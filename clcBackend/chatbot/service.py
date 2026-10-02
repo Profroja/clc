@@ -16,6 +16,7 @@ from core.models import ActorType, Channel
 
 from . import whatsapp
 from .live import LiveEffects
+from .models import MediaAsset
 from .runtime import FlowError, Runtime
 from .store import PublishedStore
 
@@ -62,7 +63,8 @@ def queue_outbound(conversation, to, engine_message):
     payload = whatsapp.render(engine_message)
     msg = Message.objects.create(
         conversation=conversation, direction=MsgDirection.OUTBOUND, sender_type=ActorType.BOT,
-        type=payload['type'], body=engine_message.get('text'), payload={'meta': payload},
+        type=payload['type'], body=engine_message.get('text') or engine_message.get('caption')
+        or engine_message.get('name'), payload={'meta': payload},
         status=DeliveryStatus.QUEUED,
     )
     # Sent only after the database commits: nothing goes out for work that rolled back.
@@ -70,9 +72,19 @@ def queue_outbound(conversation, to, engine_message):
     return msg
 
 
+def _with_meta_media(payload):
+    """Swap our asset id in a media message for Meta's media id (uploading if needed)."""
+    kind = payload['type']
+    body = payload.get(kind)
+    if kind not in ('image', 'document') or not isinstance(body, dict) or 'asset_id' not in body:
+        return payload
+    asset = MediaAsset.objects.get(id=body['asset_id'])
+    return {'type': kind, kind: {**{k: v for k, v in body.items() if k != 'asset_id'}, 'id': whatsapp.media_id(asset)}}
+
+
 def _send(message_id, to, payload):
     try:
-        wamid = whatsapp.send(to, payload)
+        wamid = whatsapp.send(to, _with_meta_media(payload))
         Message.objects.filter(id=message_id).update(provider_message_id=wamid, status=DeliveryStatus.SENT)
     except Exception as exc:  # network or Meta error: keep a record, don't break the webhook
         log.exception('WhatsApp send failed')

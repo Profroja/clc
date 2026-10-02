@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { ChevronDown, ChevronUp, CircleAlert, Plus, Trash2, TriangleAlert, X } from 'lucide-react'
+import { ChevronDown, ChevronUp, CircleAlert, Clock, Plus, Trash2, TriangleAlert, X } from 'lucide-react'
 import { ICONS } from './BlockNode.jsx'
+import { MediaPicker } from './BotSetup.jsx'
 import { LANG_LABEL, uid } from './model.js'
 
 /* ---------- small field controls ---------- */
@@ -125,7 +126,7 @@ function RulesEditor({ value, onChange, variables, operators }) {
 
 /* ---------- block settings ---------- */
 
-export function BlockInspector({ node, spec, langs, variables, flows, flowId, operators, issues, onChange, onDelete }) {
+export function BlockInspector({ node, spec, langs, variables, flows, flowId, operators, issues, onChange, onDelete, files, onFilesChange, botSettings }) {
   const [lang, setLang] = useState(langs[0] || 'sw')
   const Icon = ICONS[spec.icon]
   const data = node.data || {}
@@ -144,6 +145,12 @@ export function BlockInspector({ node, spec, langs, variables, flows, flowId, op
           ))}
         </ul>
       )}
+      {node.type === 'business_hours' && (
+        <div className="fb-callout"><Clock size={16} />
+          <div><strong>{botSettings?.hours_summary || 'Loading hours…'}</strong>
+            <p>CLC is {botSettings?.open_now ? 'open' : 'closed'} right now. Change the hours in <b>Bot settings</b> on the Chatbot flows page. In the test chat you can pretend it is open or closed.</p></div>
+        </div>
+      )}
       {spec.fields.map((f) => {
         const common = { field: f, value: data[f.key], onChange: set(f.key) }
         switch (f.kind) {
@@ -151,6 +158,12 @@ export function BlockInspector({ node, spec, langs, variables, flows, flowId, op
           case 'variable': return <VariableInput key={f.key} {...common} variables={variables} />
           case 'options': return <OptionsEditor key={f.key} {...common} langs={langs} lang={lang} setLang={setLang} />
           case 'rules': return <RulesEditor key={f.key} {...common} variables={variables} operators={operators} />
+          case 'media': return <MediaPicker key={f.key} {...common} langs={langs} lang={lang} setLang={setLang} files={files} onFilesChange={onFilesChange} LangTabs={LangTabs} />
+          case 'emails': return (
+            <div className="fb-field" key={f.key}><label>{f.label}</label>
+              <input value={data[f.key] ?? ''} onChange={(e) => set(f.key)(e.target.value)} placeholder={botSettings?.staff_emails?.join(', ') || 'name@clc.tz, other@clc.tz'} spellCheck={false} />
+              {f.help && <small className="fb-help">{f.help}{botSettings?.staff_emails?.length ? ` Now: ${botSettings.staff_emails.join(', ')}` : ' None set yet.'}</small>}</div>
+          )
           case 'number': return (
             <div className="fb-field" key={f.key}><label>{f.label}</label>
               <input type="number" min={f.min} value={data[f.key] ?? ''} onChange={(e) => set(f.key)(e.target.value === '' ? '' : Number(e.target.value))} /></div>
@@ -170,10 +183,14 @@ export function BlockInspector({ node, spec, langs, variables, flows, flowId, op
                 ))}
               </select></div>
           )
-          default: return (
-            <div className="fb-field" key={f.key}><label>{f.label}</label>
-              <input value={data[f.key] ?? ''} onChange={(e) => set(f.key)(e.target.value)} /></div>
-          )
+          default: {
+            const Tag = f.multiline ? 'textarea' : 'input'
+            return (
+              <div className="fb-field" key={f.key}><label>{f.label}{f.required && <b> *</b>}</label>
+                <Tag rows={f.multiline ? 4 : undefined} value={data[f.key] ?? ''} onChange={(e) => set(f.key)(e.target.value)} />
+                {f.help && <small className="fb-help">{f.help}</small>}</div>
+            )
+          }
         }
       })}
       {spec.deletable !== false && (

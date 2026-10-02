@@ -151,11 +151,24 @@ STATIC_URL = 'static/'
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
 
-MAILERS = {
-    'default': {
-        'BACKEND': 'django.core.mail.backends.console.EmailBackend',
-    },
-}
+# Without EMAIL_HOST, emails (e.g. the bot's Notify staff block) are printed to the console.
+if env('EMAIL_HOST', default=''):
+    MAILERS = {
+        'default': {
+            'BACKEND': 'django.core.mail.backends.smtp.EmailBackend',
+            'OPTIONS': {
+                'host': env('EMAIL_HOST'),
+                'port': env.int('EMAIL_PORT', default=587),
+                'username': env('EMAIL_HOST_USER', default=''),
+                'password': env('EMAIL_HOST_PASSWORD', default=''),
+                'use_tls': env.bool('EMAIL_USE_TLS', default=True),
+                'timeout': 20,
+            },
+        },
+    }
+else:
+    MAILERS = {'default': {'BACKEND': 'django.core.mail.backends.console.EmailBackend'}}
+DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL', default='CLC WhatsApp bot <no-reply@clc.tz>')
 
 
 # Client documents received on WhatsApp (use S3 through django-storages in production)

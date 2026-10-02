@@ -90,3 +90,22 @@ Media URLs used (Landbot storage — download and re-host before Landbot is turn
 - Kiswahili hours allow Tuesday until 23:30 (looks like a test value left in).
 - Some in-hours paths email `user_message` without ever asking for it.
 - Typos in buttons: "Virsual - Free", "End Chat 🔚\"".
+
+## Rebuild status (2026-10-02)
+
+Rebuilt as three flows in `clcBackend/chatbot/landbot.py`, loaded with `python manage.py import_landbot`
+(91 blocks instead of 284). The engine gained the three missing blocks: Business hours, Notify staff
+(email) and Send file or image.
+
+Decisions taken with CLC:
+- Opening hours: Mon–Fri 09:00–18:00, Sat 09:00–13:30 (one setting in Bot settings for every flow).
+- Every lead creates a case in the CLC Admin dashboard **and** emails godfreynjale@clc.tz and
+  dicksonmdumula@clc.tz.
+
+Changed on purpose: the 3-strike "invalid reply" ladder is replaced by the engine's polite re-ask (and
+*menu* restarts); "Other legal services" now actually asks for the description; the English phone
+appointment text now says "limited to four (4) clients a day", as the Kiswahili text does; typos fixed.
+
+Put the Landbot files in `docs/landbot/media/` (named as in Landbot) and run
+`python manage.py import_landbot --media-dir ../docs/landbot/media`. The English NECTA PDF
+(`0SJKOPQ92B6P7TFE7EKZUP02A6NMZ4KE.pdf`) was only used by the unreachable English branch.

@@ -1,8 +1,11 @@
-"""LiveEffects: what the flow's system blocks do for real (cases, handover, client record)."""
+"""LiveEffects: what the flow's system blocks do for real (cases, handover, client record, staff email)."""
+import logging
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
-from django.db import connection
+from django.conf import settings
+from django.core.mail import EmailMessage
+from django.db import connection, transaction
 
 from accounts.models import MemberRole, Membership, MembershipStatus, OrgType
 from cases.models import Case, CaseStatusHistory, Document
@@ -11,7 +14,10 @@ from core.models import ActorType, Channel, Service
 from notifications.models import Notification, NotifyChannel
 from tracking.models import ActivityEvent
 
+from . import botsettings
 from .effects import Effects
+
+log = logging.getLogger('chatbot')
 
 DAR = ZoneInfo('Africa/Dar_es_Salaam')
 CLIENT_FIELDS = {'full_name', 'region', 'email', 'preferred_language'}
@@ -83,3 +89,31 @@ class LiveEffects(Effects):
                                      entity_id=self.conversation.id, action='conversation.handover')
         notify_clc_admins('Client waiting for CLC', self.client.full_name or self.client.phone_e164 or '',
                           'conversation', self.conversation.id)
+
+    def notify_staff(self, *, to, subject, body, answers):
+        to = to or botsettings.get('staff_emails')
+        if not to:
+            log.warning('Notify staff: no recipients (set staff emails in Bot settings)')
+            return
+        c = self.client
+        lines = [body.strip(), ''] if body.strip() else []
+        lines += [f'Client: {c.full_name or "(no name yet)"}', f'WhatsApp: {c.phone_e164 or c.wa_id or ""}']
+        if c.phone_e164:
+            lines.append(f'Chat on WhatsApp: https://wa.me/{c.phone_e164.lstrip("+")}')
+        if self.conversation.case_id:
+            lines.append(f'Case: {self.conversation.case.reference}')
+        lines.append(f'Time: {botsettings.now_local():%a %d %b %Y, %H:%M} EAT')
+        if answers:
+            lines += ['', 'Answers in the chat:'] + [f'  {k}: {v}' for k, v in answers.items() if v not in (None, '')]
+        message = EmailMessage(subject=subject[:200], body='\n'.join(lines), to=to,
+                               from_email=settings.DEFAULT_FROM_EMAIL)
+
+        def send():
+            try:
+                message.send()
+            except Exception:  # a mail outage must not break the WhatsApp reply
+                log.exception('Notify staff email failed')
+        transaction.on_commit(send)
+        ActivityEvent.objects.create(actor_type=ActorType.BOT, entity_type='conversation',
+                                     entity_id=self.conversation.id, action='staff.notified',
+                                     after_data={'to': to, 'subject': subject[:200]})

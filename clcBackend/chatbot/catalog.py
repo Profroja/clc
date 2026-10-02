@@ -11,6 +11,8 @@ Field kinds the builder knows how to edit:
   options    choices; each becomes an exit of the node
   rules      condition rules; each becomes an exit, plus "else"
   flow       another flow (for Go to flow)
+  media      a file from the bot's file library, per language (sw / en / zh)
+  emails     email addresses, comma separated
 """
 
 CATEGORIES = [
@@ -41,6 +43,16 @@ NODE_TYPES = {
         'description': 'Send a text, then continue.',
         'fields': [
             {'key': 'text', 'kind': 'text_i18n', 'label': 'Message', 'required': True, 'max': 4096, 'multiline': True},
+        ],
+        'outputs': NEXT,
+    },
+    'send_media': {
+        'label': 'Send file or image', 'category': 'say', 'icon': 'file-image',
+        'description': "Send a PDF or picture from the bot's files, then continue.",
+        'fields': [
+            {'key': 'media', 'kind': 'media', 'label': 'File', 'required': True,
+             'help': 'Pick a file per language, or one for all. Upload new files in Bot files.'},
+            {'key': 'caption', 'kind': 'text_i18n', 'label': 'Caption (optional)', 'max': 1024, 'multiline': True},
         ],
         'outputs': NEXT,
     },
@@ -108,6 +120,12 @@ NODE_TYPES = {
         ],
         'outputs': NEXT,
     },
+    'business_hours': {
+        'label': 'Business hours', 'category': 'logic', 'icon': 'clock',
+        'description': 'Go one way while CLC is open and another when it is closed. Hours are set in Bot settings.',
+        'fields': [],
+        'outputs': {'kind': 'static', 'ports': [{'id': 'open', 'label': 'Open'}, {'id': 'closed', 'label': 'Closed'}]},
+    },
     'go_to_flow': {
         'label': 'Go to flow', 'category': 'logic', 'icon': 'workflow',
         'description': 'Run another published flow, then come back here.',
@@ -122,6 +140,20 @@ NODE_TYPES = {
             {'key': 'summary_variable', 'kind': 'variable', 'label': 'Variable holding the description', 'default': 'description'},
             {'key': 'region_variable', 'kind': 'variable', 'label': 'Variable holding the region', 'default': 'region'},
             {'key': 'text', 'kind': 'text_i18n', 'label': 'Confirmation (use {{reference}})', 'max': 4096, 'multiline': True},
+        ],
+        'outputs': NEXT,
+    },
+    'notify_staff': {
+        'label': 'Notify staff', 'category': 'system', 'icon': 'mail',
+        'description': "Email CLC staff with the client's details and answers, then continue.",
+        'fields': [
+            {'key': 'to', 'kind': 'emails', 'label': 'Send to',
+             'help': 'Leave empty to use the staff emails in Bot settings.'},
+            {'key': 'subject', 'kind': 'text', 'label': 'Subject (can use {{variables}})', 'required': True},
+            {'key': 'body', 'kind': 'text', 'label': 'Note to staff (can use {{variables}})', 'multiline': True},
+            {'key': 'include_answers', 'kind': 'select', 'label': "Client's answers", 'default': 'yes',
+             'options': [{'value': 'yes', 'label': 'Add all answers to the email'},
+                         {'value': 'no', 'label': "Don't add answers"}]},
         ],
         'outputs': NEXT,
     },

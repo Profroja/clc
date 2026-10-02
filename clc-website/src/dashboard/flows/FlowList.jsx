@@ -1,7 +1,8 @@
 import { Suspense, lazy, useCallback, useEffect, useState } from 'react'
-import { Bot, CircleAlert, KeyRound, Loader2, MessageCircle, Plus, Power } from 'lucide-react'
+import { Bot, CircleAlert, Clock, FolderOpen, KeyRound, Loader2, MessageCircle, Plus, Power } from 'lucide-react'
 import { api } from '../api.js'
 import { Card, Drawer, Field, PageHead } from '../shared.jsx'
+import { BotFiles, BotSettingsForm } from './BotSetup.jsx'
 
 // The builder (and React Flow) loads only when an admin opens a flow, not for website visitors.
 const FlowBuilder = lazy(() => import('./FlowBuilder.jsx'))
@@ -38,6 +39,11 @@ export default function FlowList() {
   const [creating, setCreating] = useState(false)
   const [form, setForm] = useState({ name: '', description: '' })
   const [formError, setFormError] = useState('')
+  const [drawer, setDrawer] = useState(null)  // 'files' | 'settings'
+  const [files, setFiles] = useState(null)
+  const [saved, setSaved] = useState(false)
+  const loadFiles = useCallback(() => api('chatbot/media/').then(setFiles).catch(() => setFiles([])), [])
+  useEffect(() => { if (drawer === 'files') loadFiles() }, [drawer, loadFiles])
 
   const load = useCallback(() => {
     api('chatbot/flows/').then(setFlows).catch(setError)
@@ -69,6 +75,8 @@ export default function FlowList() {
   return (
     <>
       <PageHead title="Chatbot flows" sub="Build what the WhatsApp bot says and asks, then publish it.">
+        <button className="btn btn-ghost" onClick={() => setDrawer('files')}><FolderOpen size={17} /> Bot files</button>
+        <button className="btn btn-ghost" onClick={() => { setSaved(false); setDrawer('settings') }}><Clock size={17} /> Bot settings</button>
         <button className="btn btn-gold" onClick={() => setCreating(true)}><Plus size={17} /> New flow</button>
       </PageHead>
 
@@ -106,6 +114,20 @@ export default function FlowList() {
             </button>
           ))}
         </div>
+      )}
+
+      {drawer === 'files' && (
+        <Drawer title="Bot files" onClose={() => setDrawer(null)}>
+          <BotFiles files={files} onChange={loadFiles} />
+        </Drawer>
+      )}
+      {drawer === 'settings' && (
+        <Drawer title="Bot settings" onClose={() => setDrawer(null)}
+          footer={<>{saved && <span className="fb-saved">Saved</span>}
+            <button className="btn btn-ghost" onClick={() => setDrawer(null)}>Close</button>
+            <button form="bot-settings" className="btn btn-gold">Save settings</button></>}>
+          <BotSettingsForm id="bot-settings" onSaved={() => setSaved(true)} />
+        </Drawer>
       )}
 
       {creating && (

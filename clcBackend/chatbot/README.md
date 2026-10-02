@@ -11,7 +11,7 @@ cd clcBackend
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 python manage.py migrate
-python manage.py seed_chatbot      # loads CLC's services and the "CLC intake" flow (safe to re-run)
+python manage.py import_landbot --media-dir ../docs/landbot/media   # CLC's bot, rebuilt from Landbot
 python manage.py runserver
 ```
 
@@ -24,7 +24,9 @@ Put these settings in `clcBackend/.env`:
 | `WHATSAPP_VERIFY_TOKEN` | Any secret string. Enter the same value in Meta's webhook settings |
 | `META_APP_SECRET` | App settings → Basic → App secret. It is used to check each webhook signature |
 | `GRAPH_API_VERSION` | Optional. Defaults to `v23.0` |
-| `STORAGE_DIR` | Optional. The folder for documents clients send. Defaults to `storage/` |
+| `STORAGE_DIR` | Optional. The folder for documents clients send and the bot's files. Defaults to `storage/` |
+| `EMAIL_HOST`, `EMAIL_PORT`, `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD`, `EMAIL_USE_TLS` | SMTP for **Notify staff** emails. Without `EMAIL_HOST` they are printed to the console |
+| `DEFAULT_FROM_EMAIL` | Sender of those emails, e.g. `CLC WhatsApp bot <no-reply@clc.tz>` |
 
 ### Connecting Meta
 
@@ -56,11 +58,14 @@ conversation that is already under way.
 ## Building flows (Admin → Chatbot flows)
 
 - **Blocks**:
-  - Say: Message.
+  - Say: Message, Send file or image.
   - Ask: Question, Buttons (up to 3), List (up to 10), File upload.
-  - Logic: Condition, Set variable, Go to flow.
-  - CLC system: Create case, Case status, Hand over to a person.
+  - Logic: Condition, Set variable, Business hours (Open / Closed exits), Go to flow.
+  - CLC system: Create case, Notify staff (email), Case status, Hand over to a person.
   - Finish: End.
+
+  A Buttons or List block that saves its answer as `service` also sets `{{service_label}}`, the title
+  the client tapped, in their language.
 
   Every text has a Swahili, English and Chinese version. `{{full_name}}` inserts a saved answer.
 - **Triggers** (Flow settings) decide what starts a flow:
@@ -76,6 +81,24 @@ conversation that is already under way.
     or text that is too long for WhatsApp. Warnings don't block it.
   - Every published version is kept, and *Versions* can restore any of them as a new draft.
 - A published flow can't be deleted, only switched off. That keeps the conversation history meaningful.
+
+- **Bot files** (on the Chatbot flows page): pictures and PDFs the *Send file* block sends. Replacing a
+  file there updates every flow that sends it. Files are uploaded to Meta once and reused for 25 days.
+- **Bot settings**: opening hours (East Africa Time, plus public holidays) used by every *Business hours*
+  block, and the staff emails *Notify staff* uses when a block names no one.
+
+### CLC's bot (rebuilt from Landbot)
+
+`import_landbot` loads three published flows from `chatbot/landbot.py` (source: `docs/landbot/`):
+
+| Flow | What it does |
+|---|---|
+| CLC WhatsApp bot | Hours check, welcome, language, menu: TSA / Legal services (8) / Kiapo cha Majina. Starts every new conversation |
+| Kiapo cha Majina | NSSF, NIDA (5 topics) and NECTA name changes. Kiswahili only |
+| Connect to staff or leave a message | Where every request ends. Open: case + email + handover. Closed: the client leaves a message, then case + email |
+
+Files missing from `--media-dir` get placeholders marked *Replace me* in Bot files; running the command
+again with the files swaps them in.
 
 ### Adding a new block type
 
@@ -96,7 +119,10 @@ conversation that is already under way.
 | POST | `/api/chatbot/flows/<id>/publish/` | Publish the draft |
 | GET | `/api/chatbot/flows/<id>/versions/` | Version history |
 | POST | `/api/chatbot/flows/<id>/versions/<vid>/restore/` | Copy a version into the draft |
-| POST | `/api/chatbot/flows/<id>/simulate/` | Test chat |
+| POST | `/api/chatbot/flows/<id>/simulate/` | Test chat (`hours`: `open` / `closed` to pretend) |
+| GET, POST | `/api/chatbot/media/` | Bot files: list / upload (multipart `file`, `name`) |
+| PATCH, POST, DELETE | `/api/chatbot/media/<id>/` | Rename / replace the file / delete (refused while a flow sends it) |
+| GET, PUT | `/api/chatbot/settings/` | Opening hours and staff emails |
 | GET, POST | `/api/whatsapp/webhook/` | Meta verification / incoming events |
 
 Builder actions are written to `activity_events` under the admin's session.
@@ -108,6 +134,9 @@ python manage.py test chatbot
 ```
 
 ## Not built yet
+
+- A Conversations inbox in the dashboard. Handover queues the chat, but staff cannot reply from the
+  dashboard yet; the Notify staff email includes a wa.me link to reach the client meanwhile.
 
 - Triggers for events (for example "case status changed") and schedules. The engine has a place
   for them (`TriggerType`).

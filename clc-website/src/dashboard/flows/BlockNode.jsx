@@ -1,8 +1,8 @@
 import { createContext, memo, useContext } from 'react'
 import { Handle, Position } from '@xyflow/react'
 import {
-  Briefcase, Flag, GitBranch, Headset, List, MessageSquare, Paperclip, Play, Search, SquareMousePointer,
-  TextCursorInput, Variable, Workflow,
+  Briefcase, Clock, FileImage, Flag, GitBranch, Headset, List, Mail, MessageSquare, Paperclip, Play, Search,
+  SquareMousePointer, TextCursorInput, Variable, Workflow,
 } from 'lucide-react'
 import { portsOf, preview } from './model.js'
 
@@ -10,6 +10,7 @@ export const ICONS = {
   play: Play, 'message-square': MessageSquare, 'text-cursor-input': TextCursorInput,
   'square-mouse-pointer': SquareMousePointer, list: List, paperclip: Paperclip, 'git-branch': GitBranch,
   variable: Variable, workflow: Workflow, briefcase: Briefcase, search: Search, headset: Headset, flag: Flag,
+  'file-image': FileImage, clock: Clock, mail: Mail,
 }
 
 // The builder shares the catalog, validation issues and test-chat position with every block.
@@ -23,6 +24,12 @@ function summary(node, spec, ctx) {
     case 'go_to_flow': return ctx.flows.find((f) => f.id === d.flow_id)?.name || 'Choose a flow'
     case 'condition': return ''
     case 'create_case': return preview(d.text) || 'Saves the case'
+    case 'send_media': {
+      const names = [...new Set(Object.values(d.media || {}).filter(Boolean))].map((id) => ctx.files?.find((f) => f.id === id)?.name || 'Missing file')
+      return names.length ? `📎 ${names.join(' / ')}${preview(d.caption) ? `\n${preview(d.caption)}` : ''}` : 'Choose a file'
+    }
+    case 'business_hours': return ctx.hoursSummary || ''
+    case 'notify_staff': return d.subject ? `✉ ${d.subject}` : 'Email staff'
     default: return preview(d.text)
   }
 }

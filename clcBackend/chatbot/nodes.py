@@ -43,6 +43,15 @@ def menu(body, button, section, rows):
     return {'type': 'list', 'text': body, 'button': button, 'section': section, 'rows': rows}
 
 
+def media(info, caption):
+    """A picture or document from the bot's file library (MediaAsset)."""
+    msg = {'type': 'media', 'media_kind': info['kind'], 'asset_id': info['id'], 'file_name': info['file_name'],
+           'name': info['name']}
+    if caption:
+        msg['caption'] = caption
+    return msg
+
+
 def _norm(s):
     return ' '.join((s or '').lower().split())
 
@@ -78,6 +87,16 @@ class Start(Node):
 class Message(Node):
     def enter(self, node, ctx):
         return Step(messages=[text(ctx.t(node['data'].get('text')))], port='next')
+
+
+class SendMedia(Node):
+    def enter(self, node, ctx):
+        d = node['data']
+        asset_id = pick(d.get('media'), ctx.lang)
+        info = ctx.effects.media_info(asset_id) if asset_id else None
+        if info is None:  # file deleted after publishing: skip it rather than stop the chat
+            return Step(port='next')
+        return Step(messages=[media(info, ctx.t(d.get('caption')))], port='next')
 
 
 class AskText(Node):
@@ -117,6 +136,7 @@ class AskButtons(Node):
         value = option.get('value') or option['id']
         if d.get('save_as'):
             ctx.vars[d['save_as']] = value
+            ctx.vars[f"{d['save_as']}_label"] = ctx.t(option.get('title'))  # e.g. {{service_label}}
         if d.get('save_to_client') == 'preferred_language' and value in LANGS:
             ctx.vars['lang'] = value
             ctx.effects.set_client('preferred_language', value)
@@ -210,6 +230,11 @@ class SetVariable(Node):
         return Step(port='next')
 
 
+class BusinessHours(Node):
+    def enter(self, node, ctx):
+        return Step(port='open' if ctx.effects.is_open() else 'closed')
+
+
 class GoToFlow(Node):
     def enter(self, node, ctx):
         return Step(goto_flow=node['data'].get('flow_id'))
@@ -229,6 +254,20 @@ class CreateCase(Node):
         ctx.vars['files'] = []
         messages = [text(ctx.t(d['text']))] if pick(d.get('text'), ctx.lang) else []
         return Step(messages=messages, port='next')
+
+
+class NotifyStaff(Node):
+    def enter(self, node, ctx):
+        d = node['data']
+        answers = {k: v for k, v in ctx.vars.items() if k not in ('files', 'lang')} \
+            if d.get('include_answers', 'yes') == 'yes' else {}
+        ctx.effects.notify_staff(
+            to=[e.strip() for e in (d.get('to') or '').replace(';', ',').split(',') if e.strip()],
+            subject=fill(d.get('subject') or 'WhatsApp chat', ctx.vars),
+            body=fill(d.get('body') or '', ctx.vars),
+            answers=answers,
+        )
+        return Step(port='next')
 
 
 class CaseStatus(Node):
@@ -257,7 +296,8 @@ class End(Node):
 
 
 HANDLERS = {
-    'start': Start(), 'message': Message(), 'ask_text': AskText(), 'ask_buttons': AskButtons(),
+    'start': Start(), 'message': Message(), 'send_media': SendMedia(), 'business_hours': BusinessHours(),
+    'notify_staff': NotifyStaff(), 'ask_text': AskText(), 'ask_buttons': AskButtons(),
     'ask_list': AskList(), 'ask_file': AskFile(), 'condition': Condition(), 'set_variable': SetVariable(),
     'go_to_flow': GoToFlow(), 'create_case': CreateCase(), 'case_status': CaseStatus(),
     'handover': Handover(), 'end': End(),

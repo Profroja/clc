@@ -40,6 +40,13 @@ function Builder({ flowId, onExit }) {
   const [catalog, setCatalog] = useState(null)
   const [flow, setFlow] = useState(null)
   const [allFlows, setAllFlows] = useState([])
+  const [files, setFiles] = useState(null)
+  const [botSettings, setBotSettings] = useState(null)
+  const loadFiles = useCallback(() => api('chatbot/media/').then(setFiles).catch(() => setFiles([])), [])
+  useEffect(() => {
+    loadFiles()
+    api('chatbot/settings/').then(setBotSettings).catch(() => {})
+  }, [loadFiles])
   const [nodes, setNodes] = useState([])
   const [edges, setEdges] = useState([])
   const [settings, setSettings] = useState({ languages: ['sw', 'en'] })
@@ -270,6 +277,7 @@ function Builder({ flowId, onExit }) {
   const warnings = issues.length - errors
   const selectedNode = nodes.find((n) => n.id === selected)
   const ctx = { specs, issues: byNode, active, flows: allFlows, triggerSummary: triggerSummary(flow.triggers),
+    files, hoursSummary: botSettings?.hours_summary,
     wired: new Set(edges.map((e) => `${e.source}:${e.sourceHandle || 'next'}`)) }
 
   return (
@@ -361,7 +369,7 @@ function Builder({ flowId, onExit }) {
 
           <aside className="fb-side">
             {panel === 'test' && (
-              <TestChat flowId={flowId} getDefinition={definition} langs={langs} onActive={setActive} onClose={() => setPanel('inspector')} />
+              <TestChat flowId={flowId} getDefinition={definition} langs={langs} files={files} onActive={setActive} onClose={() => setPanel('inspector')} />
             )}
             {panel === 'versions' && (
               <div className="fb-inspector-body">
@@ -383,7 +391,7 @@ function Builder({ flowId, onExit }) {
               <BlockInspector key={selectedNode.id} node={selectedNode} spec={specs[selectedNode.type]} langs={langs}
                 variables={variablesIn(nodes)} flows={allFlows} flowId={flowId} operators={catalog.operators}
                 issues={byNode[selectedNode.id] || []} onChange={(data) => updateData(selectedNode.id, data)}
-                onDelete={() => deleteBlock(selectedNode.id)} />
+                onDelete={() => deleteBlock(selectedNode.id)} files={files} onFilesChange={loadFiles} botSettings={botSettings} />
             ) : (
               <FlowSettings flow={flow} settings={settings} triggerTypes={catalog.trigger_types} onFlow={editFlow} onSettings={editSettings} />
             ))}

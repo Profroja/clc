@@ -12,5 +12,9 @@ urlpatterns = [
     path('chatbot/flows/<uuid:flow_id>/versions/', api.versions),
     path('chatbot/flows/<uuid:flow_id>/versions/<uuid:version_id>/restore/', api.restore_version),
     path('chatbot/flows/<uuid:flow_id>/simulate/', api.simulate),
+    path('chatbot/media/', api.media),
+    path('chatbot/media/<uuid:asset_id>/', api.media_detail),
+    path('chatbot/media/<uuid:asset_id>/file/', api.media_file),
+    path('chatbot/settings/', api.bot_settings),
     path('whatsapp/webhook/', api.webhook),
 ]

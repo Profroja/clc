@@ -54,6 +54,7 @@ export function variablesIn(nodes) {
   for (const n of nodes) {
     const d = n.data || {}
     if (d.save_as) names.add(d.save_as)
+    if (d.save_as && ['ask_buttons', 'ask_list'].includes(n.type)) names.add(`${d.save_as}_label`)  // title of the chosen option
     if (n.type === 'set_variable' && d.name) names.add(d.name)
   }
   return [...names].sort()

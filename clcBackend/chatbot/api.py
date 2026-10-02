@@ -1,11 +1,18 @@
 """REST API for the flow builder in the CLC Admin Portal (Chatbot flows screen)."""
+import hashlib
 import json
 import logging
+import mimetypes
+import uuid
 
 from django.conf import settings
+from django.core import signing
+from django.core.exceptions import ValidationError
+from django.core.files.base import ContentFile
+from django.core.files.storage import default_storage
 from django.db import transaction
 from django.db.models import Max
-from django.http import HttpResponse
+from django.http import FileResponse, Http404, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
@@ -20,9 +27,10 @@ from conversations.models import BotFlow, BotFlowVersion, BotSession, FlowStatus
 from core.models import ActorType
 from tracking.models import ActivityEvent, UserSession
 
-from . import service, whatsapp
+from . import botsettings, service, whatsapp
 from .catalog import catalog
 from .effects import SimulatedEffects
+from .models import MediaAsset, MediaKind
 from .runtime import FlowError, Runtime
 from .store import TestStore
 from .validate import has_errors, validate
@@ -83,6 +91,13 @@ def _editing_definition(flow):
     """Draft if there is one, else the live version; never creates anything."""
     source = _draft(flow, create=False) or flow.versions.filter(status=FlowStatus.PUBLISHED).first()
     return source.definition if source else blank_definition()
+
+
+def _lookup_media(asset_id):
+    try:
+        return MediaAsset.objects.filter(id=asset_id).exists()
+    except (ValueError, ValidationError):
+        return False
 
 
 def _lookup_flow(flow_id):
@@ -229,7 +244,7 @@ def save_draft(request, flow_id):
         draft = _draft(flow)
         draft.definition = definition
         draft.save(update_fields=['definition', 'updated_at'])
-    issues = validate(definition, flow_id=flow.id, lookup_flow=_lookup_flow, languages=_languages(definition))
+    issues = validate(definition, flow_id=flow.id, lookup_flow=_lookup_flow, lookup_media=_lookup_media, languages=_languages(definition))
     return Response({'version': draft.version, 'updated_at': draft.updated_at, 'issues': issues})
 
 
@@ -240,7 +255,7 @@ def validate_flow(request, flow_id):
     problem = _check_definition(definition)
     if problem:
         return Response({'detail': problem}, status=400)
-    return Response({'issues': validate(definition, flow_id=flow.id, lookup_flow=_lookup_flow,
+    return Response({'issues': validate(definition, flow_id=flow.id, lookup_flow=_lookup_flow, lookup_media=_lookup_media,
                                         languages=_languages(definition))})
 
 
@@ -251,7 +266,7 @@ def publish(request, flow_id):
         draft = _draft(flow, create=False)
         if draft is None:
             return Response({'detail': 'Nothing to publish: there are no unpublished changes.'}, status=400)
-        issues = validate(draft.definition, flow_id=flow.id, lookup_flow=_lookup_flow,
+        issues = validate(draft.definition, flow_id=flow.id, lookup_flow=_lookup_flow, lookup_media=_lookup_media,
                           languages=_languages(draft.definition))
         if has_errors(issues):
             return Response({'detail': 'Fix the errors before publishing.', 'issues': issues}, status=400)
@@ -297,7 +312,7 @@ def simulate(request, flow_id):
     problem = _check_definition(definition)
     if problem:
         return Response({'detail': problem}, status=400)
-    effects = SimulatedEffects()
+    effects = SimulatedEffects(hours=request.data.get('hours'))
     runtime = Runtime(TestStore(flow.id, definition), effects)
     state, event = request.data.get('state'), request.data.get('event')
     try:
@@ -310,6 +325,142 @@ def simulate(request, flow_id):
         return Response({'error': str(exc)}, status=200)
     return Response({'messages': turn.messages, 'state': turn.state, 'ended': turn.ended, 'trace': turn.trace,
                      'waiting_node': turn.waiting_node, 'effects': effects.log})
+
+
+# --- Bot files (Send file block) ----------------------------------------------------
+
+# What WhatsApp accepts, and its size limits.
+MEDIA_TYPES = {
+    'image/jpeg': (MediaKind.IMAGE, 5), 'image/png': (MediaKind.IMAGE, 5),
+    'application/pdf': (MediaKind.DOCUMENT, 100), 'application/msword': (MediaKind.DOCUMENT, 100),
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document': (MediaKind.DOCUMENT, 100),
+    'application/vnd.ms-excel': (MediaKind.DOCUMENT, 100),
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': (MediaKind.DOCUMENT, 100),
+}
+_signer = signing.TimestampSigner(salt='chatbot.media')
+
+
+def _media_json(a):
+    return {'id': str(a.id), 'name': a.name, 'kind': a.kind, 'file_name': a.file_name, 'mime_type': a.mime_type,
+            'size_bytes': a.size_bytes, 'created_at': a.created_at,
+            # The builder shows previews with <img>/<a>, which cannot send the login token.
+            'url': f'/api/chatbot/media/{a.id}/file/?sig={_signer.sign(str(a.id)).split(":", 1)[1]}'}
+
+
+def _flows_using(asset_id):
+    """Names of flows whose draft or live version sends this file."""
+    versions = BotFlowVersion.objects.select_related('flow').filter(status__in=[FlowStatus.DRAFT, FlowStatus.PUBLISHED])
+    return sorted({v.flow.name for v in versions if str(asset_id) in json.dumps(v.definition)})
+
+
+@admin_api(['GET', 'POST'])
+def media(request):
+    if request.method == 'GET':
+        return Response([_media_json(a) for a in MediaAsset.objects.all()])
+    got, error = _read_upload(request)
+    if error:
+        return error
+    upload, mime, kind, data = got
+    key = _store(upload, data)
+    name = (request.data.get('name') or upload.name.rsplit('.', 1)[0])[:120]
+    asset = MediaAsset.objects.create(
+        name=name, kind=kind, file_name=upload.name[:200], mime_type=mime, size_bytes=len(data), storage_key=key,
+        sha256=hashlib.sha256(data).hexdigest(), uploaded_by=request.user)
+    _log(request, asset.id, 'bot_file.uploaded', {'name': name, 'file_name': asset.file_name})
+    return Response(_media_json(asset), status=201)
+
+
+def _read_upload(request):
+    """(upload, mime, kind, data) or (None, error Response)."""
+    upload = request.FILES.get('file')
+    if not upload:
+        return None, Response({'detail': 'Choose a file to upload.'}, status=400)
+    mime = upload.content_type or mimetypes.guess_type(upload.name)[0] or ''
+    if mime not in MEDIA_TYPES:
+        return None, Response({'detail': 'WhatsApp can send JPG or PNG pictures, and PDF, Word or Excel documents.'},
+                              status=400)
+    kind, limit_mb = MEDIA_TYPES[mime]
+    if upload.size > limit_mb * 1024 * 1024:
+        return None, Response({'detail': f'WhatsApp allows {"pictures" if kind == MediaKind.IMAGE else "documents"} '
+                                         f'up to {limit_mb} MB.'}, status=400)
+    return (upload, mime, kind, upload.read()), None
+
+
+def _store(upload, data):
+    ext = upload.name.rsplit('.', 1)[-1].lower() if '.' in upload.name else 'bin'
+    return default_storage.save(f'bot-files/{uuid.uuid4()}.{ext}', ContentFile(data))
+
+
+@admin_api(['PATCH', 'POST', 'DELETE'])
+def media_detail(request, asset_id):
+    """PATCH renames; POST (multipart) replaces the file, so flows that send it get the new one."""
+    asset = get_object_or_404(MediaAsset, id=asset_id)
+    if request.method == 'POST':
+        got, error = _read_upload(request)
+        if error:
+            return error
+        upload, mime, kind, data = got
+        old_key = asset.storage_key
+        asset.storage_key, asset.file_name, asset.mime_type, asset.kind = _store(upload, data), upload.name[:200], mime, kind
+        asset.size_bytes, asset.sha256 = len(data), hashlib.sha256(data).hexdigest()
+        asset.meta_media_id, asset.meta_uploaded_at = '', None  # Meta must get the new file
+        asset.save()
+        default_storage.delete(old_key)
+        _log(request, asset.id, 'bot_file.replaced', {'name': asset.name, 'file_name': asset.file_name})
+        return Response(_media_json(asset))
+    if request.method == 'PATCH':
+        name = (request.data.get('name') or '').strip()
+        if not name:
+            return Response({'detail': 'Give the file a name.'}, status=400)
+        asset.name = name[:120]
+        asset.save(update_fields=['name'])
+        return Response(_media_json(asset))
+    used = _flows_using(asset.id)
+    if used:
+        return Response({'detail': f'Used in {", ".join(used)}. Remove it from those flows first.'}, status=409)
+    _log(request, asset.id, 'bot_file.deleted', {'name': asset.name})
+    asset.delete()
+    return Response(status=204)
+
+
+def media_file(request, asset_id):
+    """The file itself, for previews in the builder (signed link, valid for a day)."""
+    try:
+        _signer.unsign(f'{asset_id}:{request.GET.get("sig", "")}', max_age=86400)
+    except signing.BadSignature:
+        raise Http404
+    asset = get_object_or_404(MediaAsset, id=asset_id)
+    return FileResponse(default_storage.open(asset.storage_key, 'rb'), content_type=asset.mime_type,
+                        filename=asset.file_name, as_attachment=asset.kind == MediaKind.DOCUMENT)
+
+
+# --- Bot settings (business hours, staff emails) -------------------------------------
+
+def _settings_json():
+    hours = botsettings.get('business_hours')
+    return {'business_hours': hours, 'hours_summary': botsettings.describe(hours),
+            'open_now': botsettings.is_open(hours), 'staff_emails': botsettings.get('staff_emails'),
+            'timezone': 'Africa/Dar_es_Salaam'}
+
+
+@admin_api(['GET', 'PUT'])
+def bot_settings(request):
+    if request.method == 'PUT':
+        if 'business_hours' in request.data:
+            hours, problem = botsettings.clean_hours(request.data['business_hours'])
+            if problem:
+                return Response({'detail': problem}, status=400)
+            botsettings.put('business_hours', hours)
+        if 'staff_emails' in request.data:
+            emails, problem = botsettings.clean_emails(request.data['staff_emails'])
+            if problem:
+                return Response({'detail': problem}, status=400)
+            botsettings.put('staff_emails', emails)
+        ActivityEvent.objects.create(
+            actor_type=ActorType.STAFF, session_id=request.auth.get('session_id'),
+            acting_membership_id=request.auth.get('membership_id'), entity_type='bot_settings',
+            entity_id=uuid.UUID(int=0), action='bot_settings.updated', after_data=_settings_json() | {'open_now': None})
+    return Response(_settings_json())
 
 
 # --- Meta webhook -------------------------------------------------------------------

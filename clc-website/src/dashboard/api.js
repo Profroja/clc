@@ -17,10 +17,11 @@ function token() {
 
 export async function api(path, { method = 'GET', body } = {}) {
   const t = token()
+  const form = body instanceof FormData  // file uploads: the browser sets the multipart header
   const res = await fetch(`/api/${path}`, {
     method,
-    headers: { 'Content-Type': 'application/json', ...(t ? { Authorization: `Bearer ${t}` } : {}) },
-    body: body === undefined ? undefined : JSON.stringify(body),
+    headers: { ...(form ? {} : { 'Content-Type': 'application/json' }), ...(t ? { Authorization: `Bearer ${t}` } : {}) },
+    body: body === undefined ? undefined : form ? body : JSON.stringify(body),
   })
   if (res.status === 204) return null
   const data = await res.json().catch(() => ({}))

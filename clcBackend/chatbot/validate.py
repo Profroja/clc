@@ -5,6 +5,7 @@ title lengths), so those are errors here rather than surprises in production.
 """
 import re
 
+from .botsettings import clean_emails
 from .catalog import NODE_TYPES, ports
 from .i18n import LANGS, placeholders
 
@@ -25,8 +26,9 @@ def _texts(value):
     return {}
 
 
-def validate(definition, *, flow_id=None, lookup_flow=None, languages=('sw', 'en')):
-    """lookup_flow(flow_id) -> {"name", "published"} or None (for Go to flow)."""
+def validate(definition, *, flow_id=None, lookup_flow=None, lookup_media=None, languages=('sw', 'en')):
+    """lookup_flow(flow_id) -> {"name", "published"} or None (for Go to flow);
+    lookup_media(asset_id) -> truthy if the file still exists (for Send file)."""
     issues = []
     if not isinstance(definition, dict):
         return [_issue('error', 'The flow is not a valid definition.')]
@@ -46,7 +48,7 @@ def validate(definition, *, flow_id=None, lookup_flow=None, languages=('sw', 'en
         issues.append(_issue('error', 'A flow needs exactly one Start block.'))
 
     for n in by_id.values():
-        issues += _check_node(n, flow_id, lookup_flow, languages)
+        issues += _check_node(n, flow_id, lookup_flow, lookup_media, languages)
 
     # --- edges ---
     seen = set()
@@ -91,7 +93,7 @@ def validate(definition, *, flow_id=None, lookup_flow=None, languages=('sw', 'en
     return issues
 
 
-def _check_node(n, flow_id, lookup_flow, languages):
+def _check_node(n, flow_id, lookup_flow, lookup_media, languages):
     issues = []
     spec = NODE_TYPES.get(n.get('type'))
     nid = n['id']
@@ -164,6 +166,20 @@ def _check_node(n, flow_id, lookup_flow, languages):
                     issues.append(_issue('error', 'The chosen flow no longer exists.', nid, key))
                 elif not target.get('published'):
                     issues.append(_issue('error', f'"{target["name"]}" is not published yet.', nid, key))
+        elif kind == 'media':
+            chosen = {k: v for k, v in _texts(value).items() if v}
+            if f.get('required') and not chosen:
+                issues.append(_issue('error', f'{label}: choose a file.', nid, key))
+            for lang, asset_id in chosen.items():
+                if lookup_media and not lookup_media(asset_id):
+                    issues.append(_issue('error', f'{label} ({lang.upper()}) was deleted from Bot files.', nid, key))
+        elif kind == 'emails':
+            _, problem = clean_emails(value or '')
+            if problem:
+                issues.append(_issue('error', f'{label}: {problem}', nid, key))
+        elif kind == 'text':
+            if f.get('required') and not (value or '').strip():
+                issues.append(_issue('error', f'{label} is empty.', nid, key))
         elif kind == 'number' and value not in (None, ''):
             try:
                 if int(value) < f.get('min', 0):

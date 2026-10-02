@@ -4,6 +4,7 @@ import hashlib
 import hmac
 import logging
 import uuid
+from datetime import timedelta
 
 import requests
 from django.conf import settings
@@ -52,6 +53,27 @@ def mark_read(message_id):
            body={'messaging_product': 'whatsapp', 'status': 'read', 'message_id': message_id})
 
 
+MEDIA_TTL = timedelta(days=25)  # Meta keeps uploaded media for 30 days
+
+
+def media_id(asset):
+    """Meta's id for one of our files (MediaAsset), uploading it when there is no fresh one."""
+    if asset.meta_media_id and asset.meta_uploaded_at and timezone.now() - asset.meta_uploaded_at < MEDIA_TTL:
+        return asset.meta_media_id
+    with default_storage.open(asset.storage_key, 'rb') as fh:
+        res = requests.post(
+            f'{settings.GRAPH_BASE_URL}/{settings.GRAPH_API_VERSION}/{settings.WHATSAPP_PHONE_NUMBER_ID}/media',
+            headers={'Authorization': f'Bearer {settings.WHATSAPP_TOKEN}'}, timeout=60,
+            data={'messaging_product': 'whatsapp', 'type': asset.mime_type},
+            files={'file': (asset.file_name, fh, asset.mime_type)})
+    data = res.json() if res.content else {}
+    if not res.ok:
+        raise MetaError(f"Meta media upload {res.status_code}: {data.get('error', {}).get('message', 'unknown error')}")
+    asset.meta_media_id, asset.meta_uploaded_at = data['id'], timezone.now()
+    asset.save(update_fields=['meta_media_id', 'meta_uploaded_at'])
+    return asset.meta_media_id
+
+
 EXT = {'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp', 'application/pdf': 'pdf',
        'application/msword': 'doc',
        'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'docx'}
@@ -78,7 +100,16 @@ def _cut(s, n):
 
 
 def render(msg):
-    """The validator keeps flows inside WhatsApp's limits; _cut is only a safety net."""
+    """The validator keeps flows inside WhatsApp's limits; _cut is only a safety net.
+    A media message carries our asset id; service._send swaps it for Meta's media id."""
+    if msg['type'] == 'media':
+        kind = msg['media_kind']
+        body = {'asset_id': msg['asset_id']}
+        if msg.get('caption'):
+            body['caption'] = _cut(msg['caption'], 1024)
+        if kind == 'document':
+            body['filename'] = msg['file_name']
+        return {'type': kind, kind: body}
     if msg['type'] == 'buttons':
         return {'type': 'interactive', 'interactive': {
             'type': 'button', 'body': {'text': _cut(msg['text'], 1024)},
