@@ -1,0 +1,21 @@
+{
+  "_note": "Free HD photos from Unsplash (unsplash.com/license). Run `npm run images` to download them into public/images. Swap any id to change a photo.",
+  "images": {
+    "lawyer.jpg":        { "id": "photo-1763771349941-9a8cb7be2f43", "params": "w=1200&h=1600&fit=crop&crop=faces,top", "alt": "Woman advocate in legal attire" },
+    "team.jpg":          { "id": "photo-1573164574511-73c773193279", "params": "w=1800&h=900&fit=crop", "alt": "Professionals working together" },
+    "hero-skyline.jpg":  { "id": "photo-1601635494462-029deeeadcd7", "params": "w=2400&h=1400&fit=crop", "alt": "Dar es Salaam city and harbour from above" },
+    "skyline.jpg":       { "id": "photo-1589177900326-900782f88a55", "params": "w=1600&h=1000&fit=crop", "alt": "Dar es Salaam skyline" },
+    "dar.jpg":           { "id": "photo-1568216681201-1edacc6c8048", "params": "w=1800&h=1100&fit=crop", "alt": "Dar es Salaam waterfront" },
+    "hero-mining.jpg":   { "id": "photo-1483638867541-6d87ce7f2d4d", "params": "w=2400&h=1400&fit=crop", "alt": "Mining area from above" },
+    "mining.jpg":        { "id": "photo-1628487749130-2d41acb1802a", "params": "w=1800&h=1200&fit=crop", "alt": "Open-pit mine" },
+    "gold.jpg":          { "id": "photo-1737815914093-becb6c9ac064", "params": "w=1400&h=1000&fit=crop", "alt": "Gold nuggets" },
+    "handshake.jpg":     { "id": "photo-1681505531034-8d67054e07f6", "params": "w=1400&h=1000&fit=crop", "alt": "Handshake over a signed agreement" },
+    "deed.jpg":          { "id": "photo-1763729805496-b5dbf7f00c79", "params": "w=1800&h=1200&fit=crop", "alt": "Signing a legal document" },
+    "idcard.jpg":        { "id": "photo-1581553672347-95d9444c0d2c", "params": "w=1400&h=900&fit=crop", "alt": "Identification card" },
+    "passport.jpg":      { "id": "photo-1553697388-94e804e2f0f6", "params": "w=1400&h=1000&fit=crop", "alt": "Holding passports" },
+    "hero-family.jpg":   { "id": "photo-1737649073335-6d0d683fae81", "params": "w=2400&h=1400&fit=crop", "alt": "Family together at home" },
+    "family.jpg":        { "id": "photo-1737649073335-6d0d683fae81", "params": "w=1800&h=1200&fit=crop", "alt": "Parents with their children" },
+    "will.jpg":          { "id": "photo-1528752477378-485b46bedcde", "params": "w=1400&h=1000&fit=crop", "alt": "Last will and testament" },
+    "building.jpg":      { "id": "photo-1636652966850-5ac4d02370e9", "params": "w=1400&h=1000&fit=crop", "alt": "Government building with columns" }
+  }
+}
