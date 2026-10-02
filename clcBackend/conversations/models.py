@@ -80,13 +80,16 @@ class MessageTemplate(models.Model):
 
 
 class BotFlow(models.Model):
-    """The bot's menu, questions and messages (edited in Settings > Bot messages)."""
+    """A chatbot flow built in the admin's flow builder. What starts it lives in FlowTrigger;
+    its nodes and edges live in BotFlowVersion.definition."""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.TextField(unique=True)
+    description = models.TextField(blank=True, default='')
     service = models.ForeignKey('core.Service', null=True, blank=True, on_delete=models.PROTECT)
-    is_entry_flow = models.BooleanField(default=False)
+    is_entry_flow = models.BooleanField(default=False)  # superseded by FlowTrigger(type='new_conversation')
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         db_table = 'bot_flows'
@@ -99,17 +102,41 @@ class BotFlowVersion(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     flow = models.ForeignKey(BotFlow, on_delete=models.PROTECT, related_name='versions')
     version = models.IntegerField()
-    definition = models.JSONField()  # texts per language, questions, buttons
+    definition = models.JSONField()  # {"nodes": [...], "edges": [...]} from the flow builder
     status = models.CharField(max_length=16, choices=FlowStatus.choices, default=FlowStatus.DRAFT)
     published_by = models.ForeignKey('accounts.Membership', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
     published_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         db_table = 'bot_flow_versions'
         constraints = [
             models.UniqueConstraint(fields=['flow', 'version'], name='bot_flow_versions_flow_version_uq'),
             models.UniqueConstraint(fields=['flow'], condition=Q(status='published'), name='bot_flow_versions_one_live'),
+            models.UniqueConstraint(fields=['flow'], condition=Q(status='draft'), name='bot_flow_versions_one_draft'),
         ]
+
+
+class TriggerType(models.TextChoices):
+    NEW_CONVERSATION = 'new_conversation', 'New conversation'
+    KEYWORD = 'keyword', 'Keyword or link code'
+
+
+class FlowTrigger(models.Model):
+    """What starts a flow. Checked in priority order when a client writes with no flow running.
+    config for 'keyword': {"words": ["wosia", "will"], "match": "exact" | "contains"}"""
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    flow = models.ForeignKey(BotFlow, on_delete=models.CASCADE, related_name='triggers')
+    type = models.CharField(max_length=24, choices=TriggerType.choices)
+    config = models.JSONField(default=dict, blank=True)
+    priority = models.IntegerField(default=100)  # lower runs first
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        db_table = 'flow_triggers'
+        ordering = ['priority', 'created_at']
 
 
 class Conversation(models.Model):
@@ -137,9 +164,11 @@ class BotSession(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     conversation = models.ForeignKey(Conversation, on_delete=models.PROTECT, related_name='bot_sessions')
     flow_version = models.ForeignKey(BotFlowVersion, on_delete=models.PROTECT)
-    current_step = models.TextField(null=True, blank=True)
+    current_step = models.TextField(null=True, blank=True)  # id of the node waiting for the client
     variables = models.JSONField(default=dict)  # answers so far
+    stack = models.JSONField(default=list, blank=True)  # flows to return to after "Go to flow"
     started_at = models.DateTimeField(default=timezone.now)
+    last_step_at = models.DateTimeField(default=timezone.now)  # idle 24 h -> session restarts
     ended_at = models.DateTimeField(null=True, blank=True)
     end_reason = models.CharField(max_length=16, choices=SessionEnd.choices, null=True, blank=True)
 

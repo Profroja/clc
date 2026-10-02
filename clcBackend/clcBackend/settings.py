@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'cases',
     'notifications',
     'tracking',
+    'chatbot',
 ]
 
 AUTH_USER_MODEL = 'accounts.User'
@@ -154,4 +155,23 @@ MAILERS = {
     'default': {
         'BACKEND': 'django.core.mail.backends.console.EmailBackend',
     },
+}
+
+
+# Client documents received on WhatsApp (use S3 through django-storages in production)
+MEDIA_ROOT = env('STORAGE_DIR', default=str(BASE_DIR / 'storage'))
+
+# WhatsApp Cloud API (Meta app > WhatsApp > API Setup; see chatbot/README.md)
+WHATSAPP_PHONE_NUMBER_ID = env('WHATSAPP_PHONE_NUMBER_ID', default='')
+WHATSAPP_TOKEN = env('WHATSAPP_TOKEN', default='')            # permanent system-user token
+WHATSAPP_VERIFY_TOKEN = env('WHATSAPP_VERIFY_TOKEN', default='')  # your own random string
+META_APP_SECRET = env('META_APP_SECRET', default='')          # checks webhook signatures
+GRAPH_API_VERSION = env('GRAPH_API_VERSION', default='v23.0')
+GRAPH_BASE_URL = env('GRAPH_BASE_URL', default='https://graph.facebook.com')
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {'console': {'class': 'logging.StreamHandler'}},
+    'loggers': {'chatbot': {'handlers': ['console'], 'level': 'INFO'}},
 }
