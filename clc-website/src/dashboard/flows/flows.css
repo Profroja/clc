@@ -68,10 +68,15 @@
 .fb-block-var code { background: #f3efe5; padding: 1px 6px; border-radius: 6px; color: var(--navy-800); }
 .fb-block-end { margin: 2px 12px 10px; color: var(--muted); font-size: .74rem; font-style: italic; }
 .fb-ports { list-style: none; margin: 0; padding: 4px 0 6px; border-top: 1px solid #f0ebe0; }
-.fb-ports li { position: relative; padding: 5px 22px 5px 12px; text-align: right; color: var(--navy-800); font-weight: 600; font-size: .76rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.fb-block .react-flow__handle { width: 12px; height: 12px; border: 2px solid #fff; background: var(--gold); box-shadow: 0 0 0 1px #d6c690; }
-.fb-block .react-flow__handle.fb-in { background: var(--navy-700); top: -6px; }
-.fb-block .react-flow__handle.fb-out { right: -7px; }
+.fb-ports li { position: relative; padding: 5px 22px 5px 12px; text-align: right; color: var(--navy-800); font-weight: 600; font-size: .76rem; }
+/* The label truncates, not the row: the exit dot sits outside the row and must not be clipped. */
+.fb-ports li > span { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fb-block .react-flow__handle { width: 16px; height: 16px; border: 3px solid #fff; background: var(--gold); box-shadow: 0 0 0 1.5px #b8962a; cursor: crosshair; transition: transform .12s, box-shadow .12s; }
+.fb-block .react-flow__handle:hover { box-shadow: 0 0 0 5px rgba(201,162,39,.35); }
+.fb-block .react-flow__handle.fb-in { background: var(--navy-700); box-shadow: 0 0 0 1.5px var(--navy-700); }
+.fb-block .react-flow__handle.fb-in:hover { box-shadow: 0 0 0 5px rgba(23,46,84,.25); }
+.fb-block .react-flow__handle.fb-out.is-free { animation: fb-pulse 1.8s ease-in-out infinite; }
+@keyframes fb-pulse { 50% { box-shadow: 0 0 0 6px rgba(201,162,39,.28); } }
 .fb-unknown { padding: 14px; color: #a5492a; }
 
 /* ---------- side panel ---------- */

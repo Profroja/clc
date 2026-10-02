@@ -156,16 +156,39 @@ function Builder({ flowId, onExit }) {
   const addBlock = useCallback((type, position) => {
     const spec = specs[type]
     if (!spec) return
-    const at = position || rf.screenToFlowPosition({
-      x: (wrapper.current?.getBoundingClientRect().left || 0) + (wrapper.current?.clientWidth || 600) / 2 - 110,
-      y: (wrapper.current?.getBoundingClientRect().top || 0) + (wrapper.current?.clientHeight || 400) / 3,
-    })
+    // Clicked from the palette: put it under the selected block (or the lowest one), never on top
+    // of another block, and wire the selected block's first free exit to it.
+    let at = position
+    let from = null
+    if (!at) {
+      const all = rf.getNodes()
+      const anchor = all.find((n) => n.id === selected)
+        || all.reduce((low, n) => (!low || n.position.y > low.position.y ? n : low), null)
+      if (anchor) {
+        at = { x: anchor.position.x, y: anchor.position.y + (anchor.measured?.height || 120) + 60 }
+        const overlaps = (p) => all.some((n) => Math.abs(n.position.x - p.x) < 240 && Math.abs(n.position.y - p.y) < (n.measured?.height || 120))
+        while (overlaps(at)) at = { x: at.x + 280, y: at.y }
+        if (anchor.id === selected) {
+          const used = new Set(edges.filter((e) => e.source === anchor.id).map((e) => e.sourceHandle || 'next'))
+          const port = portsOf(anchor, specs[anchor.type]).find((p) => !used.has(p.id))
+          if (port) from = { source: anchor.id, sourceHandle: port.id }
+        }
+      } else {
+        at = rf.screenToFlowPosition({
+          x: (wrapper.current?.getBoundingClientRect().left || 0) + (wrapper.current?.clientWidth || 600) / 2 - 110,
+          y: (wrapper.current?.getBoundingClientRect().top || 0) + (wrapper.current?.clientHeight || 400) / 3,
+        })
+      }
+    }
     const block = newBlock(type, spec, at)
     dirty.current = true
     setNodes((ns) => [...ns.map((n) => ({ ...n, selected: false })), { ...block, selected: true, deletable: true }])
+    if (from) {
+      setEdges((es) => [...es, { id: `e_${from.source}_${from.sourceHandle}`, ...from, target: block.id, ...EDGE }])
+    }
     setSelected(block.id)
     setPanel('inspector')
-  }, [specs, rf])
+  }, [specs, rf, selected, edges])
 
   const onDrop = useCallback((e) => {
     e.preventDefault()
@@ -246,7 +269,8 @@ function Builder({ flowId, onExit }) {
   const errors = issues.filter((i) => i.level === 'error').length
   const warnings = issues.length - errors
   const selectedNode = nodes.find((n) => n.id === selected)
-  const ctx = { specs, issues: byNode, active, flows: allFlows, triggerSummary: triggerSummary(flow.triggers) }
+  const ctx = { specs, issues: byNode, active, flows: allFlows, triggerSummary: triggerSummary(flow.triggers),
+    wired: new Set(edges.map((e) => `${e.source}:${e.sourceHandle || 'next'}`)) }
 
   return (
     <BuilderContext.Provider value={ctx}>
@@ -293,7 +317,7 @@ function Builder({ flowId, onExit }) {
                 })}
               </section>
             ))}
-            <p className="fb-muted fb-note">Click or drag a block onto the canvas. Connect an exit (●) to the next block.</p>
+            <p className="fb-muted fb-note">Click or drag a block onto the canvas. To connect, drag from a gold dot (●) on a block's right edge to the next block.</p>
           </aside>
 
           <div className="fb-canvas" ref={wrapper} onDragOver={(e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move' }} onDrop={onDrop}>

@@ -40,7 +40,7 @@ function BlockNode({ id, type, data, selected }) {
 
   return (
     <div className={`fb-block cat-${spec.category || 'start'} ${selected ? 'is-selected' : ''} ${ctx.active === id ? 'is-active' : ''} ${level ? `has-${level}` : ''}`}>
-      {type !== 'start' && <Handle type="target" position={Position.Top} className="fb-in" />}
+      {type !== 'start' && <Handle type="target" position={Position.Top} className="fb-in" title="Drop a connection here" />}
       <header>
         <span className="fb-block-icon"><Icon size={15} /></span>
         <strong>{spec.label}</strong>
@@ -53,7 +53,7 @@ function BlockNode({ id, type, data, selected }) {
           {ports.map((p) => (
             <li key={p.id}>
               <span>{p.label}</span>
-              <Handle type="source" id={p.id} position={Position.Right} className="fb-out" />
+              <Handle type="source" id={p.id} position={Position.Right} className={`fb-out ${ctx.wired?.has(`${id}:${p.id}`) ? '' : 'is-free'}`} title="Drag to the next block" />
             </li>
           ))}
         </ul>

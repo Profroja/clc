@@ -172,8 +172,8 @@ def ports(node):
     if spec['kind'] == 'static':
         return [(p['id'], p['label']) for p in spec['ports']]
     if spec['kind'] == 'options':
-        return [(o.get('id'), o.get('title', {}).get('sw') or o.get('title', {}).get('en') or o.get('id'))
-                for o in data.get(spec['field'], []) or []]
+        return [(o.get('id'), (o.get('title') or {}).get('sw') or (o.get('title') or {}).get('en') or f'Choice {i}')
+                for i, o in enumerate(data.get(spec['field'], []) or [], 1)]
     if spec['kind'] == 'rules':
         return [(r.get('id'), f"{r.get('variable')} {r.get('operator')} {r.get('value', '')}".strip())
                 for r in data.get(spec['field'], []) or []] + [(spec['else']['id'], spec['else']['label'])]
