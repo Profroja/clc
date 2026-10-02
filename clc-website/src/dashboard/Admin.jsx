@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Bot, Building2, Check, FileText, MapPin, Phone, Mail, Plus, Search, Trash2, UserPlus, Users, Workflow } from 'lucide-react'
+import { Building2, Check, FileText, MapPin, Search, UserPlus, Users, Workflow } from 'lucide-react'
 import { activity, firms as firmData, flows as flowData, ROLES, SERVICES, users as userData, weekly } from './data.js'
 import { Avatar, Badge, BarChart, Card, DetailList, Drawer, Field, PageHead, StatCard } from './shared.jsx'
 
@@ -167,88 +167,5 @@ export function AdminFirms() {
 }
 
 /* ---------------- Chatbot flows ---------------- */
-export function AdminFlows() {
-  const [list, setList] = useState(flowData)
-  const [editing, setEditing] = useState(null)
-
-  const save = (flow) => {
-    setList((cur) => (cur.some((f) => f.id === flow.id) ? cur.map((f) => (f.id === flow.id ? flow : f)) : [flow, ...cur]))
-    setEditing(null)
-  }
-  const blank = () => ({ id: `b${Date.now()}`, name: '', service: null, entry: false, status: 'draft', version: 1, updated: new Date().toISOString().slice(0, 10), steps: [] })
-
-  return (
-    <>
-      <PageHead title="Chatbot flows" sub="The WhatsApp menus, questions and messages clients see.">
-        <button className="btn btn-gold" onClick={() => setEditing(blank())}><Plus size={17} /> New flow</button>
-      </PageHead>
-      <div className="d-flow-grid">
-        {list.map((f) => (
-          <button key={f.id} className="d-flow" onClick={() => setEditing(f)}>
-            <div className="d-flow-top">
-              <span className="d-flow-icon"><Bot size={20} /></span>
-              <Badge>{f.status}</Badge>
-            </div>
-            <h3>{f.name}</h3>
-            <p>{f.service ? serviceName(f.service) : 'Entry menu'}{f.entry && ' · entry flow'}</p>
-            <div className="d-flow-foot"><span>{f.steps.length} steps</span><span>v{f.version}</span><span>{f.updated}</span></div>
-          </button>
-        ))}
-      </div>
-      {editing && <FlowEditor flow={editing} onSave={save} onClose={() => setEditing(null)} />}
-    </>
-  )
-}
-
-const STEP_TYPES = [['message', 'Message'], ['question', 'Question'], ['buttons', 'Buttons']]
-
-function FlowEditor({ flow, onSave, onClose }) {
-  const [f, setF] = useState(flow)
-  const isNew = !flow.name
-  const setStep = (id, patch) => setF({ ...f, steps: f.steps.map((s) => (s.id === id ? { ...s, ...patch } : s)) })
-  const addStep = (type) => setF({ ...f, steps: [...f.steps, { id: `s${Date.now()}`, type, sw: '', en: '', options: type === 'buttons' ? ['', ''] : undefined }] })
-  const done = (status) => onSave({ ...f, status, version: status === 'published' ? f.version + 1 : f.version, updated: new Date().toISOString().slice(0, 10) })
-
-  return (
-    <Drawer title={isNew ? 'New chatbot flow' : f.name} onClose={onClose}
-      footer={<><button className="btn btn-ghost" onClick={() => done('draft')} disabled={!f.name}>Save draft</button>
-        <button className="btn btn-gold" onClick={() => done('published')} disabled={!f.name || !f.steps.length}>Publish</button></>}>
-      <div className="d-form">
-        <Field label="Flow name"><input value={f.name} onChange={(e) => setF({ ...f, name: e.target.value })} placeholder="e.g. Land dispute intake" /></Field>
-        <Field label="Service">
-          <select value={f.service || ''} onChange={(e) => setF({ ...f, service: e.target.value || null })}>
-            <option value="">None (menu)</option>
-            {SERVICES.map((s) => <option key={s.code} value={s.code}>{s.name}</option>)}
-          </select>
-        </Field>
-      </div>
-      <h4 className="d-sub">Conversation steps</h4>
-      <ol className="d-steps">
-        {f.steps.map((s, i) => (
-          <li key={s.id}>
-            <div className="d-step-head">
-              <span className="d-step-n">{i + 1}</span>
-              <select value={s.type} onChange={(e) => setStep(s.id, { type: e.target.value, options: e.target.value === 'buttons' ? s.options || ['', ''] : undefined })}>
-                {STEP_TYPES.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
-              </select>
-              <button className="d-icon-btn" aria-label="Remove step" onClick={() => setF({ ...f, steps: f.steps.filter((x) => x.id !== s.id) })}><Trash2 size={16} /></button>
-            </div>
-            <textarea rows={2} placeholder="Kiswahili" value={s.sw} onChange={(e) => setStep(s.id, { sw: e.target.value })} />
-            <textarea rows={2} placeholder="English" value={s.en} onChange={(e) => setStep(s.id, { en: e.target.value })} />
-            {s.type === 'buttons' && (
-              <div className="d-options">
-                {s.options.map((o, j) => (
-                  <input key={j} placeholder={`Button ${j + 1}`} value={o} onChange={(e) => setStep(s.id, { options: s.options.map((x, k) => (k === j ? e.target.value : x)) })} />
-                ))}
-                {s.options.length < 3 && <button className="btn btn-ghost d-sm" onClick={() => setStep(s.id, { options: [...s.options, ''] })}>+ button</button>}
-              </div>
-            )}
-          </li>
-        ))}
-      </ol>
-      <div className="d-addstep">
-        {STEP_TYPES.map(([v, l]) => <button key={v} onClick={() => addStep(v)}><Plus size={14} /> {l}</button>)}
-      </div>
-    </Drawer>
-  )
-}
+// The visual flow builder lives in ./flows (list -> builder -> test chat), backed by /api/chatbot/.
+export { default as AdminFlows } from './flows/FlowList.jsx'

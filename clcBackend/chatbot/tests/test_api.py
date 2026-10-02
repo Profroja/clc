@@ -37,7 +37,8 @@ class BuilderApiTests(TestCase):
         self.assertEqual(res.status_code, 201)
         flow = res.json()
         fid = flow['id']
-        self.assertEqual([n['type'] for n in flow['draft']['definition']['nodes']], ['start'])
+        self.assertEqual(flow['editing']['from'], 'draft')
+        self.assertEqual([n['type'] for n in flow['editing']['definition']['nodes']], ['start'])
         self.assertEqual(self.api('post', 'flows/', {'name': 'wills INTAKE'}).status_code, 400)  # duplicate name
 
         # Publishing an unconnected Start is refused with the reason.
@@ -58,8 +59,11 @@ class BuilderApiTests(TestCase):
         self.assertIsNone(res.json()['draft'])
         self.assertTrue(ActivityEvent.objects.filter(entity_id=fid, action='flow.published').exists())
 
-        # Editing again creates draft v2 from the published version; publishing archives v1.
-        self.assertEqual(self.api('get', f'flows/{fid}/').json()['draft']['version'], 2)
+        # Opening it shows the live version and creates nothing; saving creates draft v2.
+        opened = self.api('get', f'flows/{fid}/').json()
+        self.assertEqual((opened['editing']['from'], opened['draft']), ('published', None))
+        self.assertEqual(self.api('post', f'flows/{fid}/publish/').status_code, 400)  # nothing to publish
+        self.assertEqual(self.api('put', f'flows/{fid}/draft/', {'definition': opened['editing']['definition']}).json()['version'], 2)
         self.api('post', f'flows/{fid}/publish/')
         statuses = dict(BotFlowVersion.objects.filter(flow_id=fid).values_list('version', 'status'))
         self.assertEqual(statuses, {1: FlowStatus.ARCHIVED, 2: FlowStatus.PUBLISHED})

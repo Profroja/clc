@@ -79,6 +79,12 @@ def _draft(flow, create=True):
                                          definition=published.definition if published else blank_definition())
 
 
+def _editing_definition(flow):
+    """Draft if there is one, else the live version; never creates anything."""
+    source = _draft(flow, create=False) or flow.versions.filter(status=FlowStatus.PUBLISHED).first()
+    return source.definition if source else blank_definition()
+
+
 def _lookup_flow(flow_id):
     flow = BotFlow.objects.filter(id=flow_id).first()
     if flow is None:
@@ -103,9 +109,14 @@ def _flow_json(flow, with_definition=False):
         'updated_at': flow.updated_at,
     }
     if with_definition:
-        d = _draft(flow)
-        data['draft'] = {'version': d.version, 'updated_at': d.updated_at, 'definition': d.definition,
-                         'nodes': len(d.definition.get('nodes', []))}
+        # What the builder opens: the draft if there are unpublished changes, else the live version.
+        # Opening a flow never creates a draft; the first save does.
+        source = draft or published
+        data['editing'] = {
+            'from': 'draft' if draft else 'published' if published else 'blank',
+            'version': source.version if source else 1,
+            'definition': source.definition if source else blank_definition(),
+        }
     return data
 
 
@@ -225,7 +236,7 @@ def save_draft(request, flow_id):
 @admin_api(['POST'])
 def validate_flow(request, flow_id):
     flow = get_object_or_404(BotFlow, id=flow_id)
-    definition = request.data.get('definition') or _draft(flow).definition
+    definition = request.data.get('definition') or _editing_definition(flow)
     problem = _check_definition(definition)
     if problem:
         return Response({'detail': problem}, status=400)
@@ -282,7 +293,7 @@ def simulate(request, flow_id):
     """The builder's test chat. Runs the canvas as it is (saved or not); nothing is saved
     and no WhatsApp message is sent. The client keeps `state` between calls."""
     flow = get_object_or_404(BotFlow, id=flow_id)
-    definition = request.data.get('definition') or _draft(flow).definition
+    definition = request.data.get('definition') or _editing_definition(flow)
     problem = _check_definition(definition)
     if problem:
         return Response({'detail': problem}, status=400)
