@@ -1,0 +1,2746 @@
+# MAIN FLOW (start: bot_start)
+
+### hidden [hidden]
+
+### N902M_YCF [reply_buttons]
+  text: {{name}}😔 *Our team is currently offline.*
+    
+    We are available to assist you during our working hours:
+     *Monday to Friday:* 9:00 AM – 6:00 PM (EAT)
+     *Saturday:* 9:00 AM – 1:30 PM (EAT)
+     *Sunday:* Closed
+    We’ll be happy to help you once we’re back online during our operating hours. Thank you for your patience!
+  footer: 
+    📌 What would you like to do?
+  buttons: [Leave a message] ($df85e3b7-4da7-476f-8fe4-73e4955e0a2c) | [Leave Chat] ($d128f16f-b98d-4fbe-af3e-d4a2f83a2354)
+  destination: leave_chatormessage
+  => $d128f16f-b98d-4fbe-af3e-d4a2f83a2354 -> NESLpEoih ; $df85e3b7-4da7-476f-8fe4-73e4955e0a2c -> NzSCNucwj
+
+### NzSCNucwj [var_text]
+  text: Got it, {{name}}! _Please type your message below, and we’ll reply as soon as we’re back._
+  inputSize: long
+  errorText: I'm afraid I didn't understand, could you try again, please?
+  destination: user_message
+  => $success -> NLrLqWCI5
+
+### NI5AH31SC [reply_buttons]
+  text: {{name}},* *here’s what we offer for {{technical_support_application}} 
+    
+    Please review our *TSA Service Proposal.*
+  buttons: [View Proposal] ($fde1e67a-841c-4b34-81b2-f7bc20cbcc1b)
+  => $fde1e67a-841c-4b34-81b2-f7bc20cbcc1b -> N0Zp9spVg
+
+### NVS1qG5kj [reply_buttons]
+  text: 👋 Hello {{name}}, welcome to *CLC Legal Services!* 
+    
+    How can we assist you today?
+  footer: 🔹 Select a category
+  buttons: [1️⃣ TSA] ($43b4d0be-9dfc-49a7-8f41-a74e18e00fb3) | [2️⃣ Legal Services] ($84b3a7cf-79f3-46d8-b0e9-631754c728a4) | [3️⃣ Kiapo cha Majina] ($989fcd62-7bc2-4b81-858f-c64d54531c31)
+  destination: technical_support_application
+  => $84b3a7cf-79f3-46d8-b0e9-631754c728a4 -> NOFM5G11e ; $43b4d0be-9dfc-49a7-8f41-a74e18e00fb3 -> NAUVuApTl ; $989fcd62-7bc2-4b81-858f-c64d54531c31 -> NbYI5yF58
+
+### bot_start [business_hours]
+  timezone: Africa/Dar_es_Salaam
+  openHours: {"Monday":[{"from":"09:00","to":"16:00"}],"Tuesday":[{"from":"09:00","to":"16:00"}],"Wednesday":[{"from":"09:00","to":"16:00"}],"Thursday":[{"from":"09:00","to":"16:00"}],"Friday":[{"from":"09:00","to":"16:00"}],"Saturday":[{"from":"09:00","to":"13:00"}],"Sunday":null}
+  closedDays: []
+  specialDays: []
+  => success -> NIlje_cKJ ; failed -> N-ySdfAkW
+
+### NiqpsEc_H [chat]
+  msg(text): *📌 TSA SERVICE PROPOSAL*
+The *Technical Support Agreement (TSA)* allows a *Primary Mining License (PML) holder* to engage a technical partner for mining operations. As per *Section 8(3) of the Mining Act, Cap 123 of 2019*, 
+TSA approval by the *Mining Commission* is required before a foreign party can provide technical services.
+*📌* *What We Offer:*
+1. *Step-by-Step Process:* A structured guide for a smooth TSA approval.
+2. *Transparent Fees:* Clear pricing breakdown, no hidden costs.
+3. *Regulatory Compliance:* Ensure full adherence to mining laws.
+📩 *PDF Attached:* 
+{{name}} Kindly review our full TSA Service Proposal.
+For inquiries, contact us anytime.
+*Your Partner in Mining Compliance,*
+*CLC TEAM*
+  msg(media/file): https://storage.googleapis.com/media.landbot.io/421418/channels/VL4PXV4O8ACADCOQBE2Z6M2570DTLA8G.pdf
+  buttons: 
+  destination: options
+  => $success -> NoSz2AX6q
+
+### NoSz2AX6q [reply_buttons]
+  text: *Would you like to Discuss with an Expert before proceeding?*
+  buttons: [YES] ($4e5100ca-2bf1-4350-982f-9828626290de) | [NO] ($50e80b45-021b-4320-a79a-63bdb259c882)
+  => $50e80b45-021b-4320-a79a-63bdb259c882 -> NR-Fn0m4i ; $4e5100ca-2bf1-4350-982f-9828626290de -> NnTQ-gsp6
+
+### NR-Fn0m4i [goodbye]
+  messageText: No problem! {{name}} If you ever need our services in the future, feel free to reach out. Have a great day! 😊
+    In the meantime, you’re welcome to *join our WhatsApp Channel* for real-time updates, announcements, and helpful legal tips:
+    👉 Join
+    https://whatsapp.com/channel/0029Va8djEOE50Uc7HAtew1X
+  startButtonEnable: true
+  startButtonText: Start again
+
+### NOFM5G11e [list]
+  text: What legal service do you need help with?  
+    
+    *Legal Services Overview* 
+    1️⃣ Land & Property – Assistance with land ownership, title transfers & disputes.  
+    
+    2️⃣ Work Permits – Permit applications & renewals for foreign workers.  
+    
+    3️⃣ Transfer of Mining License (PML, ML, PL) 
+     
+    4️⃣ Drafting of Will – Estate planning & official will preparation.
+      
+    5️⃣ Company Registation – Business setup, registration & compliance.  
+    
+    6️⃣ Filing Returns – Annual returns & corporate tax compliance.  
+    
+    7️⃣ Mining Licenses – Licensing & regulatory approvals.  
+    
+    8️⃣ Other Legal Services – For specialized legal matters.  
+    
+    💰 Costs vary by service. 
+    Tap below 👇🏽 to learn more.
+  footer: Select from the options below
+  listHeader: Menu
+  list: [1️⃣Buying & Selling Land] ($EfoJHH_M) | [2️⃣ Work Permits] ($VrUyvCtq) | [3️⃣ PML, PL, Transfer] ($PqrKJqsa) | [4️⃣ Drafting of Will] ($dudyL39a) | [5️⃣ Company Registration] ($csI1aQUW) | [6️⃣Filling Annual Return] ($LVT8IpWL) | [7️⃣ Mining Licences App.] ($0CEIgUya) | [8️⃣ Other Legal Services] ($B7SMfJKi)
+  destination: selected_legal_service
+  => default -> Nc1iNz5Mb ; $EfoJHH_M -> NcvEX6Ljl ; $VrUyvCtq -> NcvEX6Ljl ; $csI1aQUW -> NcvEX6Ljl ; $LVT8IpWL -> NcvEX6Ljl ; $0CEIgUya -> NcvEX6Ljl ; $B7SMfJKi -> NPreeGokm ; $PqrKJqsa -> NcvEX6Ljl ; $dudyL39a -> NcNJ8WRj2
+
+### Nc1iNz5Mb [list]
+  text: ⚠️ It looks like there was an issue with your response.  
+    
+     Please tap a button below 👇🏽 to choose your legal service.
+  footer: Select from the options below
+  listHeader: Menu
+  list: [1️⃣Buying & Selling Land] ($EfoJHH_M) | [2️⃣ Work Permits] ($VrUyvCtq) | [3️⃣ PML, PL, Transfer] ($PqrKJqsa) | [4️⃣ Drafting of Will] ($dudyL39a) | [5️⃣ Company Registration] ($csI1aQUW) | [6️⃣Filling Annual Return] ($LVT8IpWL) | [7️⃣ Mining Licences App.] ($0CEIgUya) | [8️⃣ Other Legal Services] ($B7SMfJKi)
+  => default -> N2_vtQZTX ; $VrUyvCtq -> NcvEX6Ljl ; $csI1aQUW -> NcvEX6Ljl ; $LVT8IpWL -> NcvEX6Ljl ; $0CEIgUya -> NcvEX6Ljl ; $EfoJHH_M -> NcvEX6Ljl ; $B7SMfJKi -> NPreeGokm ; $PqrKJqsa -> NcvEX6Ljl ; $dudyL39a -> NcNJ8WRj2
+
+### NnJY16C6R [goodbye]
+  messageText: No problem! {{name}} If you ever need our services in the future, feel free to reach out. Have a great day! 😊
+    In the meantime, you’re welcome to *join our WhatsApp Channel* for real-time updates, announcements, and helpful legal tips: 👉 Join
+    https://whatsapp.com/channel/0029Va8djEOE50Uc7HAtew1X
+  startButtonEnable: true
+  startButtonText: Start again
+
+### N2_vtQZTX [list]
+  text: ⚠️ Looks like there’s an issue.  
+    
+    🔹 This is your last attempt. Please select a service using the buttons below 👇🏽.
+  footer: Select from the options below
+  listHeader: Menu
+  list: [1️⃣Buying & Selling Land] ($EfoJHH_M) | [2️⃣ Work Permits] ($VrUyvCtq) | [3️⃣ PML, PL, Transfer] ($PqrKJqsa) | [4️⃣ Drafting of Will] ($dudyL39a) | [5️⃣ Company Registration] ($csI1aQUW) | [6️⃣Filling Annual Return] ($LVT8IpWL) | [7️⃣ Mining Licences App.] ($0CEIgUya) | [8️⃣ Other Legal Services] ($B7SMfJKi)
+  => default -> NSTlcPF4U ; $EfoJHH_M -> NcvEX6Ljl ; $VrUyvCtq -> NcvEX6Ljl ; $csI1aQUW -> NcvEX6Ljl ; $LVT8IpWL -> NcvEX6Ljl ; $0CEIgUya -> NcvEX6Ljl ; $B7SMfJKi -> NPreeGokm ; $PqrKJqsa -> NcvEX6Ljl ; $dudyL39a -> NcNJ8WRj2
+
+### NSTlcPF4U [reply_buttons]
+  text: ❌ You seem to be having trouble. Would you like to:
+  buttons: [1️⃣ Talk to Support] ($1c03170e-e8e2-453e-8c3f-957598dcd538) | [2️⃣ End Chat 🔚"] ($75be3787-46dd-45ba-b27a-63273cd1856c)
+  => $75be3787-46dd-45ba-b27a-63273cd1856c -> NnJY16C6R ; $1c03170e-e8e2-453e-8c3f-957598dcd538 -> NfuVYcUS7
+
+### NOyz3zomz [human_takeover]
+  agents: 775944,814969,814972
+
+### NF5s9goCx [goodbye]
+  messageText: No problem! {{name}} If you ever need our services in the future, feel free to reach out. Have a great day! 😊
+    
+    In the meantime, you’re welcome to *join our WhatsApp Channel* for real-time updates, announcements, and helpful legal tips: 👉 Join
+    https://whatsapp.com/channel/0029Va8djEOE50Uc7HAtew1X
+  startButtonEnable: true
+  startButtonText: Start again
+
+### NCoGDupZc [reply_buttons]
+  text: {{name}}✍️ After reviewing our Legal Service Overview and opted for   {{selected_legal_service}}
+  footer: 
+    Do you want to proceed?
+  buttons: [Proceed ✅] ($c34973f6-6834-4a3d-8bc7-0cce925d4227) | [Not Interested ❌] ($1c11f7c9-cf0d-4de8-9729-c7dc5d9842ca)
+  => $1c11f7c9-cf0d-4de8-9729-c7dc5d9842ca -> NF5s9goCx ; $c34973f6-6834-4a3d-8bc7-0cce925d4227 -> NFKKXV4xz
+
+### NcvEX6Ljl [set_a_variable]
+  action: SET
+  field: selected_legal_service
+  type: STRING
+  value: {{selected_legal_service}}
+  => success -> NCoGDupZc
+
+### NFKKXV4xz [reply_buttons]
+  text: 📢 *Service Availability Notice*
+    
+    At the moment, our legal services are only accessible in *Dar es Salaam and Dodoma*.  
+    
+    You can choose:  
+    1. *Visual (Phone) Appointment* – FREE, but _requires at least 4 people. _
+    2._ _*Physical Appointment* – May include appointment fees.
+  footer: 
+    📌 Please select an option to continue.
+  buttons: [Virsual - Free] ($fb08732f-ebd7-4160-a4f7-35807468906b) | [Physical-Paid] ($7a15aeea-7365-450c-b2f1-fc54d576cb25)
+  => $7a15aeea-7365-450c-b2f1-fc54d576cb25 -> Nk7j27hxI ; $fb08732f-ebd7-4160-a4f7-35807468906b -> NL9enuRTF
+
+### NRjhm1XIb [goodbye]
+  messageText: *Hello* {{name}},
+    Thank you for reaching out😊!  As you’ve opted to {{leave_chatormessage}} , we’ll assume you prefer to connect during our available hours.
+    
+    We’d love to assist you when we’re back! Feel free to reach out again during our working hours, and we’ll be happy to help.
+    
+    In the meantime, you’re welcome to *join our WhatsApp Channel* for real-time updates, announcements, and helpful legal tips:
+    👉 Join https://whatsapp.com/channel/0029Va8djEOE50Uc7HAtew1X
+    
+    *Best regards,*
+    *CLC TEAM*
+  startButtonEnable: true
+  startButtonText: Start again during Working Hours
+
+### N0Zp9spVg [chat]
+  msg(media/file): https://storage.googleapis.com/media.landbot.io/421418/channels/QP73X467P2PCU9XPQUG9V39SBVY07XD1.jpg
+  buttons: 
+  destination: options
+  => $success -> NiqpsEc_H
+
+### NIlje_cKJ [chat]
+  msg(media/file): https://storage.googleapis.com/media.landbot.io/421418/channels/POMWRY0T6W0TZUEVQU2HLK62F6M0MN9B.png
+  msg(text): *WELCOME TO COMMUNITY LEGAL CLINIC*
+  buttons: 
+  destination: options
+  => $success -> NDO3oLBg5
+
+### NDO3oLBg5 [reply_buttons]
+  text: {{name}}
+    Choose1️⃣ For English Language
+    Chagua2️⃣ Kwa Lugha ya Kiswahili
+  buttons: [1️⃣] ($0eea7761-acae-42dc-8e04-f53a561757d1) | [2️⃣] ($d901d6e3-de27-4f4d-b012-149c39b2b339)
+  => $0eea7761-acae-42dc-8e04-f53a561757d1 -> NVS1qG5kj ; $d901d6e3-de27-4f4d-b012-149c39b2b339 -> BACsnmg1C
+
+### NAUVuApTl [set_a_variable]
+  action: SET
+  field: technical_support_application
+  type: STRING
+  value: {{technical_support_application}}
+  => success -> NI5AH31SC
+
+### NRXiiTahS [reply_buttons]
+  text: {{name}} 
+    
+    
+    Choose1️⃣ For English Language
+    Chagua2️⃣ Kwa Lugha ya Kiswahili
+  buttons: [1️⃣] ($0eea7761-acae-42dc-8e04-f53a561757d1) | [2️⃣] ($d901d6e3-de27-4f4d-b012-149c39b2b339)
+  => $0eea7761-acae-42dc-8e04-f53a561757d1 -> N902M_YCF ; $d901d6e3-de27-4f4d-b012-149c39b2b339 -> NJY99fCDL
+
+### N-ySdfAkW [chat]
+  msg(media/file): https://storage.googleapis.com/media.landbot.io/421418/channels/KJ13UW0ZQ8Y84IFUL13Y9QLZ6UXKY68P.png
+  msg(text): *WELCOME TO COMMUNITY LEGAL CLINIC*
+  buttons: 
+  destination: options
+  => $success -> NRXiiTahS
+
+### NJY99fCDL [reply_buttons]
+  text: {{name}}😔 *Timu yetu haipo ofisini kwa sasa.*
+    
+    Tunapatikana siku za kazi zifuatazo:
+     *Jumatatu hadi Ijumaa:* Saa 3:00 asubuhi hadi saa 10:00 jioni (EAT)
+     *Jumamosi:* Saa 3:00 asubuhi hadi saa 7:30 mchana (EAT)
+     *Jumapili:* Hatufungui
+    Tutafurahi kukuhudumia pindi tutakaporejea katika saa zetu za kazi. Asante kwa subira yako!
+  footer: 
+    📌Ungependa kufanya nini?
+  buttons: [Acha Ujumbe] ($df85e3b7-4da7-476f-8fe4-73e4955e0a2c) | [Sitisha Huduma] ($d128f16f-b98d-4fbe-af3e-d4a2f83a2354)
+  => $df85e3b7-4da7-476f-8fe4-73e4955e0a2c -> N0SVNtVg6 ; $d128f16f-b98d-4fbe-af3e-d4a2f83a2354 -> NyO7HRGkA
+
+### N0SVNtVg6 [var_text]
+  text: Sawa, {{name}}! _tafadhali andika ujumbe wako hapo chini, na tutakujibu mara baada ya kuingia muda wa kazi_
+  inputSize: long
+  errorText: I'm afraid I didn't understand, could you try again, please?
+  destination: user_message
+  => $success -> N24-StkP8
+
+### BACsnmg1C [brick]
+
+### NI5vC0o-F [goodbye]
+  messageText: *Habari*, {{name}}
+    Asante kwa kuwasiliana nasi 😊!
+    Tungetamani sana kukuhudumia tunaporudi ! Tafadhali jisikie huru kuwasiliana nasi tena wakati wa saa zetu za kazi.
+    
+    Lakini tunapenda kukukaribisha ujinge kwenye channel yetu kupata taarifa za mara kwa mara, 
+    jiunge nasi https://whatsapp.com/channel/0029Va8djEOE50Uc7HAtew1X
+    *Asante,* 
+    *CLC TEAM*
+  startButtonEnable: true
+  startButtonText: Tuma neno HABARI  kupata Huduma zetu Saa za kazi
+
+### NgRPZ9fET [chat]
+  msg(text): {{name}} Please wait a moment; you will be connected to Customer Care shortly.
+  buttons: 
+  destination: options
+  => $success -> N4NCwpTdU
+
+### NnTQ-gsp6 [chat]
+  msg(text): {{name}} Please wait a moment; you will be connected to Customer Care shortly.
+  buttons: 
+  destination: options
+  => $success -> Nm3U0qDa7
+
+### NLrLqWCI5 [email]
+  subject: Chat Outside Working Hours: Follow-Up Required
+  text: Hello Customer Care,
+    
+    The following message was left by a user via chat outside our standard business hours. Please find the details below for further action.
+    
+    Left Message
+    {{user_message}} https://app.landbot.io/gui/chats_v4/{{uuid}} (https://app.landbot.io/gui/chats_v4/%C2%BF%C2%B7~uuid%C2%B7?)
+    
+    If necessary, Please assist the user accordingly once operations resume.
+    
+    Thank you,  
+    CLC Management
+  emails: ["godfreynjale@clc.tz","dicksonmdumula@clc.tz"]
+
+### N_izQoO5J [chat]
+  msg(text): Thank you, {{name}}! We've received your request for a physical appointment. Our customer care team will contact you shortly to assist you with further details.
+
+Currently, we have offices in *Dar es Salaam* and *Dodoma* for physical appointments. If you're unable to visit these locations, our team can also help you schedule a virtual appointment.
+  buttons: 
+  destination: options
+  => $success -> N2r907SRe
+
+### N24-StkP8 [email]
+  subject: Ujumbe wa Mteja Uliopokelewa Nje ya Saa za Kazi – Tafadhali Fuatilia
+  text: Habari Huduma kwa Wateja,
+    
+    Mtumiaji ameacha ujumbe kupitia chat (Acha Ujumbe) nje ya muda wetu wa kazi. Tafadhali angalia maelezo hapa chini kwa hatua zaidi
+    
+    Ujumbe wa Mtumiaji
+    {{user_message}}https://app.landbot.io/gui/chats_v4/{{uuid}} (https://app.landbot.io/gui/chats_v4/%C2%BF%C2%B7~uuid%C2%B7?)
+    
+    Tafadhali mfuatilie na kumsaidia mtumiaji mara tu ofisi zitakapofunguliwa.
+    
+    Asante,
+    CLC Management
+  emails: ["dicksonmdumula@clc.tz","godfreynjale@clc.tz"]
+
+### NESLpEoih [set_a_variable]
+  action: SET
+  field: leave_chatormessage
+  type: STRING
+  value: {{leave_chatormessage}}
+  => success -> NRjhm1XIb
+
+### Nk7j27hxI [chat]
+  msg(media/file): https://storage.googleapis.com/media.landbot.io/421418/channels/V1LSLFIZSMM9ZMFKQS50OP0MMJE0AMJ9.png
+  buttons: 
+  destination: options
+  => $success -> N_izQoO5J
+
+### NPreeGokm [chat]
+  msg(text): You've selected {{selected_legal_service}}
+I'm here to help!
+Please briefly describe your issue or the assistance you require. I'll review your situation, and after consulting with our legal expert if necessary, we'll guide you on the best way forward.
+  buttons: 
+  destination: options
+  => $success -> NQPTfUMKX
+
+### NL9enuRTF [chat]
+  msg(text): 📅*Phone Appointment*
+*Book Your Appointment Now* (10 minutes)
+Click the Link below👇🏽
+
+
+https://calendly.com/legalclinicclc/10min
+
+*Client Meeting Policy*
+To maintain the quality and efficiency of our legal services, please note the following:
+1. Clients are expected to join their scheduled 10 minutes consultation on time.
+2. A grace period of 5 minutes is allowed. If the client has not joined within 5 minutes and no prior communication is received, the meeting will be considered missed.
+3. Missed meetings must be rescheduled through our official booking system to secure a new slot.
+4. We do not impose penalties for missed meetings; however, timely attendance is required to ensure service continuity for all clients.
+We appreciate your cooperation and understanding.
+
+*CLC TEAM*
+  buttons: 
+  destination: options
+  => $success -> NbUqK5Byb
+
+### N2RpH0oby [email]
+  subject: Customer Appointment Chat: Upon Confirmation Within Business Hours
+  text: Hello Customer Care,
+    
+    The following message was left by a user via chat during our standard business hours post appointment confirmation. Please make follow up on the details below by either chat or calling and kindly give me a private notes on what aspired for further action.
+    
+    Left Message
+    {{user_message}} https://app.landbot.io/gui/chats_v4/{{uuid}} (https://app.landbot.io/gui/chats_v4/%C2%BF%C2%B7~uuid%C2%B7?)
+    
+    Please assist the user accordingly once.
+    
+    Thank you,  
+    CLC Manageme*nt*
+  emails: ["godfreynjale@clc.tz","dicksonmdumula@clc.tz"]
+  => success -> NmhvC4Dj1
+
+### N2fIadcq0 [set_a_variable]
+  action: SET
+  field: user_message
+  type: STRING
+  value: {{user_message}}
+  => success -> N2RpH0oby
+
+### NmhvC4Dj1 [human_takeover]
+  agents: 775944,814972,814969
+
+### N37WEM2HX [reply_buttons]
+  text: {{name}}😔 Our team is currently offline. 
+    
+    _We are open Monday to Friday from 9:00 AM to 6:00 PM and on Saturday from 9:00 AM to 1:30 PM. We are closed on Sundays. We’ll be happy to assist you during our working hours! _
+  footer: 
+    📌 What would you like to do?
+  buttons: [Leave a message] ($df85e3b7-4da7-476f-8fe4-73e4955e0a2c)
+  destination: leave_chatormessage
+  => default -> N3CoIAL1E
+
+### N3CoIAL1E [var_text]
+  text: 💌Got it_, _{{name}}!_ Please type your message below, and we’ll reply as soon as we’re back._
+  inputSize: long
+  errorText: I'm afraid I didn't understand, could you try again, please?
+  destination: user_message
+  => $success -> Nob2GF2jL
+
+### NK-xB6Y_6 [email]
+  subject: Physical Appointment Chat - Within Business Hours
+  text: Hello Customer Care,
+    
+    The following message was left by a user via chat during our standard business hours post physical appointment confirmation. Please make follow up on the details below by either chat or calling and kindly give me a private notes on what aspired for further action.
+    
+    Left Message
+    {{user_message}} https://app.landbot.io/gui/chats_v4/{{uuid}} (https://app.landbot.io/gui/chats_v4/%C2%BF%C2%B7~uuid%C2%B7?)
+    
+    Please assist the user accordingly once.
+    
+    Thank you,  
+    CLC Management
+  emails: ["godfreynjale@clc.tz","dicksonmdumula@clc.tz"]
+  => success -> NSkoqzoir
+
+### NM3_5WvNK [set_a_variable]
+  action: SET
+  field: user_message
+  type: STRING
+  value: {{user_message}}
+  => success -> NK-xB6Y_6
+
+### NSkoqzoir [human_takeover]
+  agents: 741085,749184,775944
+
+### NafilqBJi [reply_buttons]
+  text: {{name}}😔 Our team is currently offline. 
+    
+    _We are open Monday to Friday from 9:00 AM to 6:00 PM and on Saturday from 9:00 AM to 1:30 PM. We are closed on Sundays. We’ll be happy to assist you during our working hours! _
+  footer: 
+    📌 What would you like to do?
+  buttons: [Leave a message] ($df85e3b7-4da7-476f-8fe4-73e4955e0a2c)
+  destination: leave_chatormessage
+  => default -> NYI40h7_s
+
+### NYI40h7_s [var_text]
+  text: 💌Got it_, _{{name}}!_ Please type your message below, and we’ll reply as soon as we’re back._
+  inputSize: long
+  errorText: I'm afraid I didn't understand, could you try again, please?
+  destination: user_message
+  => $success -> NCmrW78Ox
+
+### NCmrW78Ox [email]
+  subject: Physical Appointment Chat - Outside Business Hours
+  text: Hello Customer Care,
+    
+    The following message was left by a user via chat during outside standard business hours please continue with either scheduling physical appointment after consultation with Advocates or otherwise. Also, Please make follow up on the details below by either chat or calling and kindly give me a private notes on what aspired for further action.
+    
+    Left Message
+    {{user_message}} https://app.landbot.io/gui/chats_v4/{{uuid}} (https://app.landbot.io/gui/chats_v4/%C2%BF%C2%B7~uuid%C2%B7?)
+    
+    Please assist the user accordingly once operations resume.
+    
+    Thank you,  
+    CLC Management
+  emails: ["dicksonmdumula@clc.tz","godfreynjale@clc.tz"]
+
+### NRz_V3xeL [set_a_variable]
+  action: SET
+  field: user_message
+  type: STRING
+  value: {{user_message}}
+  => success -> NEvJ0PcDI
+
+### NEvJ0PcDI [human_takeover]
+  agents: 775944,814969,814972
+
+### N6EHyiKDl [reply_buttons]
+  text: {{name}}😔 Our team is currently offline. 
+    
+    _We are open Monday to Friday from 9:00 AM to 6:00 PM and on Saturday from 9:00 AM to 1:30 PM. We are closed on Sundays. We’ll be happy to assist you during our working hours! _
+  footer: 
+    📌 What would you like to do?
+  buttons: [Leave a message] ($df85e3b7-4da7-476f-8fe4-73e4955e0a2c)
+  destination: leave_chatormessage
+  => default -> NcFc1hMEs
+
+### NcFc1hMEs [var_text]
+  text: 💌Got it_, _{{name}}!_ Please type your message below, and we’ll reply as soon as we’re back._
+  inputSize: long
+  errorText: I'm afraid I didn't understand, could you try again, please?
+  destination: user_message
+  => $success -> N7HV13eEG
+
+### N7HV13eEG [email]
+  subject: Chat - Outside Business Hours
+  text: Hello Customer Care,
+    
+    The following message was left by a user via chat during outside standard business hours please continue with reading the user needs and if the issue concerns legal please foward the issue to an advocate or Admin account after consultation with either of them.
+    Kindly be informed of the user issue and Please assist the user accordingly once operations resume for further action.
+    
+    Left Message
+    {{user_message}} https://app.landbot.io/gui/chats_v4/{{uuid}} (https://app.landbot.io/gui/chats_v4/%C2%BF%C2%B7~uuid%C2%B7?)
+    
+    Thank you,  
+    CLC Management
+  emails: ["dicksonmdumula@clc.tz","godfreynjale@clc.tz"]
+
+### N___upBrn [reply_buttons]
+  text: {{name}}😔 Our team is currently offline. 
+    
+    _We are open Monday to Friday from 9:00 AM to 6:00 PM and on Saturday from 9:00 AM to 1:30 PM. We are closed on Sundays. We’ll be happy to assist you during our working hours! _
+  footer: 
+    📌 What would you like to do?
+  buttons: [Leave a message] ($df85e3b7-4da7-476f-8fe4-73e4955e0a2c)
+  destination: leave_chatormessage
+  => default -> Nh9KGvO10
+
+### Nh9KGvO10 [var_text]
+  text: 💌Got it_, _{{name}}!_ Please type your message below, and we’ll reply as soon as we’re back._
+  inputSize: long
+  errorText: I'm afraid I didn't understand, could you try again, please?
+  destination: user_message
+  => $success -> NF7cTFD7W
+
+### NF7cTFD7W [email]
+  subject: Chat - Outside Business Hours
+  text: Hello Customer Care,
+    
+    The following message was left by a user via chat during outside standard business hours please continue with directing this user on either how to use our services or Please assist the user issues provided here below and kindly give me a private notes on what aspired for further action.
+    
+    Left Message
+    {{user_message}} https://app.landbot.io/gui/chats_v4/{{uuid}} (https://app.landbot.io/gui/chats_v4/%C2%BF%C2%B7~uuid%C2%B7?)
+    
+    Please assist the user accordingly once operations resume.
+    
+    Thank you,  
+    CLC Management
+  emails: ["godfrey.aloyce@clctz.org","dickson.mdumula@clctz.org"]
+
+### Nob2GF2jL [email]
+  subject: Customer Appointment  Booking Chat - Outside Business Hours
+  text: Hello Customer Care,
+    
+    The following message was left by a user via chat during outside standard business hours post appointment confirmation, Please make follow up on the details below by either chat or calling and kindly give me a private notes on what aspired for further action.
+    
+    Left Message
+    {{user_message}} https://app.landbot.io/gui/chats_v4/{{uuid}} (https://app.landbot.io/gui/chats_v4/%C2%BF%C2%B7~uuid%C2%B7?)
+    
+    Please assist the user accordingly once operations resume.
+    
+    Thank you,  
+    CLC Management
+  emails: ["dicksonmdumula@clc.tz","godfreynjale@clc.tz"]
+
+### N4NCwpTdU [email]
+  subject: Chat - Within Business Hours
+  text: Hello Customer Care,
+    
+    The following message was left by a user via chat during standard business hours please continue with directing this user on either how to use our services or Please assist the user issues provided here below and kindly give me a private notes on what aspired for further action.
+    
+    Left Message
+    {{user_message}} https://app.landbot.io/gui/chats_v4/{{uuid}} (https://app.landbot.io/gui/chats_v4/%C2%BF%C2%B7~uuid%C2%B7?)
+    
+    Please assist the user accordingly once operations resume.
+    
+    Thank you,  
+    CLC Management
+  emails: ["godfreynjale@clc.tz","dicksonmdumula@clc.tz"]
+  => success -> NOyz3zomz
+
+### N03aGKLZR [human_takeover]
+  agents: 814972,814969,775944
+
+### NokRmQZUH [reply_buttons]
+  text: {{name}}😔 _*Our team is currently offline.*_
+    
+    _We are available to assist you during our working hours:
+     __*Monday to Friday:*__ 9:00 AM – 6:00 PM (EAT)
+     __*Saturday:*__ 9:00 AM – 1:30 PM (EAT)
+     __*Sunday:*__ Closed_
+    _We’ll be happy to help you once we’re back online during our operating hours. Thank you for your patience!_
+  footer: 
+    📌 What would you like to do?
+  buttons: [Leave a message] ($df85e3b7-4da7-476f-8fe4-73e4955e0a2c)
+  destination: leave_chatormessage
+  => default -> NinMRVgAy
+
+### NinMRVgAy [var_text]
+  text: 💌Got it_, _{{name}}!_ Please type your message below, and we’ll reply as soon as we’re back._
+  inputSize: long
+  errorText: I'm afraid I didn't understand, could you try again, please?
+  destination: user_message
+  => $success -> NyGSdKlyF
+
+### NyGSdKlyF [email]
+  subject: Customer Appointment  Booking Chat - Outside Business Hours
+  text: Hello Customer Care,
+    
+    *A user left the following message via chat outside of standard business hours.*
+    The user selected *TSA*, but since it was outside our operating hours, they chose to leave a message instead.
+    Please review the details below and follow up with the user accordingly. If the matter appears to be urgent or requires further assistance, kindly send the user an appointment link or book an appointment on their behalf.
+    
+    Left Message
+    {{user_message}} https://app.landbot.io/gui/chats_v4/{{uuid}} (https://app.landbot.io/gui/chats_v4/%C2%BF%C2%B7~uuid%C2%B7?)
+    
+    Please assist the user accordingly once operations resume.
+    
+    Thank you,  
+    CLC Management
+  emails: ["dicksonmdumula@clc.tz","godfreynjale@clc.tz"]
+
+### Nm3U0qDa7 [business_hours]
+  timezone: Africa/Dar_es_Salaam
+  openHours: {"Monday":[{"from":"09:00","to":"16:00"}],"Tuesday":[{"from":"09:00","to":"16:00"}],"Wednesday":[{"from":"09:00","to":"16:00"}],"Thursday":[{"from":"09:00","to":"16:00"}],"Friday":[{"from":"09:00","to":"16:00"}],"Saturday":[{"from":"09:00","to":"13:00"}],"Sunday":null}
+  closedDays: []
+  specialDays: []
+  => success -> N03aGKLZR ; failed -> NokRmQZUH
+
+### NbUqK5Byb [business_hours]
+  timezone: Africa/Dar_es_Salaam
+  openHours: {"Monday":[{"from":"09:00","to":"16:00"}],"Tuesday":[{"from":"09:00","to":"16:00"}],"Wednesday":[{"from":"09:00","to":"16:00"}],"Thursday":[{"from":"09:00","to":"16:00"}],"Friday":[{"from":"09:00","to":"16:00"}],"Saturday":[{"from":"09:00","to":"13:00"}],"Sunday":null}
+  closedDays: []
+  specialDays: []
+  => success -> N2fIadcq0 ; failed -> N37WEM2HX
+
+### N2r907SRe [business_hours]
+  timezone: Africa/Dar_es_Salaam
+  openHours: {"Monday":[{"from":"09:00","to":"16:00"}],"Tuesday":[{"from":"09:00","to":"16:00"}],"Wednesday":[{"from":"09:00","to":"16:00"}],"Thursday":[{"from":"09:00","to":"16:00"}],"Friday":[{"from":"09:00","to":"16:00"}],"Saturday":[{"from":"09:00","to":"13:00"}],"Sunday":null}
+  closedDays: []
+  specialDays: []
+  => success -> NM3_5WvNK ; failed -> NafilqBJi
+
+### NfuVYcUS7 [business_hours]
+  timezone: Africa/Dar_es_Salaam
+  openHours: {"Monday":[{"from":"09:00","to":"16:00"}],"Tuesday":[{"from":"09:00","to":"16:00"}],"Wednesday":[{"from":"09:00","to":"16:00"}],"Thursday":[{"from":"09:00","to":"16:00"}],"Friday":[{"from":"09:00","to":"16:00"}],"Saturday":[{"from":"09:00","to":"13:00"}],"Sunday":null}
+  closedDays: []
+  specialDays: []
+  => success -> NgRPZ9fET ; failed -> N___upBrn
+
+### NQPTfUMKX [business_hours]
+  timezone: Africa/Dar_es_Salaam
+  openHours: {"Monday":[{"from":"09:00","to":"16:00"}],"Tuesday":[{"from":"09:00","to":"16:00"}],"Wednesday":[{"from":"09:00","to":"16:00"}],"Thursday":[{"from":"09:00","to":"16:00"}],"Friday":[{"from":"09:00","to":"16:00"}],"Saturday":[{"from":"09:00","to":"13:00"}],"Sunday":null}
+  closedDays: []
+  specialDays: []
+  => success -> NRz_V3xeL ; failed -> N6EHyiKDl
+
+### NH_aXYwXw [set_a_variable]
+  action: SET
+  field: selected_legal_service
+  type: STRING
+  value: {{selected_legal_service}}
+  => success -> BqMJ9BMFi
+
+### BqMJ9BMFi [brick]
+
+### NyO7HRGkA [set_a_variable]
+  action: SET
+  field: leave_chatormessage
+  type: STRING
+  value: {{leave_chatormessage}}
+  => success -> NI5vC0o-F
+
+### NbYI5yF58 [chat]
+  msg(text): If you need this service, please click again on the *Kiapo cha Majina* option below.
+👉 Please note: This service will be provided in *Swahili only for now*, so kindly continue using the *Kiswahili menu* to proceed.
+  buttons: 
+  destination: options
+  => $success -> BACsnmg1C
+
+### NcNJ8WRj2 [chat]
+  msg(text): 📝 Here’s your free Will template PDF — just as we promised in our podcast.
+  msg(media/file): https://storage.googleapis.com/media.landbot.io/421418/channels/DZAU2KDO4G2JVAD4V6JNAKR9KCIZQLED.pdf
+  buttons: 
+  destination: options
+  => $success -> NcvEX6Ljl
+
+
+# BRICK BACsnmg1C "KISWAHILI "
+
+### outputs [brick_outputs]
+  outputs: [{"id":"$0","alias":"Output #1"}]
+
+### NQBpYdurV [set_a_variable]
+  action: SET
+  field: technical_support_application
+  type: STRING
+  value: {{technical_support_application}}
+  => success -> NbPfr2uMV
+
+### NbPfr2uMV [reply_buttons]
+  text: {{name}}, tunakukaribisha kupata huduma bora za {{technical_support_application}}
+    
+    Tafadhali chukua muda kukagua *Pendekezo letu la Huduma ya TSA*.
+  buttons: [Tazama Pendekezo] ($fde1e67a-841c-4b34-81b2-f7bc20cbcc1b)
+  => default -> N0K1EaFEo
+
+### N0K1EaFEo [chat]
+  msg(media/file): https://storage.googleapis.com/media.landbot.io/421418/channels/QP73X467P2PCU9XPQUG9V39SBVY07XD1.jpg
+  buttons: 
+  destination: options
+  => $success -> NoyJ9BWhq
+
+### NoyJ9BWhq [chat]
+  msg(text): 📌 *PENDEKEZO LA HUDUMA YA TSA*
+Mkataba wa Msaada wa Kiufundi (*TSA - Technical Support Agreement*) unamruhusu mmiliki wa *Leseni ya Madini ya Awali (PML - Primary Mining License)* kushirikiana na mtaalamu  wa kiufundi kwa shughuli za uchimbaji madini. Kwa mujibu wa *Kifungu cha 8(3) cha Sheria ya Madini, Sura ya 123 ya mwaka 2019*, idhini ya TSA kutoka kwa *Tume ya Madini* inahitajika kabla ya mshirika wa kigeni kutoa huduma za kiufundi.
+📌 *Tunachotoa:*
+1. *Mchakato wa Hatua kwa Hatua* – Mwongozo ulioandaliwa kwa urahisi wa kupata idhini ya TSA.
+2. *Gharama Zenye Uwazi* – Muundo wa malipo ulio wazi, bila gharama zilizofichwa.
+3. *Uzingatiaji wa Sheria* – Uhakikisho wa kufuata kikamilifu sheria za uchimbaji madini.
+📩 *PDF Imeambatishwa:*
+ {{name}}Tafadhali kagua pendekezo letu kamili la huduma za TSA.
+
+Kwa maswali au maelezo zaidi, wasiliana nasi wakati wowote.
+*Mshirika Wako Katika Uzingatiaji wa Sheria za Madini,*
+ *Timu ya CLC*
+  msg(media/file): https://storage.googleapis.com/media.landbot.io/421418/channels/O7NDEDOYP9BV1RTGCT1M4GOMWRUT5BXF.pdf
+  buttons: 
+  destination: options
+  => $success -> Nz8PF7zms
+
+### NxWDGj9Nc [list]
+  text: {{name}}  *Unahitaji msaada wa huduma gani za kisheria?!*
+    
+     *Muhtasari wa Huduma za Kisheria*
+    1️⃣ Ardhi & Mali  – Msaada wa umiliki wa ardhi, uhamishaji wa hati & migogoro.
+    
+    2️⃣ Vibali vya Kazi – Maombi & upyaishaji wa vibali kwa wafanyakazi wa kigeni.
+    
+    3️⃣ Jinsi ya Kuuza na Kununua Leseni ya kuchimba na kutafiti Madini/kuachia eneo la leseni ya utafiti madini.
+    
+    4️⃣ Kuandika wa Wosia – Mpango wa urithi & maandalizi rasmi ya wosia.
+    
+    5️⃣ Usajili wa Kampuni – Kuanzisha biashara, usajili & uzingatiaji wa sheria.
+    
+    6️⃣ Uwasilishaji wa ripoti za makampuni – Ripoti za mwaka & Mabadiliko ya Wakurugenzi wa kampuni.
+    
+    7️⃣ Leseni za Madini – Upatikanaji wa leseni & kibali cha udhibiti.
+    
+    8️⃣ Huduma Nyingine za Kisheria – Kwa masuala maalum ya kisheria.
+    
+    💰 Gharama zinatofautiana kulingana na huduma.
+    Bonyeza hapa 👇🏽 kujifunza zaidi.
+  footer: Tafadhali chagua kutoka kwenye chaguo zilizopo hapa chini.
+  listHeader: Menu
+  list: [1️⃣Ardhi & Mali] ($EfoJHH_M) | [2️⃣ Vibali vya Kazi] ($VrUyvCtq) | [3️⃣ Uza/nunua Leseni] ($PqrKJqsa) | [4️⃣ Uandishi wa Wosia] ($dudyL39a) | [5️⃣ Usajili wa Kampuni] ($csI1aQUW) | [6️⃣ Ripoti za Kampuni] ($LVT8IpWL) | [7️⃣ Leseni za Madini] ($0CEIgUya) | [8️⃣Huduma Nyingine] ($B7SMfJKi)
+  destination: selected_legal_service
+  => default -> Ns_nuNE6o ; $EfoJHH_M -> NRdgqXLbS ; $csI1aQUW -> NRdgqXLbS ; $LVT8IpWL -> NRdgqXLbS ; $0CEIgUya -> NRdgqXLbS ; $B7SMfJKi -> NFfV2jxWU ; $VrUyvCtq -> NRdgqXLbS ; $PqrKJqsa -> NRdgqXLbS ; $dudyL39a -> NZoyjG5sc
+
+### Ns_nuNE6o [list]
+  text: ⚠️ {{name}} Inaonekana kulikuwa na tatizo kwenye jibu lako.
+    
+    Tafadhali gusa kitufe hapa chini 👇🏽 kuchagua huduma yako ya kisheria.
+  listHeader: Menu
+  list: [1️⃣Ardhi & Mali] ($EfoJHH_M) | [2️⃣ Vibali vya Kazi] ($VrUyvCtq) | [3️⃣ Uza/nunua Leseni] ($PqrKJqsa) | [4️⃣ Uandishi wa Wosia] ($dudyL39a) | [5️⃣ Usajili wa Kampuni] ($csI1aQUW) | [6️⃣ Ripoti za Kampuni] ($LVT8IpWL) | [7️⃣ Leseni za Madini] ($0CEIgUya) | [8️⃣ Huduma Nyingine] ($B7SMfJKi)
+  => default -> NL7tIlnHh ; $EfoJHH_M -> NRdgqXLbS ; $csI1aQUW -> NRdgqXLbS ; $LVT8IpWL -> NRdgqXLbS ; $0CEIgUya -> NRdgqXLbS ; $B7SMfJKi -> NFfV2jxWU ; $VrUyvCtq -> NRdgqXLbS ; $PqrKJqsa -> NRdgqXLbS ; $dudyL39a -> NZoyjG5sc
+
+### NL7tIlnHh [list]
+  text: ⚠️ Inaonekana kuna tatizo.
+    
+    🔹{{name}}Hili ni jaribio lako la mwisho. Tafadhali chagua huduma kwa kutumia vitufe hapa chini 👇🏽.
+  listHeader: Menu
+  list: [1️⃣Ardhi & Mali] ($EfoJHH_M) | [2️⃣ Vibali vya Kazi] ($VrUyvCtq) | [3️⃣ Uza/nunua Leseni] ($PqrKJqsa) | [4️⃣  Uandishi wa Wosia] ($dudyL39a) | [5️⃣Usajili wa Kampuni] ($csI1aQUW) | [6️⃣ Ripoti za Kampuni] ($LVT8IpWL) | [7️⃣ Leseni za Madini] ($0CEIgUya) | [8️⃣ Huduma Nyingine] ($B7SMfJKi)
+  => default -> NtFAZeME3 ; $EfoJHH_M -> NRdgqXLbS ; $VrUyvCtq -> NRdgqXLbS ; $csI1aQUW -> NRdgqXLbS ; $LVT8IpWL -> NRdgqXLbS ; $0CEIgUya -> NRdgqXLbS ; $B7SMfJKi -> NFfV2jxWU ; $PqrKJqsa -> NRdgqXLbS ; $dudyL39a -> NZoyjG5sc
+
+### NRdgqXLbS [set_a_variable]
+  action: SET
+  field: selected_legal_service
+  type: STRING
+  value: {{selected_legal_service}}
+  => success -> NdG0Jo-t6
+
+### NdG0Jo-t6 [reply_buttons]
+  text: {{name}} ✍️ Baada ya kupitia Mwongozo wetu wa Huduma za Kisheria kuhusu {{selected_legal_service}}
+  footer: Je Unataka Kuendelea?
+  buttons: [Endelea ✅] ($c34973f6-6834-4a3d-8bc7-0cce925d4227) | [Sitisha ❌] ($1c11f7c9-cf0d-4de8-9729-c7dc5d9842ca)
+  => $c34973f6-6834-4a3d-8bc7-0cce925d4227 -> N56saIeqn ; $1c11f7c9-cf0d-4de8-9729-c7dc5d9842ca -> NC7FXwC9P
+
+### NtFAZeME3 [reply_buttons]
+  text: ❌ Inaonekana unapata shida.
+    Je, ungependa:
+    
+    1. Kuwasiliana na Mtoa Huduma   au
+    2. Kusitisha Huduma
+  buttons: [Huduma kwa Wateja] ($1c03170e-e8e2-453e-8c3f-957598dcd538) | [Sitisha  🔚"] ($75be3787-46dd-45ba-b27a-63273cd1856c)
+  => $75be3787-46dd-45ba-b27a-63273cd1856c -> NnEQWl5AB ; $1c03170e-e8e2-453e-8c3f-957598dcd538 -> N95hZKgif
+
+### Nz8PF7zms [reply_buttons]
+  text: 📌 *Je, ungependa kujadili na mtaalamu kabla ya kuendelea?*_
+    _
+  buttons: [NDIO] ($4e5100ca-2bf1-4350-982f-9828626290de) | [HAPANA] ($50e80b45-021b-4320-a79a-63bdb259c882)
+  => $50e80b45-021b-4320-a79a-63bdb259c882 -> NXsaOxi_E ; $4e5100ca-2bf1-4350-982f-9828626290de -> NjkvisA3M
+
+### NXsaOxi_E [goodbye]
+  messageText: Hakuna shida! {{name}} Ikiwa utahitaji huduma zetu siku za usoni, usisite kuwasiliana nasi. Uwe na siku njema! 😊
+  startButtonEnable: true
+  startButtonText: Start again
+
+### N56saIeqn [reply_buttons]
+  text: 📢 *Taarifa ya Upatikanaji wa Huduma*
+    
+    Kwa sasa, huduma zetu za kisheria zinapatikana *Dar es Salaam* na *Dodoma* pekee.
+    
+    Unaweza kuchagua:
+    1. *Kutana na Wakili kwa Njia ya Simu *– BURE, lakini inahitaji watu wasiozidi wanne (4) kwa siku.
+    2. *Kutana na Wakili Ofisini* – Inaweza kuhusisha gharama za huduma.
+  footer: 
+    📌 Tafadhali chagua hapo chini ili kuendelea.
+  buttons: [Kwa Simu - Bure] ($fb08732f-ebd7-4160-a4f7-35807468906b) | [Ofisini- Malipo] ($7a15aeea-7365-450c-b2f1-fc54d576cb25)
+  => $7a15aeea-7365-450c-b2f1-fc54d576cb25 -> NtBbbqyWm ; $fb08732f-ebd7-4160-a4f7-35807468906b -> NMHKQ6ozU
+
+### NUxVv4i0q [human_takeover]
+  agents: 775944,814969,814972
+
+### NnEQWl5AB [goodbye]
+  messageText: Hakuna shida! {{name}} Ikiwa utahitaji huduma zetu siku za usoni, usisite kuwasiliana nasi. Uwe na siku njema! 😊😊
+    
+    📢 Pia, usikose habari tofauti ya huduma zetu!Jiunge na WhatsApp Channel ya CLC kwa taarifa za kisheria, huduma mpya, na elimu ya sheria moja kwa moja kwenye simu yako. 
+    👉 Bonyeza hapa https://whatsapp.com/channel/0029Va8djEOE50Uc7HAtew1X kujiunga.
+  startButtonEnable: true
+  startButtonText: Start again
+
+### brick_start [reply_buttons]
+  text: 👋 Habari {{name}}, karibu *CLC Huduma za Kisheria!*
+    
+    Tunawezaje kukusaidia leo?
+  footer: 
+    🔹 Chagua katika horodha
+  buttons: [1️⃣ TSA] ($43b4d0be-9dfc-49a7-8f41-a74e18e00fb3) | [2️⃣ Huduma za Sheria] ($84b3a7cf-79f3-46d8-b0e9-631754c728a4) | [3️⃣ Kiapo Cha Majina] ($6d7713dd-3767-4b13-8692-7d11dd18b4ec)
+  destination: technical_support_application
+  => $43b4d0be-9dfc-49a7-8f41-a74e18e00fb3 -> NQBpYdurV ; $84b3a7cf-79f3-46d8-b0e9-631754c728a4 -> NxWDGj9Nc ; $6d7713dd-3767-4b13-8692-7d11dd18b4ec -> B6QQ3ULOp
+
+### NC7FXwC9P [goodbye]
+  messageText: Hakuna shida! {{name}} Ikiwa utahitaji huduma zetu siku za usoni, usisite kuwasiliana nasi. Uwe na siku njema! 😊
+  startButtonEnable: true
+  startButtonText: Start again
+
+### NglTqMXci [chat]
+  msg(text): {{name}} Subiri Kidogo, Utaunganishwa na Mtoa Huduma hivi Punde
+  buttons: 
+  destination: options
+  => $success -> Nz_NpJBOx
+
+### NjkvisA3M [chat]
+  msg(text): {{name}} Subiri Kidogo, Utaunganishwa na Mtoa Huduma hivi Punde
+  buttons: 
+  destination: options
+  => $success -> N_chGBfLL
+
+### NkFJ8bPMI [chat]
+  msg(text): Asante, {{name}} ! Tumepokea ombi lako la kikao cha ana kwa ana na Wakili. Timu yetu ya huduma kwa wateja itawasiliana nawe muda mfupi ujao ili kukusaidia na taarifa zaidi.
+
+Kwa sasa, tunayo ofisi Dar es Salaam na Dodoma kwa kikao cha ana kwa ana. Iwapo hutaweza kufika katika maeneo haya, timu yetu inaweza pia kukusaidia kupanga miadi ya mtandaoni.
+  buttons: 
+  destination: options
+  => $success -> NmBGQMZ77
+
+### NFfV2jxWU [chat]
+  msg(text): Umechagua {{selected_legal_service}}
+Nipo tayari kukusaidia! 
+Tafadhali eleza kwa ufupi suala lako au huduma unayohitaji. Nitaipitia na baada ya kushauriana na Wakili wetu ikihitajika, tutakuelekeza namna bora ya kukuhudumia.
+  buttons: 
+  destination: options
+  => $success -> NyMRMDlWR
+
+### NtBbbqyWm [chat]
+  msg(media/file): https://storage.googleapis.com/media.landbot.io/421418/channels/V1LSLFIZSMM9ZMFKQS50OP0MMJE0AMJ9.png
+  buttons: 
+  destination: options
+  => $success -> NkFJ8bPMI
+
+### NMHKQ6ozU [chat]
+  msg(text): 📅 *Appoinment*
+*Weka Appoinment Yako Sasa*  (Dakika 10)
+Bofya kiungo hapa chini👇🏽
+
+
+https://calendly.com/legalclinicclc/10min
+
+*Sera ya Kuhudhuria Mikutano*
+Kwa ajili ya kuhakikisha ubora na ufanisi wa huduma zetu za kisheria, tafadhali zingatia yafuatayo:
+1. Wateja wanatakiwa kujiunga kwenye kikao cha dakika 10 kilichopangwa kwa wakati.
+2. Muda wa kusubiri wa dakika 5 unaruhusiwa. Iwapo mteja hatajiunga ndani ya dakika hizo na hatakuwa ametuma taarifa, kikao kitazingatiwa kuwa kimeshinikana.
+3. Mikutano iliyoshindikana italazimika kupangwa upya kupitia mfumo wetu rasmi wa kuweka miadi.
+4. Hatutozi ada yoyote kwa mikutano iliyoshindikana, lakini uhudhuriaji kwa wakati ni muhimu ili kuhakikisha mwendelezo wa huduma bora kwa wateja wote.
+Tunakushukuru kwa ushirikiano na uelewa wako.
+
+*CLC TEAM*
+  buttons: 
+  destination: options
+  => $success -> NGWH5E2Fa
+
+### NOpQ8RqOt [reply_buttons]
+  text: {{name}}😔*Timu yetu haipo ofisini kwa sasa.*
+    
+    Tunapatikana siku za kazi zifuatazo:
+     *Jumatatu hadi Ijumaa:* Saa 3:00 asubuhi hadi saa 10:00 jioni (EAT)
+     *Jumamosi:* Saa 3:00 asubuhi hadi saa 7:30 mchana (EAT)
+     *Jumapili:* Hatufungui
+    Tutafurahi kukuhudumia pindi tutakaporejea katika saa zetu za kazi. Asante kwa subira yako!
+  footer: 
+    Ungependa kufanya nini?
+  buttons: [Acha Ujumbe] ($df85e3b7-4da7-476f-8fe4-73e4955e0a2c)
+  => default -> NMW7cGzRN
+
+### NMW7cGzRN [var_text]
+  text: _💌_Sawa,_ _{{name}}! _tafadhali andika ujumbe wako hapo chini, na tutakujibu mara baada ya kuingia muda wa kazi_
+  inputSize: long
+  errorText: I'm afraid I didn't understand, could you try again, please?
+  destination: user_message
+  => $success -> NqMLwcYw2
+
+### NqMLwcYw2 [email]
+  subject: Ujumbe wa Mteja: Baada ya Kuthibitisha Appointment - Nje ya muda wa kazi
+  text: Habari Huduma kwa Wateja,
+    
+    Ujumbe ufuatao umeachwa na mtumiaji kupitia chat nje ya saa zetu za kawaida za kazi, baada ya kuthibitisha apointment. Tafadhali fanya ufuatiliaji kwa kutumia maelezo hapa chini, kwa kumpigia simu au kumwandikia kupitia chat.
+    Ningependa pia unipe maelezo binafsi kuhusu kilichotokea kupitia private notes kwenye mfumo ili tuweze kuchukua hatua zinazofaa.
+    
+    Ujumbe wa Mtumiaji
+    {{user_message}} https://app.landbot.io/gui/chats_v4/{{uuid}} (https://app.landbot.io/gui/chats_v4/%C2%BF%C2%B7~uuid%C2%B7?)
+    
+    Tafadhali mfuatilie na kumsaidia mtumiaji mara tu ofisi zitakapofunguliwa.
+    
+    Asante,
+    CLC Management
+  emails: ["godfreynjale@clc.tz","dicksonmdumula@clc.tz"]
+
+### NGWH5E2Fa [business_hours]
+  timezone: Africa/Dar_es_Salaam
+  openHours: {"Monday":[{"from":"09:00","to":"18:00"}],"Tuesday":[{"from":"09:00","to":"23:30"}],"Wednesday":[{"from":"09:00","to":"18:00"}],"Thursday":[{"from":"09:00","to":"18:00"}],"Friday":[{"from":"09:00","to":"18:00"}],"Saturday":[{"from":"09:00","to":"13:00"}],"Sunday":null}
+  closedDays: []
+  specialDays: []
+  => success -> Nr9W09Pof ; failed -> NOpQ8RqOt
+
+### Nr9W09Pof [set_a_variable]
+  action: SET
+  field: user_message
+  type: STRING
+  value: {{user_message}}
+  => success -> Nm8oeZE6-
+
+### Nm8oeZE6- [email]
+  subject: Ujumbe wa Mteja: Baada ya Kuthibitisha Appointment - Ndani ya Saa za Kazi
+  text: Habari Huduma kwa Wateja,
+    
+    Mtumiaji aliacha ujumbe kupitia chat wakati wa saa zetu za kawaida za kazi baada ya kuthibitisha appointment. Tafadhali fuatilia ujumbe huu siku inayofuata kwa kumpigia simu au kumwandikia kupitia chat.
+    Ningependa pia unipe maelezo binafsi kuhusu kilichojiri kupitia private notes kwenye mfumo ili tuweze kuchukua hatua zinazofaa.
+    
+    Ujumbe wa Mtumiaji
+    {{user_message}}
+    https://app.landbot.io/gui/chats_v4/{{uuid}} (https://app.landbot.io/gui/chats_v4/%C2%BF%C2%B7~uuid%C2%B7?)
+    
+    Tafadhali mfuatilie na kumsaidia mtumiaji mara tu ofisi zitakapofunguliwa.
+    
+    Asante,
+    CLC Management
+  emails: ["godfreynjale@clc.tz","dicksonmdumula@clc.tz"]
+  => success -> NnO5rh2t2
+
+### NnO5rh2t2 [human_takeover]
+  agents: 775944,814969,814972
+
+### NC6PiCnyU [reply_buttons]
+  text: {{name}}😔*Timu yetu haipo ofisini kwa sasa.*
+    
+    Tunapatikana siku za kazi zifuatazo:
+     *Jumatatu hadi Ijumaa:* Saa 3:00 asubuhi hadi saa 10:00 jioni (EAT)
+     *Jumamosi:* Saa 3:00 asubuhi hadi saa 7:30 mchana (EAT)
+     *Jumapili:* Hatufungui
+    Tutafurahi kukuhudumia pindi tutakaporejea katika saa zetu za kazi. Asante kwa subira yako!
+  footer: 
+    📌Ungependa kufanya nini?
+  buttons: [Acha Ujumbe] ($df85e3b7-4da7-476f-8fe4-73e4955e0a2c)
+  => default -> NiU6EzoT3
+
+### NiU6EzoT3 [var_text]
+  text: _💌_Sawa,_ _{{name}}! _tafadhali andika ujumbe wako hapo chini, na tutakujibu mara baada ya kuingia muda wa kazi_
+  inputSize: long
+  errorText: I'm afraid I didn't understand, could you try again, please?
+  destination: user_message
+  => $success -> N4la6e6cE
+
+### N4la6e6cE [email]
+  subject: Ujumbe wa Mteja Baada ya Kuomba Kukutana na Wakili Ofisini– Nje ya Saa za Kazi
+  text: Habari Huduma kwa Wateja,
+    
+    Mtumiaji aliacha ujumbe kupitia chat nje ya saa zetu za kawaida za kazi. Tafadhali endelea kuwasiliana nae kuhusu kupanga appointment ya kuonana na wakili ofisini baada ya kushauriana na Mawakili, au chukua hatua nyingine inayofaa kama vile kumsaidia kupata appointment kwa njia ya simu.
+    Tafadhali fanya ufuatiliaji wa maelezo haya kwa kumpigia simu au kumwandikia kupitia chat, na unijulishe kuhusu kilichotokea kupitia private notes kwenye mfumo
+    
+    Ujumbe wa Mtumiaji
+    {{user_message}} https://app.landbot.io/gui/chats_v4/{{uuid}} (https://app.landbot.io/gui/chats_v4/%C2%BF%C2%B7~uuid%C2%B7?)
+    
+    Tafadhali mfuatilie na kumsaidia mtumiaji mara tu ofisi zitakapofunguliwa.
+    
+    Asante,
+    CLC Management
+  emails: ["dicksonmdumula@clc.tz","godfreynjale@clc.tz"]
+
+### NmBGQMZ77 [business_hours]
+  timezone: Africa/Dar_es_Salaam
+  openHours: {"Monday":[{"from":"09:00","to":"18:00"}],"Tuesday":[{"from":"09:00","to":"23:30"}],"Wednesday":[{"from":"09:00","to":"18:00"}],"Thursday":[{"from":"09:00","to":"18:00"}],"Friday":[{"from":"09:00","to":"18:00"}],"Saturday":[{"from":"09:00","to":"13:00"}],"Sunday":null}
+  closedDays: []
+  specialDays: []
+  => failed -> NC6PiCnyU ; success -> NI48pAzhh
+
+### NLvycs4VO [email]
+  subject: Ujumbe wa Mteja Baada ya Kuomba Kukutana na Wakili Ofisini– Ndani ya Saa za Kazi
+  text: Habari Huduma kwa Wateja,
+    
+    Mtumiaji ameacha ujumbe kupitia chat wakati wa saa zetu za kazi baada ya kuchagua kuonana na Wakili ana kwa ana (ofisini). Tafadhali fanya ufuatiliaji siku kwa kumpigia simu au kumwandikia kupitia chat, na unijulishe kwa private notes kwenye mfumo kuhusu kilichotokea kwa ajili ya hatua zaidi.
+    
+    Ujumbe wa Mtumiaji
+    {{user_message}} https://app.landbot.io/gui/chats_v4/{{uuid}} (https://app.landbot.io/gui/chats_v4/%C2%BF%C2%B7~uuid%C2%B7?)
+    
+    Tafadhali msaidie mtumiaji ipasavyo.
+    
+    Asante,
+    CLC Management
+  emails: ["dicksonmdumula@clc.tz","godfreynjale@clc.tz"]
+  => success -> NTsjeXCN5
+
+### NTsjeXCN5 [human_takeover]
+  agents: 775944,814969,814972
+
+### NI48pAzhh [set_a_variable]
+  action: SET
+  field: user_message
+  type: STRING
+  value: {{user_message}}
+  => success -> NLvycs4VO
+
+### NTCASAtgp [reply_buttons]
+  text: {{name}}😔*Timu yetu haipo ofisini kwa sasa.*
+    
+    Tunapatikana siku za kazi zifuatazo:
+     *Jumatatu hadi Ijumaa:* Saa 3:00 asubuhi hadi saa 10:00 jioni (EAT)
+     *Jumamosi:* Saa 3:00 asubuhi hadi saa 7:30 mchana (EAT)
+     *Jumapili:* Hatufungui
+    Tutafurahi kukuhudumia pindi tutakaporejea katika saa zetu za kazi. Asante kwa subira yako!
+  footer: 
+    📌Ungependa kufanya nini?
+  buttons: [Acha Ujumbe] ($df85e3b7-4da7-476f-8fe4-73e4955e0a2c)
+  => default -> N9aoRp0DV
+
+### N9aoRp0DV [var_text]
+  text: _💌_Sawa,_ _{{name}}! _tafadhali andika ujumbe wako hapo chini, na tutakujibu mara baada ya kuingia muda wa kazi_
+  inputSize: long
+  errorText: I'm afraid I didn't understand, could you try again, please?
+  destination: user_message
+  => $success -> NW-nc9MGX
+
+### NW-nc9MGX [email]
+  subject: Ujumbe wa Mteja Uliopokelewa Nje ya Saa za Kazi – Tafadhali Fuatilia
+  text: Habari Huduma kwa Wateja,
+    
+    Mteja aliacha ujumbe kupitia chat nje ya saa zetu za kawaida za kazi. Tafadhali endelea kwa kusoma mahitaji ya mteja, na kama tatizo linahusu masuala ya kisheria, tafadhali wasiliana kwanza na Wakili au akaunti ya Admin, kisha liwasilishwe kwao kwa hatua zaidi.
+    
+    Ujumbe wa Mtumiaji
+    {{user_message}} https://app.landbot.io/gui/chats_v4/{{uuid}} (https://app.landbot.io/gui/chats_v4/%C2%BF%C2%B7~uuid%C2%B7?)
+    
+    Tafadhali fahamu changamoto ya mteja kama ilivyoelezwa, na msaidie ipasavyo mara shughuli zitakaporejea.
+    
+    Asante,
+    CLC Management
+  emails: ["godfreynjale@clc.tz","dicksonmdumula@clc.tz"]
+
+### NyMRMDlWR [business_hours]
+  timezone: Africa/Dar_es_Salaam
+  openHours: {"Monday":[{"from":"09:00","to":"18:00"}],"Tuesday":[{"from":"09:00","to":"23:30"}],"Wednesday":[{"from":"09:00","to":"18:00"}],"Thursday":[{"from":"09:00","to":"18:00"}],"Friday":[{"from":"09:00","to":"18:00"}],"Saturday":[{"from":"09:00","to":"13:00"}],"Sunday":null}
+  closedDays: []
+  specialDays: []
+  => failed -> NTCASAtgp ; success -> Nb0myy63s
+
+### NUCvTnO9H [human_takeover]
+  agents: 814969,814972,775944
+
+### Nb0myy63s [set_a_variable]
+  action: SET
+  field: user_message
+  type: STRING
+  value: {{user_message}}
+  => success -> NUCvTnO9H
+
+### Nyyys2oQH [reply_buttons]
+  text: {{name}}😔*Timu yetu haipo ofisini kwa sasa.*
+    
+    Tunapatikana siku za kazi zifuatazo:
+     *Jumatatu hadi Ijumaa:* Saa 3:00 asubuhi hadi saa 10:00 jioni (EAT)
+     *Jumamosi:* Saa 3:00 asubuhi hadi saa 7:30 mchana (EAT)
+     *Jumapili:* Hatufungui
+    Tutafurahi kukuhudumia pindi tutakaporejea katika saa zetu za kazi. Asante kwa subira yako!
+  footer: 
+    📌Ungependa kufanya nini?
+  buttons: [Acha Ujumbe] ($df85e3b7-4da7-476f-8fe4-73e4955e0a2c)
+  => default -> Nhglhxn7S
+
+### Nhglhxn7S [var_text]
+  text: _💌_Sawa,_ _{{name}}! _tafadhali andika ujumbe wako hapo chini, na tutakujibu mara baada ya kuingia muda wa kazi_
+  inputSize: long
+  errorText: I'm afraid I didn't understand, could you try again, please?
+  destination: user_message
+  => $success -> NXd0BXZJZ
+
+### NXd0BXZJZ [email]
+  subject: Ujumbe wa Mteja Uliopokelewa Nje ya Saa za Kazi – Tafadhali Fuatilia
+  text: Habari Huduma kwa Wateja,
+    
+    Mteja aliacha ujumbe kupitia chat nje ya saa zetu za kazi. Tafadhali endelea kwa kumwelekeza jinsi ya kutumia huduma zetu, au msaidie moja kwa moja kulingana na changamoto alizozieleza hapa chini.
+    Pia, tafadhali niandikie private note kwenye mfumo kuhusu kilichotokea kwa ajili ya hatua zaidi.
+    Ujumbe wa Mtumiaji
+    {{user_message}} https://app.landbot.io/gui/chats_v4/{{uuid}} (https://app.landbot.io/gui/chats_v4/%C2%BF%C2%B7~uuid%C2%B7?)
+    
+    Tafadhali mfuatilie na kumsaidia mtumiaji mara tu ofisi zitakapofunguliwa.
+    
+    Asante,
+    CLC Management
+  emails: ["godfreynjale@clc.tz","dicksonmdumula@clc.tz"]
+
+### N95hZKgif [business_hours]
+  timezone: Africa/Dar_es_Salaam
+  openHours: {"Monday":[{"from":"09:00","to":"18:00"}],"Tuesday":[{"from":"09:00","to":"23:30"}],"Wednesday":[{"from":"09:00","to":"18:00"}],"Thursday":[{"from":"09:00","to":"18:00"}],"Friday":[{"from":"09:00","to":"18:00"}],"Saturday":[{"from":"09:00","to":"13:00"}],"Sunday":null}
+  closedDays: []
+  specialDays: []
+  => failed -> Nyyys2oQH ; success -> NglTqMXci
+
+### Nz_NpJBOx [email]
+  subject: Ujumbe wa Mteja Uliopokelewa Ndani ya Saa za Kazi – Tafadhali Fuatilia
+  text: Habari Huduma kwa Wateja,
+    
+    Mteja aliacha ujumbe kupitia chat nje ya saa zetu za kazi. Tafadhali fuatilia siku inayofuata kwa kumwelekeza jinsi ya kutumia huduma zetu, au msaidie moja kwa moja kulingana na changamoto alizozieleza hapa chini.
+    Pia, tafadhali niandikie private note kwenye mfumo kuhusu kilichotokea kwa ajili ya hatua zaidi.
+    Ujumbe wa Mtumiaji
+    {{user_message}} https://app.landbot.io/gui/chats_v4/{{uuid}} (https://app.landbot.io/gui/chats_v4/%C2%BF%C2%B7~uuid%C2%B7?)
+    
+    Tafadhali mfuatilie na kumsaidia mtumiaji mara tu ofisi zitakapofunguliwa.
+    
+    Asante,
+    CLC Management
+  emails: ["dicksonmdumula@clc.tz","godfreynjale@clc.tz"]
+  => success -> NUxVv4i0q
+
+### NORolkehb [reply_buttons]
+  text: {{name}}😔*Timu yetu haipo ofisini kwa sasa.*
+    
+    Tunapatikana siku za kazi zifuatazo:
+     *Jumatatu hadi Ijumaa:* Saa 3:00 asubuhi hadi saa 10:00 jioni (EAT)
+     *Jumamosi:* Saa 3:00 asubuhi hadi saa 7:30 mchana (EAT)
+     *Jumapili:* Hatufungui
+    Tutafurahi kukuhudumia pindi tutakaporejea katika saa zetu za kazi. Asante kwa subira yako!
+  footer: 
+    Ungependa kufanya nini?
+  buttons: [Acha Ujumbe] ($df85e3b7-4da7-476f-8fe4-73e4955e0a2c)
+  => default -> NtDvws79A
+
+### NtDvws79A [var_text]
+  text: _💌_Sawa,_ _{{name}}! _tafadhali andika ujumbe wako hapo chini, na tutakujibu mara baada ya kuingia muda wa kazi_
+  inputSize: long
+  errorText: I'm afraid I didn't understand, could you try again, please?
+  destination: user_message
+  => $success -> NR76W0PGS
+
+### NR76W0PGS [email]
+  subject: Ujumbe wa Mteja: Baada ya Kuthibitisha Appointment - Nje ya muda wa kazi
+  text: Habari Huduma kwa Wateja,
+    
+    Ujumbe ufuatao umeachwa na mtumiaji kupitia chat nje ya saa zetu za kawaida za kazi, baada ya kuthibitisha apointment. Tafadhali fanya ufuatiliaji kwa kutumia maelezo hapa chini, kwa kumpigia simu au kumwandikia kupitia chat.
+    Ningependa pia unipe maelezo binafsi kuhusu kilichotokea kupitia private notes kwenye mfumo ili tuweze kuchukua hatua zinazofaa.
+    
+    Ujumbe wa Mtumiaji
+    {{user_message}} https://app.landbot.io/gui/chats_v4/{{uuid}} (https://app.landbot.io/gui/chats_v4/%C2%BF%C2%B7~uuid%C2%B7?)
+    
+    Tafadhali mfuatilie na kumsaidia mtumiaji mara tu ofisi zitakapofunguliwa.
+    
+    Asante,
+    CLC Management
+  emails: ["dicksonmdumula@clc.tz","godfreynjale@clc.tz"]
+
+### N_chGBfLL [business_hours]
+  timezone: Africa/Dar_es_Salaam
+  openHours: {"Monday":[{"from":"09:00","to":"18:00"}],"Tuesday":[{"from":"09:00","to":"23:30"}],"Wednesday":[{"from":"09:00","to":"18:00"}],"Thursday":[{"from":"09:00","to":"18:00"}],"Friday":[{"from":"09:00","to":"18:00"}],"Saturday":[{"from":"09:00","to":"13:00"}],"Sunday":null}
+  closedDays: []
+  specialDays: []
+  => success -> NQ_gRYnip ; failed -> NORolkehb
+
+### NQ_gRYnip [set_a_variable]
+  action: SET
+  field: user_message
+  type: STRING
+  value: {{user_message}}
+  => success -> NKTI-sg7C
+
+### NKTI-sg7C [email]
+  subject: Ujumbe wa Mteja: Baada ya Kuthibitisha Appointment - Ndani ya Saa za Kazi
+  text: Habari Huduma kwa Wateja,
+    
+    Mtumiaji aliacha ujumbe kupitia chat wakati wa saa zetu za kawaida za kazi baada ya kuthibitisha appointment. Tafadhali fuatilia ujumbe huu siku inayofuata kwa kumpigia simu au kumwandikia kupitia chat.
+    Ningependa pia unipe maelezo binafsi kuhusu kilichojiri kupitia private notes kwenye mfumo ili tuweze kuchukua hatua zinazofaa.
+    
+    Ujumbe wa Mtumiaji
+    {{user_message}}
+    https://app.landbot.io/gui/chats_v4/{{uuid}} (https://app.landbot.io/gui/chats_v4/%C2%BF%C2%B7~uuid%C2%B7?)
+    
+    Tafadhali mfuatilie na kumsaidia mtumiaji mara tu ofisi zitakapofunguliwa.
+    
+    Asante,
+    CLC Management
+  emails: ["godfreynjale@clc.tz","dicksonmdumula@clc.tz"]
+  => success -> Nr3r7QeXK
+
+### Nr3r7QeXK [human_takeover]
+  agents: 775944,814969,814972
+
+### B6QQ3ULOp [brick]
+
+### NZoyjG5sc [chat]
+  msg(text): 📝 Hii hapa nakala ya bure ya Wosia — kama tulivyoahidi kwenye podcast yetu.
+  msg(media/file): https://storage.googleapis.com/media.landbot.io/421418/channels/DZAU2KDO4G2JVAD4V6JNAKR9KCIZQLED.pdf
+  buttons: 
+  destination: options
+  => $success -> NRdgqXLbS
+
+
+# BRICK BqMJ9BMFi "DEEDPOLL ISSUES"
+
+### outputs [brick_outputs]
+  outputs: [{"id":"$0","alias":"Option 1"}]
+
+### brick_start [reply_buttons]
+  text: {{name}}✍️ After reviewing our Legal Service Overview and opted {{deedpoll_viapo}}
+  footer: Please Choose
+  buttons: [Proceed ✅] ($0595432a-75fd-4510-9ad9-826367c5381b) | [Not Interested ❌] ($a509f357-09ba-4b17-9d68-c8b2c6b995ef)
+  destination: deedpoll_viapo
+  => $a509f357-09ba-4b17-9d68-c8b2c6b995ef -> NDeMb4Tnz ; $0595432a-75fd-4510-9ad9-826367c5381b -> NQogi1DV-
+
+### NDeMb4Tnz [goodbye]
+  messageText: No problem! {{name}} If you ever need our services in the future, feel free to reach out. Have a great day! 😊
+  startButtonEnable: true
+  startButtonText: Start again
+
+### N23b5MP1u [chat]
+  msg(text): *Do you need help with name corrections on NECTA certificates? *Please read the NECTA guidelines here in the PDF below 👇:
+
+or Visit Website: http://www.necta.go.tz/
+  msg(media/file): https://storage.googleapis.com/media.landbot.io/421418/channels/0SJKOPQ92B6P7TFE7EKZUP02A6NMZ4KE.pdf
+  buttons: 
+  destination: options
+  => $success -> NFgxh6ZGk
+
+### NCMy1tYjc [reply_buttons]
+  text: 👋 _Hello _{{name}}_! Are you following up on your NSSF benefits but facing issues due to name mismatches on your documents?_
+    Here are the *common problems*:
+    🔹 Your name on your NIDA ID doesn’t match your NSSF account details
+    🔹 Misspelled names or different name order (e.g., first vs last name)
+    🔹 Missing middle names or Letters
+    ⚠️ _Important:_
+    To resolve such issues, *a legal name change document (Deed Poll)* is often required. This must be prepared by a licensed advocate and registered officially.
+  footer: 👉 Need help with a Deed Poll or booking an appointment?
+  buttons: [Proceed ✅] ($ca143762-ab5e-4754-aa81-8d842798965b) | [Not Interested ❌] ($e24a5543-7750-4ff0-83aa-4d0434c4b38d)
+  => $ca143762-ab5e-4754-aa81-8d842798965b -> Bi7XynwwI ; $e24a5543-7750-4ff0-83aa-4d0434c4b38d -> NSOA8l6vI
+
+### Bi7XynwwI [brick]
+
+### NSOA8l6vI [goodbye]
+  messageText: No problem! {{name}} If you ever need our services in the future, feel free to reach out. Have a great day! 😊
+  startButtonEnable: true
+  startButtonText: Start again
+
+### B77swpsVD [brick]
+
+### NQogi1DV- [reply_buttons]
+  text: *Welcome! Please select your issue:*
+  buttons: [NSSF Issues] ($71f17641-55b6-4add-8ad5-8f8c8e17ca8e) | [NIDA Issues] ($5c3182b7-cc0d-4441-a399-b52a37ec840d) | [NECTA Certificates] ($50012fcf-16c8-464f-a43d-2cfb5c9f8f99)
+  => $50012fcf-16c8-464f-a43d-2cfb5c9f8f99 -> N23b5MP1u ; $5c3182b7-cc0d-4441-a399-b52a37ec840d -> B77swpsVD ; $71f17641-55b6-4add-8ad5-8f8c8e17ca8e -> NCMy1tYjc
+
+### NFgxh6ZGk [human_takeover]
+  agents: 741085,749184
+
+
+# BRICK Bi7XynwwI "NSSF PROCCED"
+
+### outputs [brick_outputs]
+  outputs: [{"id":"$0","alias":"Option 1"}]
+
+### NBFEjqWdX [chat]
+  msg(text): Thank you, {{name}}! We've received your request for a physical appointment. Our customer care team will contact you shortly to assist you with further details.
+
+Currently, we have offices in *Dar es Salaam* and *Dodoma* for physical appointments. If you're unable to visit these locations, our team can also help you schedule a virtual appointment.
+  buttons: 
+  destination: options
+  => $success -> Nd8PMe9vm
+
+### N066yTqCy [chat]
+  msg(text): 📅*Phone Appointment*
+*Book Your Appointment Now* (10 minutes)
+Click the Link below👇🏽
+
+
+https://calendly.com/legalclinicclc/10min
+
+*Client Meeting Policy*
+To maintain the quality and efficiency of our legal services, please note the following:
+1. Clients are expected to join their scheduled 10 minutes consultation on time.
+2. A grace period of 5 minutes is allowed. If the client has not joined within 5 minutes and no prior communication is received, the meeting will be considered missed.
+3. Missed meetings must be rescheduled through our official booking system to secure a new slot.
+4. We do not impose penalties for missed meetings; however, timely attendance is required to ensure service continuity for all clients.
+We appreciate your cooperation and understanding.
+
+*CLC TEAM*
+  buttons: 
+  destination: options
+  => $success -> NftQfeaUm
+
+### NSFBcDhKW [email]
+  subject: Customer Appointment Chat: Upon Confirmation Within Business Hours
+  text: Hello Customer Care,
+    
+    The following message was left by a user via chat during our standard business hours post appointment confirmation. Please make follow up on the details below by either chat or calling and kindly give me a private notes on what aspired for further action.
+    
+    Left Message
+    {{user_message}} https://app.landbot.io/gui/chats_v4/{{uuid}} (https://app.landbot.io/gui/chats_v4/%C2%BF%C2%B7~uuid%C2%B7?)
+    
+    Please assist the user accordingly once.
+    
+    Thank you,  
+    CLC Manageme*nt*
+  emails: ["godfrey.aloyce@clctz.org","dickson.mdumula@clctz.org"]
+  => success -> N9DP5vACh
+
+### NTJRLb_-v [set_a_variable]
+  action: SET
+  field: user_message
+  type: STRING
+  value: {{user_message}}
+  => success -> NSFBcDhKW
+
+### N9DP5vACh [human_takeover]
+  agents: 741085,749184
+
+### NKp41dEQH [reply_buttons]
+  text: {{name}}😔 Our team is currently offline. 
+    
+    _We are open Monday to Friday from 9:00 AM to 6:00 PM and on Saturday from 9:00 AM to 1:30 PM. We are closed on Sundays. We’ll be happy to assist you during our working hours! _
+  footer: 
+    📌 What would you like to do?
+  buttons: [Leave a message] ($df85e3b7-4da7-476f-8fe4-73e4955e0a2c)
+  destination: leave_chatormessage
+  => default -> NSxXUc_59
+
+### NSxXUc_59 [var_text]
+  text: 💌Got it_, _{{name}}!_ Please type your message below, and we’ll reply as soon as we’re back._
+  inputSize: long
+  errorText: I'm afraid I didn't understand, could you try again, please?
+  destination: user_message
+  => $success -> NKw6oesbW
+
+### NIZSQXtiX [email]
+  subject: Physical Appointment Chat - Within Business Hours
+  text: Hello Customer Care,
+    
+    The following message was left by a user via chat during our standard business hours post physical appointment confirmation. Please make follow up on the details below by either chat or calling and kindly give me a private notes on what aspired for further action.
+    
+    Left Message
+    {{user_message}} https://app.landbot.io/gui/chats_v4/{{uuid}} (https://app.landbot.io/gui/chats_v4/%C2%BF%C2%B7~uuid%C2%B7?)
+    
+    Please assist the user accordingly once.
+    
+    Thank you,  
+    CLC Management
+  emails: ["godfrey.aloyce@clctz.org","dickson.mdumula@clctz.org"]
+  => success -> NOm7UPtOu
+
+### NQarw3yRf [set_a_variable]
+  action: SET
+  field: user_message
+  type: STRING
+  value: {{user_message}}
+  => success -> NIZSQXtiX
+
+### NOm7UPtOu [human_takeover]
+  agents: 741085,749184
+
+### NSYCHkifP [reply_buttons]
+  text: {{name}}😔 Our team is currently offline. 
+    
+    _We are open Monday to Friday from 9:00 AM to 6:00 PM and on Saturday from 9:00 AM to 1:30 PM. We are closed on Sundays. We’ll be happy to assist you during our working hours! _
+  footer: 
+    📌 What would you like to do?
+  buttons: [Leave a message] ($df85e3b7-4da7-476f-8fe4-73e4955e0a2c)
+  destination: leave_chatormessage
+  => default -> NHY8ukIXz
+
+### NHY8ukIXz [var_text]
+  text: 💌Got it_, _{{name}}!_ Please type your message below, and we’ll reply as soon as we’re back._
+  inputSize: long
+  errorText: I'm afraid I didn't understand, could you try again, please?
+  destination: user_message
+  => $success -> NqQOq_Wy1
+
+### NqQOq_Wy1 [email]
+  subject: Physical Appointment Chat - Outside Business Hours
+  text: Hello Customer Care,
+    
+    The following message was left by a user via chat during outside standard business hours please continue with either scheduling physical appointment after consultation with Advocates or otherwise. Also, Please make follow up on the details below by either chat or calling and kindly give me a private notes on what aspired for further action.
+    
+    Left Message
+    {{user_message}} https://app.landbot.io/gui/chats_v4/{{uuid}} (https://app.landbot.io/gui/chats_v4/%C2%BF%C2%B7~uuid%C2%B7?)
+    
+    Please assist the user accordingly once operations resume.
+    
+    Thank you,  
+    CLC Management
+  emails: ["godfrey.aloyce@clctz.org","dickson.mdumula@clctz.org"]
+
+### NKw6oesbW [email]
+  subject: Customer Appointment  Booking Chat - Outside Business Hours
+  text: Hello Customer Care,
+    
+    The following message was left by a user via chat during outside standard business hours post appointment confirmation, Please make follow up on the details below by either chat or calling and kindly give me a private notes on what aspired for further action.
+    
+    Left Message
+    {{user_message}} https://app.landbot.io/gui/chats_v4/{{uuid}} (https://app.landbot.io/gui/chats_v4/%C2%BF%C2%B7~uuid%C2%B7?)
+    
+    Please assist the user accordingly once operations resume.
+    
+    Thank you,  
+    CLC Management
+  emails: ["godfrey.aloyce@clctz.org","dickson.mdumula@clctz.org"]
+
+### NftQfeaUm [business_hours]
+  timezone: Africa/Dar_es_Salaam
+  openHours: {"Monday":[{"from":"09:00","to":"16:00"}],"Tuesday":[{"from":"09:00","to":"16:00"}],"Wednesday":[{"from":"09:00","to":"16:00"}],"Thursday":[{"from":"09:00","to":"16:00"}],"Friday":[{"from":"09:00","to":"16:00"}],"Saturday":[{"from":"09:00","to":"13:00"}],"Sunday":null}
+  closedDays: []
+  specialDays: []
+  => success -> NTJRLb_-v ; failed -> NKp41dEQH
+
+### Nd8PMe9vm [business_hours]
+  timezone: Africa/Dar_es_Salaam
+  openHours: {"Monday":[{"from":"09:00","to":"16:00"}],"Tuesday":[{"from":"09:00","to":"16:00"}],"Wednesday":[{"from":"09:00","to":"16:00"}],"Thursday":[{"from":"09:00","to":"16:00"}],"Friday":[{"from":"09:00","to":"16:00"}],"Saturday":[{"from":"09:00","to":"13:00"}],"Sunday":null}
+  closedDays: []
+  specialDays: []
+  => success -> NQarw3yRf ; failed -> NSYCHkifP
+
+### brick_start [reply_buttons]
+  text: 📢 *Service Availability Notice*
+    At the moment, our legal services are only accessible in *Dar es Salaam and Dodoma*.
+    You can choose:
+    1. *Visual (Phone) Appointment* – FREE, but _requires at least 4 people._
+    2._ _*Physical Appointment* – May include appointment fees.
+  buttons: [Online - Free] ($5bf9502b-fe5d-4d82-bde3-2f74e9da374a) | [Physical - Paid] ($fa0fb89d-6571-4425-ba1c-0ec30b327fd9)
+  => $5bf9502b-fe5d-4d82-bde3-2f74e9da374a -> N066yTqCy ; $fa0fb89d-6571-4425-ba1c-0ec30b327fd9 -> NBFEjqWdX
+
+
+# BRICK B77swpsVD "NIDA ISSUES"
+
+### outputs [brick_outputs]
+  outputs: [{"id":"$0","alias":"Output #1"}]
+
+### brick_start [list]
+  text: *You need assistance with NIDA Correction services. Please select the type of correction you need:*
+  listHeader: Choose what you want
+  list: [Changing Name] ($SYG2EFcg) | [Correct Information] ($Ym5t2TG-) | [Day/Month/Year Change] ($-6QyLbuT) | [Fraud Changing Info] ($XtERkhgC) | [For Government Employee] ($z808uqHN)
+  => $SYG2EFcg -> NtfAkXbOy ; $Ym5t2TG- -> N0pP8-Bfs ; $-6QyLbuT -> NN2nj340k ; $XtERkhgC -> N-IVDmAXA ; $z808uqHN -> NPnZG1GqN
+
+### NtfAkXbOy [reply_buttons]
+  title: Please Learn Here
+  text: *NAME CHANGE GUIDELINES*
+    *INTRODUCTION:*The authority responsible for name changes is the *National Identification Authority (NIDA)*. They have provided the following guidelines for anyone wishing to change their name. Please read carefully to understand the process, and visit their website by clicking here (https://nida.go.tz/Mabadiliko-Majina) for more information.
+    *MAIN BODY:*
+    *Name Corrections*Any applicant who needs to change their name is required to submit the following documents:
+    *Name Changes*
+    a) A clinic card, public notice, birth certificate, Class VII certificate, Form IV certificate, or leaving certificate obtained earlier by parents or the one you submitted to NIDA during your registration, containing the name information as you now wish it to appear.
+    b) *Obtain a Deed Poll (an affidavit for name change) from a lawyer recognized by the Tanganyika Law Society (TLS)*, and then submit it to the Ministry of Lands and Human Settlements Development to register the corrected name.
+    c) Publish a notice in the Government Gazette issued by the Government Chief Printer showing the changes made to the name.
+    d) The District Registration Officer may request any additional documents that they deem necessary to verify the applicant’s information/names.
+    e) Any changes without proper documentary evidence verifying the requested information cannot be permitted, received, or processed by any officials.
+    f) If the error occurred on the Authority’s side, the Registration Officer will verify and proceed with the corrections without any fee. Otherwise, the applicant will be required to pay a fee of *20,000 Tanzanian Shillings*.
+    g) The applicant’s request will be presented to the Registration and Identification Committee. If the committee is satisfied that the application meets the necessary criteria, they will issue approval for the Registration Officer to proceed with the corrections. If the application does not meet the criteria, approval will not be granted, and the Registration Officer will not proceed with any changes.
+    *Information Allowed to be Changed in Identity Applications*
+    The guideline for the correction of information under the National Identification Authority (NIDA) registration allows changes to the following information, provided the applicant meets the basic required criteria:
+    a) Government-issued Marriage Certificate,
+    b) Government-issued Divorce Certificate or a copy of the court judgment/decree or enforcement document,
+    c) Birth certificate, or certificates from Primary/Secondary/Higher Education institutions, or Baptism certificate/astrological certificate,
+    d) To accurately perform their duties, the District Registration Officer may request any additional documents that confirm the applicant’s information/names.
+    e) The applicant must contribute a fee of *20,000 Tanzanian Shillings* for the correction. If the mistake was made by the Authority, the Registration Officer will verify and proceed with the correction free of charge.
+    f) The District Registration Officer may request any other supporting documents deemed necessary to verify the applicant’s information/names.
+    g) Any changes without proper documentary evidence verifying the requested information cannot be permitted, received, or processed by District Registration Officers.
+    *Important:*The client’s request may either be accepted or rejected depending on the reason and the intention behind seeking the changes.
+  footer: Need Lawyer Guidance?
+  buttons: [Yes] ($385b98e8-e53a-45fe-ad9f-3b93eeca8313) | [No] ($e41374a1-5f28-4c1c-a860-ba308f789c3f)
+  => $e41374a1-5f28-4c1c-a860-ba308f789c3f -> NXmvQPY6P ; $385b98e8-e53a-45fe-ad9f-3b93eeca8313 -> N9_pi81qT
+
+### N0pP8-Bfs [reply_buttons]
+  title: Please Learn here
+  text: *CORRECTION OF INFORMATION*
+    *INTRODUCTION:*The authority responsible for the correction of personal information is the *National Identification Authority (NIDA)*. They have issued official guidelines explaining who is eligible, the types of information that can be corrected, and the required documents that must be submitted for the correction process. For more details, please visit their website by clicking here (https://nida.go.tz/Mabadiliko-Majina).
+    Below are the detailed procedures and requirements:
+    *Eligibility Criteria for an Applicant Seeking to Update Registration Information:*
+    (i) An applicant who has married and changed their name by adopting the surname of their husband or spouse.
+    (ii) An applicant who has legally divorced may be allowed to update their information and revert to their original names (before marriage) based on their certificates/documents.
+    (iii) An applicant who made mistakes when entering some of their information during the Registration and Identification process.
+    (iv) An applicant whose information was incorrectly entered into the National Identification Authority (NIDA) system by its officers during operations.
+    (v) An applicant who registered some of their names under the “other/famous names” section and later wishes to have those names recorded as their first names. This can be corrected without affecting their original identity or the information already stored in the system.
+    (vi) A surname — if the applicant decides to start using a name that already exists under their parents’ names, for example, a grandfather’s name that was not previously used.
+    The District Registration Officer (DRO) may approve the correction of information recorded in the applicant’s original registration form, such as in the “other names” section, provided the changes are not intended to hide or falsify the applicant's original identity.
+    *Types of Information Permitted to Be Corrected:*
+    According to the guidelines for the correction of information at the National Identification Authority, the following types of information may be changed if the applicant meets the required criteria:
+    (i) First name, middle name, or surname (family name), after fulfilling the required criteria and submitting proper evidence.
+    (ii) Date and month of birth.
+    (iii) The applicant’s residential address.
+    (iv) Phone number — after the Registration Officer confirms that the phone number is registered using the applicant’s NIN (National Identification Number).
+    (v) Citizenship — for those who have changed their citizenship, with acceptable documents following the citizenship data update guidelines.
+    (vi) Marital status information.
+    (vii) Occupation information.
+    (viii) Personal records (this information is found in Section F of the Registration and Identification Form No. 47–58).
+    *Types of Information That Cannot Be Changed Without Special Permission:*
+    Some types of information cannot be changed unless special approval is granted after review by the Registration and Identification Committee and authorization by the Director General. These are:
+    (i) Parents' information.
+    (ii) Permanent residence.
+    (iii) Place of birth.
+    (iv) Two or three names together (in entirety).
+    (v) Year of birth.
+    (vi) Applicant’s signature.
+  footer: Want to talk to NIDA Customer Support?
+  buttons: [Yes] ($e41374a1-5f28-4c1c-a860-ba308f789c3f) | [No] ($536eb32a-ecf9-4f47-b840-26a73dc159f6)
+  => $536eb32a-ecf9-4f47-b840-26a73dc159f6 -> NXmvQPY6P ; $e41374a1-5f28-4c1c-a860-ba308f789c3f -> NZMkT7mEO
+
+### NN2nj340k [reply_buttons]
+  title: Please Learn Here
+  text: *CORRECTION OF DATE, MONTH, OR YEAR OF BIRTH*
+    *INTRODUCTION:*
+    The authority responsible for correcting personal information, including date, month, or year of birth, is the *National Identification Authority (NIDA)*. They have set clear procedures and requirements that an applicant must follow.
+    For full details, you can visit their official website by clicking here (https://nida.go.tz/Mabadiliko-Majina).
+    Below are the specific guidelines:
+    *Correction of Date and Month of Birth*
+    Any applicant who wishes to make changes to their date or month of birth must submit the following documents:
+    a) A birth certificate.
+    b) If the applicant had previously submitted a birth certificate during registration and now submits a new birth certificate with different information, the Registration Officer may request verification of that document from the Registration, Insolvency and Trusteeship Agency (RITA) for Mainland Tanzania or from the Zanzibar Civil Status Registration Agency (ZCSRA) for Zanzibar.
+    c) *The applicant must attach a copy of the announcement published in the Government Gazette containing the relevant change of information.*
+    d) To accurately perform their duties, the District Registration Officer (DRO) may request any additional documents to verify the applicant’s information.
+    e) The applicant must pay a fee of *20,000 Tanzanian Shillings* for processing the correction. However, if the mistake was caused by the Authority, the Registration Officer will verify and proceed with the correction free of charge.
+    f) Any correction requests without proper supporting documentation will not be permitted, accepted, or processed by District Registration Officers.
+    *Correction of Year of Birth*
+    Requests for changes to the *year of birth* will *not* be permitted unless special approval is obtained from the Registration and Identification Committee. Furthermore, the applicant must present the following documents:
+    a) A birth certificate obtained during the applicant’s early life, typically sought by their parents or guardians.
+    b) A primary school leaving certificate.
+    c) A clinic card (Health Clinic Record).
+    d) A secondary school leaving certificate.
+    e) Any other early document that proves the applicant’s age, obtained before registration and issuance of the National ID.
+    f) *A copy of the announcement from the Government Gazette containing the relevant change of information.*
+    g) The District Registration Officer (DRO) may request additional documents deemed necessary to verify the applicant’s date of birth.
+    h) The applicant must pay a fee of *20,000 Tanzanian Shillings* to process the correction. However, if the error originated from the Authority’s side, corrections will be made at no cost after verification.
+    i) Any change request without proper documentary evidence will not be accepted, processed, or allowed at the initial district level until reviewed and approved by the relevant Committee.
+    *Important:*
+    The client's request may either be accepted or rejected depending on the reason and intent behind requesting the corrections.
+  footer: Do you have the Gazette notice for your name change?
+  buttons: [Yes] ($1f55e4bb-328b-4019-81a6-74c092c423c0) | [No] ($6583ea8e-ac82-4179-a196-977e1b6cc0c4)
+  => $1f55e4bb-328b-4019-81a6-74c092c423c0 -> BSPFkPEse ; $6583ea8e-ac82-4179-a196-977e1b6cc0c4 -> BSPFkPEse
+
+### N-IVDmAXA [reply_buttons]
+  title: Please Learn Here
+  text: *CORRECTION OF INFORMATION FOR APPLICANTS WHO COMMITTED FRAUD*
+    *INTRODUCTION:*The National Identification Authority (NIDA) has clear guidelines for applicants who submitted forged documents or documents belonging to other individuals in an attempt to hide their true identity during the registration and identification process.
+    Read more: https://nida.go.tz/Mabadiliko-Udanganyifu
+    According to the *Registration and Identification Act of 1986*, as revised in *2012*, and the accompanying *2014 Regulations*, Section *17(b)* states:
+    "Any person who knowingly gives false or misleading information to a registration officer commits an offense and once convicted, the person is liable to a fine of not less than two hundred thousand shillings and not more than five million shillings or to imprisonment for a term not less than two months and not more than two years."
+    In Kiswahili:
+    "Mtu yeyote ambaye kwa kujua anatoa taarifa za uongo au za kupotosha kwa Afisa Usajili; anatenda kosa na mara baada ya kupatikana na hatia, mtu anawajibika kwa faini isiyopungua shilingi laki mbili na isiyozidi shilingi milioni tano au kifungo kisichopungua miezi miwili na kisichozidi miaka miwili."
+    *Procedures for Applicants Confirmed to Have Committed Fraud*
+    For an applicant found guilty of committing fraud, the Authority (NIDA) will proceed with information corrections *only after* the applicant submits the following documents:
+    (i) A copy of the judgment or decree order.
+    (ii) Case proceedings record.
+    (iii) Proof of payment of the fine, if fined by the court.
+    (iv) Proof of completion of the prison sentence, if sentenced to imprisonment.
+    (v) Any other documents as specified in the earlier mentioned sections.
+  footer: Do you have more questions?
+  buttons: [YES] ($d01f4d10-fbf8-41da-bbdc-df5c81fdefb5) | [No] ($c2fd2d24-bdf3-479c-89d6-237d71986f2b)
+  => $c2fd2d24-bdf3-479c-89d6-237d71986f2b -> NXmvQPY6P ; $d01f4d10-fbf8-41da-bbdc-df5c81fdefb5 -> BSPFkPEse
+
+### NPnZG1GqN [reply_buttons]
+  title: Please Learn Here
+  text: *CORRECTION OF INFORMATION FOR PUBLIC SERVANTS AND RETIRED PUBLIC SERVANTS*
+    *INTRODUCTION:*The National Identification Authority (NIDA) has set guidelines for the correction of information for public servants and retired public servants. Only information corrections that do not affect the original identity of the individual are allowed, and they must adhere to the following procedures. For more details, please visit their official website by clicking here (https://nida.go.tz/Mabadiliko-Majina).
+    Below are the detailed procedures:
+    <h3>1. Correction of Information for Public Servants/Retired Public Servants</h3>The types of information for public servants that can be corrected include:
+    (i) Errors made by NIDA officers during operations, particularly typographical errors.
+    (ii) Names that were entered in the wrong sequence (vice versa) but still appear in the correct name sections.
+    (iii) Names of applicants who registered using their spouse’s surname after marriage, with proof provided through a marriage certificate.
+    <h3>2. Correction of Date of Birth for Public Servants/Retired Public Servants</h3>To correct date of birth details, the applicant must submit:
+    a) An introduction letter from the employer confirming the applicant’s request details.
+    b) Approval from the Permanent Secretary, President’s Office - Public Service Management and Good Governance, agreeing to the requested changes.
+    c) The applicant’s birth certificate containing the necessary information.
+    d) The District Registration Officer may request additional supporting documents as necessary to verify the applicant’s details.
+    e) Any changes without proper documentary evidence will not be allowed, accepted, or processed by the officers.
+    f) If the mistake originated from NIDA’s side, corrections will be done free of charge. Otherwise, the applicant must pay a fee of *20,000 Tanzanian Shillings*.
+    g) The client’s application will be submitted to the Registration and Identification Committee. If the committee is satisfied that the application meets the criteria, approval will be issued for the Registrar to proceed. If not, no approval will be given, and no correction will be made.
+    <h3>3. Correction of Names for Public Servants/Retired Public Servants</h3>For name corrections, the applicant must provide:
+    a) An introduction letter from the employer confirming the request.
+    b) Approval from the Permanent Secretary, President’s Office - Public Service Management and Good Governance, authorizing the changes.
+    c) The District Registration Officer may request any additional document to verify the applicant’s information.
+    d) A Deed Poll obtained from a lawyer recognized by the Tanganyika Law Society (TLS) and registered at the Ministry of Lands and Human Settlements Development, along with a receipt of payment.
+    e) A public announcement published in the Government Gazette showing the name changes.
+    f) Any correction without proper supporting documentation will not be allowed, accepted, or processed by the officers.
+    g) If the mistake was caused by NIDA, no fee will be charged. Otherwise, the applicant must pay a *20,000 Tanzanian Shillings* fee.
+    h) The client’s application must be reviewed and approved by the Registration and Identification Committee before any corrections can proceed.
+    <h3>4. Correction of Names Due to Marriage or Divorce for Public Servants/Retired Public Servants</h3>Applicants must provide:
+    a) An introduction letter from the employer confirming the details of the request.
+    b) Approval from the Permanent Secretary, President’s Office - Public Service Management and Good Governance, authorizing the changes.
+    c) A marriage certificate or divorce certificate.
+    d) A Deed Poll obtained from a lawyer recognized by the Tanganyika Law Society (TLS) and registered at the Ministry of Lands and Human Settlements Development, along with the receipt.
+    e) A public notice published in the Government Gazette showing the name change.
+    f) Any request without proper documentation will not be accepted or processed.
+    g) The applicant must pay a fee of *20,000 Tanzanian Shillings* for the information correction.
+    h) The District Registration Officer may request additional documents to verify the applicant’s identity and information.
+    <h3>5. Corrections for Government Employees Not Using the Public Service Payroll System (Those Using a Cheque Number for Payment)</h3>This applies to employees such as soldiers, police officers, and staff from other government institutions not on the Payroll System. The procedure includes submitting the following documents at the NIDA district registration office:
+    (i) An introduction letter from the applicant’s employer.
+    (ii) Approval from the relevant Ministry’s Permanent Secretary authorizing the information change.
+    (iii) A birth certificate for name or date of birth corrections.
+    (iv) A Deed Poll obtained from a lawyer recognized by the Tanganyika Law Society (TLS) and registered at the Ministry of Lands and Human Settlements Development, along with the payment receipt.
+    (v) A public announcement published in the Government Gazette showing the name change.
+    (vi) Any request without proper supporting documents will not be allowed, accepted, or processed.
+    (vii) The applicant must pay a fee of *20,000 Tanzanian Shillings*.
+    (viii) The District Registration Officer may request any additional document they deem necessary to verify the applicant’s identity and information.
+    *Important:*A client’s request may either be accepted or rejected depending on the reasons and the applicant’s intention for requesting the corrections.
+  footer: Do you have a deedpoll?
+  buttons: [YES] ($22f7b774-8881-44ef-b993-db83a9ae6de2) | [NO] ($d492367f-29f4-479d-8811-b8ee4b57a7bd)
+  => $22f7b774-8881-44ef-b993-db83a9ae6de2 -> BSPFkPEse ; $d492367f-29f4-479d-8811-b8ee4b57a7bd -> BSPFkPEse
+
+### NXmvQPY6P [goodbye]
+  messageText: No problem! {{name}} If you ever need our services in the future, feel free to reach out. Have a great day! 😊
+  startButtonEnable: true
+  startButtonText: Start again
+
+### Nv30uS4s7 [chat]
+  msg(text): Thank you, {{name}}! We've received your request for a physical appointment. Our customer care team will contact you shortly to assist you with further details.
+
+Currently, we have offices in *Dar es Salaam* and *Dodoma* for physical appointments. If you're unable to visit these locations, our team can also help you schedule a virtual appointment.
+  buttons: 
+  destination: options
+  => $success -> N7JjJdhrR
+
+### NwJyVrCEr [chat]
+  msg(text): 📅*Phone Appointment*
+*Book Your Appointment Now* (10 minutes)
+Click the Link below👇🏽
+
+
+https://calendly.com/legalclinicclc/10min
+
+*Client Meeting Policy*
+To maintain the quality and efficiency of our legal services, please note the following:
+1. Clients are expected to join their scheduled 10 minutes consultation on time.
+2. A grace period of 5 minutes is allowed. If the client has not joined within 5 minutes and no prior communication is received, the meeting will be considered missed.
+3. Missed meetings must be rescheduled through our official booking system to secure a new slot.
+4. We do not impose penalties for missed meetings; however, timely attendance is required to ensure service continuity for all clients.
+We appreciate your cooperation and understanding.
+
+*CLC TEAM*
+  buttons: 
+  destination: options
+  => $success -> Np1cYZlZJ
+
+### N0o7X_yxa [email]
+  subject: Customer Appointment Chat: Upon Confirmation Within Business Hours
+  text: Hello Customer Care,
+    
+    The following message was left by a user via chat during our standard business hours post appointment confirmation. Please make follow up on the details below by either chat or calling and kindly give me a private notes on what aspired for further action.
+    
+    Left Message
+    {{user_message}} https://app.landbot.io/gui/chats_v4/{{uuid}} (https://app.landbot.io/gui/chats_v4/%C2%BF%C2%B7~uuid%C2%B7?)
+    
+    Please assist the user accordingly once.
+    
+    Thank you,  
+    CLC Manageme*nt*
+  emails: ["godfrey.aloyce@clctz.org","dickson.mdumula@clctz.org"]
+  => success -> NN-wWN3ZJ
+
+### NC6CaT6L0 [set_a_variable]
+  action: SET
+  field: user_message
+  type: STRING
+  value: {{user_message}}
+  => success -> N0o7X_yxa
+
+### NN-wWN3ZJ [human_takeover]
+  agents: 741085,749184
+
+### NVq1AxehK [reply_buttons]
+  text: {{name}}😔 Our team is currently offline. 
+    
+    _We are open Monday to Friday from 9:00 AM to 6:00 PM and on Saturday from 9:00 AM to 1:30 PM. We are closed on Sundays. We’ll be happy to assist you during our working hours! _
+  footer: 
+    📌 What would you like to do?
+  buttons: [Leave a message] ($df85e3b7-4da7-476f-8fe4-73e4955e0a2c)
+  destination: leave_chatormessage
+  => default -> N0U5YzkWD
+
+### N0U5YzkWD [var_text]
+  text: 💌Got it_, _{{name}}!_ Please type your message below, and we’ll reply as soon as we’re back._
+  inputSize: long
+  errorText: I'm afraid I didn't understand, could you try again, please?
+  destination: user_message
+  => $success -> N4E3t_l1H
+
+### N_72Vp8fr [email]
+  subject: Physical Appointment Chat - Within Business Hours
+  text: Hello Customer Care,
+    
+    The following message was left by a user via chat during our standard business hours post physical appointment confirmation. Please make follow up on the details below by either chat or calling and kindly give me a private notes on what aspired for further action.
+    
+    Left Message
+    {{user_message}} https://app.landbot.io/gui/chats_v4/{{uuid}} (https://app.landbot.io/gui/chats_v4/%C2%BF%C2%B7~uuid%C2%B7?)
+    
+    Please assist the user accordingly once.
+    
+    Thank you,  
+    CLC Management
+  emails: ["godfrey.aloyce@clctz.org","dickson.mdumula@clctz.org"]
+  => success -> NzVYo1xBa
+
+### Ny3ZDX8s6 [set_a_variable]
+  action: SET
+  field: user_message
+  type: STRING
+  value: {{user_message}}
+  => success -> N_72Vp8fr
+
+### NzVYo1xBa [human_takeover]
+  agents: 741085,749184
+
+### N_6tJ_3Yy [reply_buttons]
+  text: {{name}}😔 Our team is currently offline. 
+    
+    _We are open Monday to Friday from 9:00 AM to 6:00 PM and on Saturday from 9:00 AM to 1:30 PM. We are closed on Sundays. We’ll be happy to assist you during our working hours! _
+  footer: 
+    📌 What would you like to do?
+  buttons: [Leave a message] ($df85e3b7-4da7-476f-8fe4-73e4955e0a2c)
+  destination: leave_chatormessage
+  => default -> NM2l5cNgH
+
+### NM2l5cNgH [var_text]
+  text: 💌Got it_, _{{name}}!_ Please type your message below, and we’ll reply as soon as we’re back._
+  inputSize: long
+  errorText: I'm afraid I didn't understand, could you try again, please?
+  destination: user_message
+  => $success -> NZjCHjeoF
+
+### NZjCHjeoF [email]
+  subject: Physical Appointment Chat - Outside Business Hours
+  text: Hello Customer Care,
+    
+    The following message was left by a user via chat during outside standard business hours please continue with either scheduling physical appointment after consultation with Advocates or otherwise. Also, Please make follow up on the details below by either chat or calling and kindly give me a private notes on what aspired for further action.
+    
+    Left Message
+    {{user_message}} https://app.landbot.io/gui/chats_v4/{{uuid}} (https://app.landbot.io/gui/chats_v4/%C2%BF%C2%B7~uuid%C2%B7?)
+    
+    Please assist the user accordingly once operations resume.
+    
+    Thank you,  
+    CLC Management
+  emails: ["godfrey.aloyce@clctz.org","dickson.mdumula@clctz.org"]
+
+### N4E3t_l1H [email]
+  subject: Customer Appointment  Booking Chat - Outside Business Hours
+  text: Hello Customer Care,
+    
+    The following message was left by a user via chat during outside standard business hours post appointment confirmation, Please make follow up on the details below by either chat or calling and kindly give me a private notes on what aspired for further action.
+    
+    Left Message
+    {{user_message}} https://app.landbot.io/gui/chats_v4/{{uuid}} (https://app.landbot.io/gui/chats_v4/%C2%BF%C2%B7~uuid%C2%B7?)
+    
+    Please assist the user accordingly once operations resume.
+    
+    Thank you,  
+    CLC Management
+  emails: ["godfrey.aloyce@clctz.org","dickson.mdumula@clctz.org"]
+
+### Np1cYZlZJ [business_hours]
+  timezone: Africa/Dar_es_Salaam
+  openHours: {"Monday":[{"from":"09:00","to":"16:00"}],"Tuesday":[{"from":"09:00","to":"16:00"}],"Wednesday":[{"from":"09:00","to":"16:00"}],"Thursday":[{"from":"09:00","to":"16:00"}],"Friday":[{"from":"09:00","to":"16:00"}],"Saturday":[{"from":"09:00","to":"13:00"}],"Sunday":null}
+  closedDays: []
+  specialDays: []
+  => success -> NC6CaT6L0 ; failed -> NVq1AxehK
+
+### N7JjJdhrR [business_hours]
+  timezone: Africa/Dar_es_Salaam
+  openHours: {"Monday":[{"from":"09:00","to":"16:00"}],"Tuesday":[{"from":"09:00","to":"16:00"}],"Wednesday":[{"from":"09:00","to":"16:00"}],"Thursday":[{"from":"09:00","to":"16:00"}],"Friday":[{"from":"09:00","to":"16:00"}],"Saturday":[{"from":"09:00","to":"13:00"}],"Sunday":null}
+  closedDays: []
+  specialDays: []
+  => success -> Ny3ZDX8s6 ; failed -> N_6tJ_3Yy
+
+### N9_pi81qT [reply_buttons]
+  text: 📢 *Service Availability Notice*
+    At the moment, our legal services are only accessible in *Dar es Salaam and Dodoma*.
+    You can choose:
+    1. *Visual (Phone) Appointment* – FREE, but _requires at least 4 people._
+    2._ _*Physical Appointment* – May include appointment fees.
+  buttons: [Online - Free] ($5bf9502b-fe5d-4d82-bde3-2f74e9da374a) | [Physical - Paid] ($fa0fb89d-6571-4425-ba1c-0ec30b327fd9)
+  => $5bf9502b-fe5d-4d82-bde3-2f74e9da374a -> NwJyVrCEr ; $fa0fb89d-6571-4425-ba1c-0ec30b327fd9 -> Nv30uS4s7
+
+### NZMkT7mEO [reply_buttons]
+  text: Please check with NIDA Customer Support Contact here
+    <h5>Huduma Kwa Wateja</h5>023-2210500 (http://tel:0232210500)
+    Jumatatu - Ijumaa
+    01:30 asubuhi - 09:30 alasiri
+    Mitandao ya Kijamii
+    or
+    Communicate officially to them Directly via Address
+    Mkurugenzi Mkuu
+    Mamlaka ya Vitambulisho vya Taifa
+    Barabara ya Kilimani
+    S.L.P 12324
+    11995 Dar Es Salaam.
+    info@nida.go.tz (mailto:info@nida.go.tz)
+    Simu: +255 734 220 962 (http://tel:+255 734 220 962)
+  footer: Did we help your issue?
+  buttons: [YES] ($2d735540-3616-4c42-a4a3-1f4b6e18799f) | [NO, I Need Guidance] ($9886d9cc-3056-48bb-9b66-a1d0c5926eed)
+  => $2d735540-3616-4c42-a4a3-1f4b6e18799f -> NWMEY6Glp ; $9886d9cc-3056-48bb-9b66-a1d0c5926eed -> N9_pi81qT
+
+### NWMEY6Glp [goodbye]
+  messageText: Thank You! {{name}} for good feedback, If you ever need our services in the future, feel free to reach out. Have a great day! 😊
+  startButtonEnable: true
+  startButtonText: Start again
+
+### BSPFkPEse [brick]
+
+
+# BRICK BSPFkPEse "WANAHITAJI GAZETI LA SERIKALI"
+
+### outputs [brick_outputs]
+  outputs: [{"id":"$0","alias":"Output #1"}]
+
+### Ne_gHPBd1 [email]
+  subject: Customer Appointment Chat: Upon Confirmation Within Business Hours
+  text: Hello Customer Care,
+    
+    The following message was left by a user via chat during our standard business hours post appointment confirmation. Please make follow up on the details below by either chat or calling and kindly give me a private notes on what aspired for further action.
+    
+    Left Message
+    {{user_message}} https://app.landbot.io/gui/chats_v4/{{uuid}} (https://app.landbot.io/gui/chats_v4/%C2%BF%C2%B7~uuid%C2%B7?)
+    
+    Please assist the user accordingly once.
+    
+    Thank you,  
+    CLC Manageme*nt*
+  emails: ["godfrey.aloyce@clctz.org","dickson.mdumula@clctz.org"]
+  => success -> NZtVvHRph
+
+### N3hg5mCaP [set_a_variable]
+  action: SET
+  field: user_message
+  type: STRING
+  value: {{user_message}}
+  => success -> Ne_gHPBd1
+
+### NZtVvHRph [human_takeover]
+  agents: 741085,749184
+
+### Nmcgz3WYF [reply_buttons]
+  text: {{name}}😔 Our team is currently offline. 
+    
+    _We are open Monday to Friday from 9:00 AM to 6:00 PM and on Saturday from 9:00 AM to 1:30 PM. We are closed on Sundays. We’ll be happy to assist you during our working hours! _
+  footer: 
+    📌 What would you like to do?
+  buttons: [Leave a message] ($df85e3b7-4da7-476f-8fe4-73e4955e0a2c)
+  destination: leave_chatormessage
+  => default -> NwKFkeBeK
+
+### NwKFkeBeK [var_text]
+  text: 💌Got it_, _{{name}}!_ Please type your message below, and we’ll reply as soon as we’re back._
+  inputSize: long
+  errorText: I'm afraid I didn't understand, could you try again, please?
+  destination: user_message
+  => $success -> NH9gz3Uqw
+
+### NH9gz3Uqw [email]
+  subject: Customer Appointment  Booking Chat - Outside Business Hours
+  text: Hello Customer Care,
+    
+    The following message was left by a user via chat during outside standard business hours post appointment confirmation, Please make follow up on the details below by either chat or calling and kindly give me a private notes on what aspired for further action.
+    
+    Left Message
+    {{user_message}} https://app.landbot.io/gui/chats_v4/{{uuid}} (https://app.landbot.io/gui/chats_v4/%C2%BF%C2%B7~uuid%C2%B7?)
+    
+    Please assist the user accordingly once operations resume.
+    
+    Thank you,  
+    CLC Management
+  emails: ["godfrey.aloyce@clctz.org","dickson.mdumula@clctz.org"]
+
+### brick_start [business_hours]
+  timezone: Africa/Dar_es_Salaam
+  openHours: {"Monday":[{"from":"09:00","to":"16:00"}],"Tuesday":[{"from":"09:00","to":"16:00"}],"Wednesday":[{"from":"09:00","to":"16:00"}],"Thursday":[{"from":"09:00","to":"16:00"}],"Friday":[{"from":"09:00","to":"16:00"}],"Saturday":[{"from":"09:00","to":"13:00"}],"Sunday":null}
+  closedDays: []
+  specialDays: []
+  => success -> N3hg5mCaP ; failed -> Nmcgz3WYF
+
+
+# BRICK B6QQ3ULOp "KIAPO CHA MAJINA"
+
+### outputs [brick_outputs]
+  outputs: [{"id":"$0","alias":"Option 1"}]
+
+### Bgvx53-_2 [brick]
+
+### BXruWSjQY [brick]
+
+### brick_start [reply_buttons]
+  text: {{name}} Changamoto yako ya Majina inahusu nini?
+    
+    Je, majina yako hayalingani kwenye cheti cha kuzaliwa, NIDA, au nyaraka za NSSF?
+    Umeshindwa kupata mafao au huduma kwa sababu ya tofauti ya majina?
+    ➡️ Tunakusaidia kuandaa *kiapo cha mabadiliko ya majina (DeedPoll)* na *tamko la kisheria* ili kurasimisha jina lako kwenye nyaraka rasmi.
+    Huduma iliyosahihi itakusaidia kupata cheti kipya, kurekebisha NIDA, na kurahisisha upatikanaji wa mafao kama ya NSSF.
+    *MUHIMU*
+    Kuna baadhi ya huduma tutakuelimisha ukaipate kwenye mamlaka husika.
+  footer: Chagua hapa Chini unachangamoto kwenye eneo gani?
+  buttons: [Mafao ya NSSF] ($6803409b-71d9-4142-a476-5792f5aef0f8) | [Kitambulisho NIDA] ($d4db24a3-44de-45f4-b9b3-5d2ee90628fd) | [VYETI (ELIMU)] ($91db96a2-710f-4238-99db-4796674dcf95)
+  => $d4db24a3-44de-45f4-b9b3-5d2ee90628fd -> BXruWSjQY ; $6803409b-71d9-4142-a476-5792f5aef0f8 -> Bgvx53-_2 ; $91db96a2-710f-4238-99db-4796674dcf95 -> BB3P4rCUp
+
+### BB3P4rCUp [brick]
+
+
+# BRICK Bgvx53-_2 "NSSF BRICK"
+
+### outputs [brick_outputs]
+  outputs: [{"id":"$0","alias":"Option 1"}]
+
+### Nz-75T3UZ [chat]
+  msg(text): Ahsante, {{name}}! Tumepokea ombi lako la miadi ya ana kwa ana. Timu yetu ya huduma kwa wateja itawasiliana nawe hivi karibuni kukusaidia kwa maelezo zaidi.
+Kwa sasa, tuna ofisi *Dar es Salaam na Dodoma* kwa miadi ya ana kwa ana.
+Ikiwa huwezi kufika kwenye maeneo haya, timu yetu inaweza pia kukusaidia kupanga *miadi ya mtandaoni (virtual appointment)*.
+  buttons: 
+  destination: options
+  => $success -> Nu8DA9EkN
+
+### NFbaQ5q3E [chat]
+  msg(text): 📅 *Miadi ya Simu*
+ *Weka Miadi Yako Sasa (Dakika 10)*
+Bonyeza kiungo hapa chini 👇🏽
+https://calendly.com/legalclinicclc/10min (https://calendly.com/legalclinicclc/10min)
+
+<h3>*Sera ya Mikutano na Wateja*</h3>Ili kudumisha ubora na ufanisi wa huduma zetu za kisheria, tafadhali zingatia yafuatayo:
+- *Wateja wanatarajiwa kujiunga na mashauriano yao ya dakika 10 kwa wakati.*
+- *Kuna muda wa neema wa dakika 5.* Ikiwa mteja hajiungi ndani ya muda huo na hakuna mawasiliano yaliyotolewa kabla, mkutano utachukuliwa kuwa *umekosa*.
+- Mikutano iliyokosekana *inapaswa kupangwa upya kupitia mfumo wetu rasmi wa kuweka miadi* ili kupata nafasi nyingine.
+- *Hatutozi adhabu kwa mikutano iliyokosekana*, lakini kuhudhuria kwa wakati ni muhimu ili kuhakikisha mwendelezo wa huduma kwa wateja wote.
+*Tunathamini ushirikiano na uelewa wako.*
+*TIMU YA CLC*
+  buttons: 
+  destination: options
+  => $success -> N8GbYihqq
+
+### NWPnx7W3S [email]
+  subject: Customer Appointment Chat: Upon Confirmation Within Business Hours
+  text: Hello Customer Care,
+    
+    The following message was left by a user via chat during our standard business hours post appointment confirmation. Please make follow up on the details below by either chat or calling and kindly give me a private notes on what aspired for further action.
+    
+    Left Message
+    {{user_message}} https://app.landbot.io/gui/chats_v4/{{uuid}} (https://app.landbot.io/gui/chats_v4/%C2%BF%C2%B7~uuid%C2%B7?)
+    
+    Please assist the user accordingly once.
+    
+    Thank you,  
+    CLC Manageme*nt*
+  emails: ["dicksonmdumula@clc.tz","godfreynjale@clc.tz"]
+  => success -> N3L6DMeYF
+
+### NGMByn8k4 [set_a_variable]
+  action: SET
+  field: user_message
+  type: STRING
+  value: {{user_message}}
+  => success -> NWPnx7W3S
+
+### N3L6DMeYF [human_takeover]
+  agents: 775944,814969,814972
+
+### NB9EDyoZP [reply_buttons]
+  text: {{name}}😔 📴 *Timu Yetu Haipo Mtandaoni kwa Sasa*
+    Tunapatikana *Jumatatu hadi Ijumaa kuanzia saa 3:00 asubuhi hadi saa 12:00 jioni*,
+    na *Jumamosi kuanzia saa 3:00 asubuhi hadi saa 7:30 mchana*.
+     *Hatufanyi kazi Jumapili.*
+    Tutafurahi kukuhudumia wakati wa saa zetu za kazi!
+  footer: 
+    📌 What would you like to do?
+  buttons: [Leave a message] ($df85e3b7-4da7-476f-8fe4-73e4955e0a2c)
+  destination: leave_chatormessage
+  => default -> NlTpU9Lmq
+
+### NlTpU9Lmq [var_text]
+  text: 💌Got it_, _{{name}}!_ Please type your message below, and we’ll reply as soon as we’re back._
+  inputSize: long
+  errorText: I'm afraid I didn't understand, could you try again, please?
+  destination: user_message
+  => $success -> Nj9p7Vd-l
+
+### NUM4_0VQ5 [email]
+  subject: Physical Appointment Chat - Within Business Hours
+  text: Hello Customer Care,
+    
+    The following message was left by a user via chat during our standard business hours post physical appointment confirmation. Please make follow up on the details below by either chat or calling and kindly give me a private notes on what aspired for further action.
+    
+    Left Message
+    {{user_message}} https://app.landbot.io/gui/chats_v4/{{uuid}} (https://app.landbot.io/gui/chats_v4/%C2%BF%C2%B7~uuid%C2%B7?)
+    
+    Please assist the user accordingly once.
+    
+    Thank you,  
+    CLC Management
+  emails: ["godfreynjale@clc.tz","dicksonmdumula@clc.tz"]
+  => success -> NSadqMAd2
+
+### N-AIy90LK [set_a_variable]
+  action: SET
+  field: user_message
+  type: STRING
+  value: {{user_message}}
+  => success -> NUM4_0VQ5
+
+### NSadqMAd2 [human_takeover]
+  agents: 775944,814969,814972
+
+### NCx6ezGw4 [reply_buttons]
+  text: {{name}}😔 📴 *Timu Yetu Haipo Mtandaoni kwa Sasa*
+    Tunapatikana:
+    🕘 *Jumatatu hadi Ijumaa:* Saa 3:00 asubuhi hadi saa 12:00 jioni
+    🕘 *Jumamosi:* Saa 3:00 asubuhi hadi saa 7:30 mchana
+    ❌ *Jumapili:* Hatuwezi kuhudumia
+    *Tutafurahi kukusaidia wakati wa saa zetu za kazi!*
+  footer: 
+    📌 What would you like to do?
+  buttons: [Leave a message] ($df85e3b7-4da7-476f-8fe4-73e4955e0a2c)
+  destination: leave_chatormessage
+  => default -> N6YPUWHd2
+
+### N6YPUWHd2 [var_text]
+  text: 💌Got it_, _{{name}}!_ Please type your message below, and we’ll reply as soon as we’re back._
+  inputSize: long
+  errorText: I'm afraid I didn't understand, could you try again, please?
+  destination: user_message
+  => $success -> NGIrTNthL
+
+### NGIrTNthL [email]
+  subject: Physical Appointment Chat - Outside Business Hours
+  text: Hello Customer Care,
+    
+    The following message was left by a user via chat during outside standard business hours please continue with either scheduling physical appointment after consultation with Advocates or otherwise. Also, Please make follow up on the details below by either chat or calling and kindly give me a private notes on what aspired for further action.
+    
+    Left Message
+    {{user_message}} https://app.landbot.io/gui/chats_v4/{{uuid}} (https://app.landbot.io/gui/chats_v4/%C2%BF%C2%B7~uuid%C2%B7?)
+    
+    Please assist the user accordingly once operations resume.
+    
+    Thank you,  
+    CLC Management
+  emails: ["godfreynjale@clc.tz","dicksonmdumula@clc.tz"]
+
+### Nj9p7Vd-l [email]
+  subject: Customer Appointment  Booking Chat - Outside Business Hours
+  text: Hello Customer Care,
+    
+    The following message was left by a user via chat during outside standard business hours post appointment confirmation, Please make follow up on the details below by either chat or calling and kindly give me a private notes on what aspired for further action.
+    
+    Left Message
+    {{user_message}} https://app.landbot.io/gui/chats_v4/{{uuid}} (https://app.landbot.io/gui/chats_v4/%C2%BF%C2%B7~uuid%C2%B7?)
+    
+    Please assist the user accordingly once operations resume.
+    
+    Thank you,  
+    CLC Management
+  emails: ["dicksonmdumula@clc.tz","godfreynjale@clc.tz"]
+
+### N8GbYihqq [business_hours]
+  timezone: Africa/Dar_es_Salaam
+  openHours: {"Monday":[{"from":"09:00","to":"16:00"}],"Tuesday":[{"from":"09:00","to":"16:00"}],"Wednesday":[{"from":"09:00","to":"16:00"}],"Thursday":[{"from":"09:00","to":"16:00"}],"Friday":[{"from":"09:00","to":"16:00"}],"Saturday":[{"from":"09:00","to":"13:00"}],"Sunday":null}
+  closedDays: []
+  specialDays: []
+  => success -> NGMByn8k4 ; failed -> NB9EDyoZP
+
+### Nu8DA9EkN [business_hours]
+  timezone: Africa/Dar_es_Salaam
+  openHours: {"Monday":[{"from":"09:00","to":"16:00"}],"Tuesday":[{"from":"09:00","to":"16:00"}],"Wednesday":[{"from":"09:00","to":"16:00"}],"Thursday":[{"from":"09:00","to":"16:00"}],"Friday":[{"from":"09:00","to":"16:00"}],"Saturday":[{"from":"09:00","to":"13:00"}],"Sunday":null}
+  closedDays: []
+  specialDays: []
+  => success -> N-AIy90LK ; failed -> NCx6ezGw4
+
+### brick_start [reply_buttons]
+  text: Ikiwa unafuatilia *mafao ya NSSF* au huduma za benki na *majina yako kwenye NIDA hayafanani* na yale kwenye kitambulisho cha kazi, unaweza kuhitaji *kiapo cha majina* kutoka kwa wakili.
+    *Leo unaweza kuandaa kiapo chako rasmi kwa msaada wa Wakili aliyeidhinishwa.*
+    *Ili kupata huduma hii, utahitaji:*
+    1. Picha 3 za passport
+    2. Kitambulisho chenye jina lililoandikwa tofauti
+    3. Kitambulisho chenye jina unalotaka kutumia
+    
+    *Kama uko tayari tutakushauri na kukupa huduma.*
+    📢 *Taarifa Kuhusu Upatikanaji wa Huduma*
+    Kwa sasa, *huduma zetu za kisheria zinapatikana tu katika Dar es Salaam na Dodoma.*
+    Unaweza kuchagua:
+    1. *Miadi ya Kuonana kwa Njia ya Video (Simu) – BURE*, lakini inahitaji watu wasiopungua wanne.
+    2. *Miadi ya Ana kwa Ana – Inaweza kuhusisha ada ya miadi.*
+  footer: Tayari kuanza? Chagua
+  buttons: [Simu/Online - Bure] ($ce571ce5-e1c3-4bc5-8299-57eb4ab49d9a) | [Ofisini - Malipo] ($64c42a70-ba91-43ec-9a82-73ccd3056ba0)
+  => $ce571ce5-e1c3-4bc5-8299-57eb4ab49d9a -> NFbaQ5q3E ; $64c42a70-ba91-43ec-9a82-73ccd3056ba0 -> Nz-75T3UZ
+
+
+# BRICK BXruWSjQY "NIDA BRICK"
+
+### outputs [brick_outputs]
+  outputs: [{"id":"$0","alias":"Option 1"}]
+
+### NT5dA3jNf [reply_buttons]
+  title: Tafadhali jifunze 
+  text: <h3>*📌 Mabadiliko ya Majina – NIDA*</h3>*Nani Anahusika:* Mamlaka ya Vitambulisho vya Taifa (NIDA) ndiyo yenye jukumu la Kushughulikia mabadiliko ya majina.
+     *Nyaraka:*
+    <ul>1. Cheti cha kuzaliwa / shule / kadi ya kliniki
+    2. _*Deed Poll*_* kutoka kwa wakili wa TLS*
+    3. Tangazo kwenye Gazeti la Serikali
+    4. Cheti cha ndoa/talaka (ikihitajika)
+    </ul>*Hatua:*
+    5. Pata Deed Poll na usajili Wizara ya Ardhi
+    6. Chapisha tangazo kwenye Gazeti
+    7. Wasilisha nyaraka kwa Afisa Usajili
+    8. Lipa Tsh 20,000 (bila malipo kama kosa ni la NIDA)
+    9. Kamati ya Usajili itaamua
+    *Unaweza Kubadilisha:*
+    <ul>10. Jina la kwanza/kati/ukoo
+    11. Taarifa za ndoa/talaka
+    12. Taarifa za elimu au dini
+    </ul>*❗ Muhimu:* Hakuna mabadiliko bila nyaraka sahihi.
+    🔗 Zaidi: nida.go.tz/Mabadiliko-Majina (https://nida.go.tz/Mabadiliko-Majina)
+  footer: Unahitaji Deedpoll kutoka kwa Wakili?
+  buttons: [Ndiyo] ($385b98e8-e53a-45fe-ad9f-3b93eeca8313) | [Hapana] ($e41374a1-5f28-4c1c-a860-ba308f789c3f)
+  => $e41374a1-5f28-4c1c-a860-ba308f789c3f -> NJzoPI83W ; $385b98e8-e53a-45fe-ad9f-3b93eeca8313 -> N0pVmAB8n
+
+### NtsnK6g5C [reply_buttons]
+  title: Tafadhali jifunze
+  text: <h3>*🔧 Marekebisho ya Taarifa – NIDA*</h3>*Mamlaka Husika:* _Mamlaka ya Vitambulisho vya Taifa (NIDA)_
+    *Nani Anaweza Kubadilisha Taarifa?*
+    - Aliyeoa/olewa na kubadili jina
+    - Aliyetalikiwa kihalali
+    - Aliyefanya makosa wakati wa usajili
+    - Taarifa zilizokosewa na NIDA
+    - Aliyetaka majina maarufu yawe rasmi
+    - Anayetumia jina la ukoo la mzazi/babu
+    *Taarifa Zinazoruhusiwa Kubadilishwa:*
+    - Jina la kwanza, kati au ukoo
+    - Tarehe & mwezi wa kuzaliwa
+    - Anuani ya makazi
+    - Namba ya simu (iliyowekwa kwa NIN)
+    - Uraia (kwa waliobadili)
+    - Hali ya ndoa
+    - Kazi
+    - Taarifa binafsi (Sehemu ya F ya Fomu Na. 47–58)
+    *Taarifa Zinazohitaji Kibali Maalum:*
+    - Taarifa za wazazi
+    - Makazi ya kudumu
+    - Mahali pa kuzaliwa
+    - Kubadilisha majina yote kwa pamoja
+    - Mwaka wa kuzaliwa
+    - Sahihi ya mwombaji
+    📎 _Zaidi tembelea:_
+     https://nida.go.tz/Usajili-Marekebisho# (https://nida.go.tz/Usajili-Marekebisho#)
+  footer: Ungependa kuzungumza na Huduma kwa Wateja wa NIDA?
+  buttons: [Ndiyo] ($e41374a1-5f28-4c1c-a860-ba308f789c3f) | [Hapana] ($536eb32a-ecf9-4f47-b840-26a73dc159f6)
+  => $536eb32a-ecf9-4f47-b840-26a73dc159f6 -> NJzoPI83W ; $e41374a1-5f28-4c1c-a860-ba308f789c3f -> Ngq_k3GpD
+
+### Nk5ypraPD [reply_buttons]
+  title: Jifunze Hapa
+  text: <h3>*📅 Marekebisho ya Tarehe/Mwezi/Mwaka wa Kuzaliwa – NIDA*</h3>Mamlaka ya Vitambulisho vya Taifa (NIDA) inaruhusu marekebisho ya taarifa za kuzaliwa ikiwa kuna ushahidi halali.
+    Kwa *tarehe au mwezi wa kuzaliwa*, muombaji anatakiwa kuwasilisha:
+    - Cheti cha kuzaliwa
+    - *Tangazo la marekebisho kwenye Gazeti la Serikali*, linalothibitisha mabadiliko
+    - Uthibitisho wa cheti kutoka RITA au ZCSRA (kama cheti kipya kinatofautiana na cha awali)
+    - Ada ya Tsh 20,000 (isipokuwa kama kosa ni la NIDA)
+    Kwa *mwaka wa kuzaliwa*, mabadiliko hayawezi kufanyika bila *kibali maalum* kutoka Kamati ya Usajili. Muombaji anatakiwa pia kuwasilisha tangazo kwenye *Gazeti la Serikali* pamoja na nyaraka kama vyeti vya shule, kadi ya kliniki, na cheti cha kuzaliwa cha awali.
+    📌 *Tangazo kwenye Gazeti la Serikali ni la lazima* kuthibitisha mabadiliko yoyote ya taarifa hizi. Bila tangazo hilo, maombi hayatashughulikiwa.
+    🔗 Maelezo zaidi: https://nida.go.tz/Usajili-Marekebisho# (https://nida.go.tz/Usajili-Marekebisho#)
+  footer: Una tangazo la Gazeti la Serikali la mabadiliko ya jina?
+  buttons: [Ndiyo] ($1f55e4bb-328b-4019-81a6-74c092c423c0) | [Hapana] ($6583ea8e-ac82-4179-a196-977e1b6cc0c4)
+  => $6583ea8e-ac82-4179-a196-977e1b6cc0c4 -> BHrfmmmZj ; $1f55e4bb-328b-4019-81a6-74c092c423c0 -> BHrfmmmZj
+
+### NUHU-kdyd [reply_buttons]
+  title: Jifunze kwa Makini
+  text: <h3>*🛑 Marekebisho ya Taarifa kwa Waombaji Waliofanya Udanganyifu – NIDA*</h3>*Utangulizi:*
+    Mamlaka ya Vitambulisho vya Taifa (NIDA) ina mwongozo maalum kwa waombaji waliotumia nyaraka bandia au za watu wengine ili kuficha utambulisho wao halisi wakati wa usajili.
+    🔗 _Soma zaidi:_ https://nida.go.tz/Mabadiliko-Udanganyifu (https://nida.go.tz/Mabadiliko-Udanganyifu)
+    *🔐 Sheria Inavyosema (Kifungu cha 17(b), Sura ya 36):*
+     _Mtu yeyote ambaye kwa kujua anatoa taarifa za uongo au kupotosha kwa Afisa Usajili anatenda kosa. Akipatikana na hatia, atawajibika kwa faini isiyopungua Tsh 200,000 na isiyozidi Tsh 5,000,000 au kifungo cha miezi 2 hadi miaka 2._
+    <h3>*Marekebisho Yanaruhusiwa Baada ya Nyaraka Zifuatazo:*</h3>1. Nakala ya hukumu au amri ya mahakama
+    2. Kumbukumbu ya mwenendo wa kesi
+    3. Ushahidi wa malipo ya faini (kama alitozwa)
+    4. Ushahidi wa kumaliza kifungo (kama alihukumiwa kifungo)
+    5. Nyaraka nyingine kama zitakavyoelekezwa na NIDA
+    📌 _Marekebisho haya hayafanywi hadi hatua zote za kisheria zitakapokamilika ipasavyo._
+  footer: Una swali lolote?
+  buttons: [Ndiyo] ($d01f4d10-fbf8-41da-bbdc-df5c81fdefb5) | [Hapana] ($c2fd2d24-bdf3-479c-89d6-237d71986f2b)
+  => $c2fd2d24-bdf3-479c-89d6-237d71986f2b -> NJzoPI83W ; $d01f4d10-fbf8-41da-bbdc-df5c81fdefb5 -> BHrfmmmZj
+
+### Nxkszo15F [reply_buttons]
+  title: Soma kwa Makini
+  text: <h3>*📝 Marekebisho ya Taarifa – Watumishi wa Umma/Wastaafu (NIDA)*</h3>*Mamlaka:*
+    Marekebisho haya husimamiwa na _Mamlaka ya Vitambulisho vya Taifa (NIDA)_.
+    *Tatizo:*
+    Makosa ya majina, tarehe ya kuzaliwa, au mabadiliko baada ya ndoa/talaka yanayosababisha matatizo katika mafao au utambulisho.
+    *Hatua Muhimu:*
+    ✅ Barua ya mwajiri
+    ✅ Idhini ya Katibu Mkuu – Utumishi
+    ✅ Cheti cha kuzaliwa / ndoa / talaka
+    ✅ Deed Poll kutoka kwa wakili wa TLS
+    ✅ Tangazo la Gazeti la Serikali
+    ✅ Ada ya Tsh 20,000 (isipokuwa kama kosa ni la NIDA)
+    ✅ Maombi hupitiwa na Kamati ya Usajili
+    *Huduma za Wakili:*
+    ⚖️ Kuandaa *Deed Poll*, kutoa huduma jinsi ya kupata *Gazeti la Serikali*, na* *kusaidia kutambua nyaraka sahihi kwa NIDA.
+    📌 _Maombi yanategemea ushahidi kamili na yanaweza kukubaliwa au kukataliwa._
+    🔗 _Soma zaidi:_ nida.go.tz (https://nida.go.tz/)
+  footer: je, Una DEEDPOLL na GAZETI LA SERIKALI?
+  buttons: [Ndiyo] ($22f7b774-8881-44ef-b993-db83a9ae6de2) | [Hapana] ($d492367f-29f4-479d-8811-b8ee4b57a7bd)
+  => $22f7b774-8881-44ef-b993-db83a9ae6de2 -> BHrfmmmZj ; $d492367f-29f4-479d-8811-b8ee4b57a7bd -> BHrfmmmZj
+
+### NJzoPI83W [goodbye]
+  messageText: Hakuna shida! {{name}} Ikiwa utahitaji huduma zetu siku za usoni, jisikie huru kuwasiliana nasi. Kuwa na siku njema!
+    
+    📢 _Pia, usikose habari tofauti ya huduma zetu!_
+    Jiunge na _WhatsApp Channel ya CLC_ kwa taarifa za kisheria, huduma mpya, na elimu ya sheria moja kwa moja kwenye simu yako.
+    👉 Bonyeza hapa kujiunga (https://whatsapp.com/channel/0029Va8djEOE50Uc7HAtew1X) 😊
+  startButtonEnable: true
+  startButtonText: Start again
+
+### Ngq_k3GpD [reply_buttons]
+  text: *Tafadhali wasiliana na Huduma kwa Wateja wa NIDA kupitia mawasiliano haya hapa chini:*
+    *Huduma kwa Wateja*
+    📞 *023-2210500*
+    🗓️ *Jumatatu - Ijumaa*
+    🕜 *Saa 1:30 asubuhi - Saa 9:30 alasiri*
+    *Mitandao ya Kijamii*
+    
+    au
+    
+     *Wasiliana nao rasmi moja kwa moja kupitia anwani ifuatayo:*
+    *Mkurugenzi Mkuu*
+     *Mamlaka ya Vitambulisho vya Taifa (NIDA)*
+    Barabara ya Kilimani
+    S.L.P. 12324
+    11995 Dar es Salaam
+    📧 *info@nida.go.tz*
+    📞 *Simu: +255 734 220 962*
+  footer: Je, tumekusaidia kwenye changamoto yako?
+  buttons: [Ndiyo] ($2d735540-3616-4c42-a4a3-1f4b6e18799f) | [La, naomba mwongozo] ($9886d9cc-3056-48bb-9b66-a1d0c5926eed)
+  => $2d735540-3616-4c42-a4a3-1f4b6e18799f -> N102IuZDd ; $9886d9cc-3056-48bb-9b66-a1d0c5926eed -> N0pVmAB8n
+
+### N102IuZDd [goodbye]
+  messageText: Ahsante! {{name}} Ikiwa utahitaji huduma zetu siku za usoni, jisikie huru kuwasiliana nasi. Kuwa na siku njema!
+    📢 _Pia, usikose habari tofauti ya huduma zetu!_Jiunge na _WhatsApp Channel ya CLC_ kwa taarifa za kisheria, huduma mpya, na elimu ya sheria moja kwa moja kwenye simu yako. 👉 Bonyeza hapa kujiunga (https://whatsapp.com/channel/0029Va8djEOE50Uc7HAtew1X) 😊
+  startButtonEnable: true
+  startButtonText: Start again
+
+### brick_start [list]
+  text: *Unahitaji msaada kwa huduma za marekebisho ya NIDA. Tafadhali chagua aina ya marekebisho unayohitaji:*
+  listHeader: Chagua unachotaka 
+  list: [Kubadili Jina] ($uO991gwl) | [Rekebisha Taarifa] ($C6nYjNi7) | [Badili Siku/Mwezi/Mwaka] ($0tXm-cWv) | [Waliodanganya Taarifa] ($SDV_YLYx) | [Taarifa: Watumishi Umma] ($AcpGbOaY)
+  => $uO991gwl -> NT5dA3jNf ; $C6nYjNi7 -> NtsnK6g5C ; $0tXm-cWv -> Nk5ypraPD ; $SDV_YLYx -> NUHU-kdyd ; $AcpGbOaY -> Nxkszo15F
+
+### N0pVmAB8n [reply_buttons]
+  text: 📢 *Taarifa ya Upatikanaji wa Huduma*
+    
+    Kwa sasa, huduma zetu za kisheria zinapatikana *Dar es Salaam* na *Dodoma* pekee.
+    
+    Unaweza kuchagua:
+    1. *Kuwasiliana na Wakili kwa Njia ya Simu au Video*– BURE, lakini tunahudumia watu wasiozidi wanne (4) kwa siku.
+    2. *Kutana na Wakili Ofisini* – Itahusisha gharama za kuonana na Wakili.
+  footer: 
+    📌 Tafadhali chagua hapo chini ili kuendelea.
+  buttons: [Kwa Simu - Bure] ($fb08732f-ebd7-4160-a4f7-35807468906b) | [Ofisini- Malipo] ($7a15aeea-7365-450c-b2f1-fc54d576cb25)
+  => $7a15aeea-7365-450c-b2f1-fc54d576cb25 -> NqfNy2vXg ; $fb08732f-ebd7-4160-a4f7-35807468906b -> NPWdHe3xU
+
+### NIPc9uZ5m [chat]
+  msg(text): Asante, {{name}} ! Tumepokea ombi lako la kikao cha ana kwa ana na Wakili. Timu yetu ya huduma kwa wateja itawasiliana nawe muda mfupi ujao ili kukusaidia na taarifa zaidi.
+
+Kwa sasa, tunayo ofisi Dar es Salaam na Dodoma kwa kikao cha ana kwa ana. Iwapo hutaweza kufika katika maeneo haya, timu yetu inaweza pia kukusaidia kupanga miadi ya mtandaoni.
+  buttons: 
+  destination: options
+  => $success -> NuFQdNMho
+
+### NqfNy2vXg [chat]
+  msg(media/file): https://storage.googleapis.com/media.landbot.io/421418/channels/V1LSLFIZSMM9ZMFKQS50OP0MMJE0AMJ9.png
+  buttons: 
+  destination: options
+  => $success -> NIPc9uZ5m
+
+### NPWdHe3xU [chat]
+  msg(text): 📅 *Appoinment*
+*Weka Appoinment Yako Sasa*  (Dakika 10)
+Bofya kiungo hapa chini👇🏽
+
+
+https://calendly.com/legalclinicclc/10min
+
+*Sera ya Kuhudhuria Mikutano*
+Kwa ajili ya kuhakikisha ubora na ufanisi wa huduma zetu za kisheria, tafadhali zingatia yafuatayo:
+1. Wateja wanatakiwa kujiunga kwenye kikao cha dakika 10 kilichopangwa kwa wakati.
+2. Muda wa kusubiri wa dakika 5 unaruhusiwa. Iwapo mteja hatajiunga ndani ya dakika hizo na hatakuwa ametuma taarifa, kikao kitazingatiwa kuwa kimeshinikana.
+3. Mikutano iliyoshindikana italazimika kupangwa upya kupitia mfumo wetu rasmi wa kuweka miadi.
+4. Hatutozi ada yoyote kwa mikutano iliyoshindikana, lakini uhudhuriaji kwa wakati ni muhimu ili kuhakikisha mwendelezo wa huduma bora kwa wateja wote.
+Tunakushukuru kwa ushirikiano na uelewa wako.
+
+*CLC TEAM*
+  buttons: 
+  destination: options
+  => $success -> N224Mmu0_
+
+### Nw_H_ypct [reply_buttons]
+  text: {{name}}😔*Timu yetu haipo ofisini kwa sasa.*
+    
+    Tunapatikana siku za kazi zifuatazo:
+     *Jumatatu hadi Ijumaa:* Saa 3:00 asubuhi hadi saa 10:00 jioni (EAT)
+     *Jumamosi:* Saa 3:00 asubuhi hadi saa 7:30 mchana (EAT)
+     *Jumapili:* Hatufungui
+    Tutafurahi kukuhudumia pindi tutakaporejea katika saa zetu za kazi. Asante kwa subira yako!
+  footer: 
+    Ungependa kufanya nini?
+  buttons: [Acha Ujumbe] ($df85e3b7-4da7-476f-8fe4-73e4955e0a2c)
+  => default -> N-fTtqu2M
+
+### N-fTtqu2M [var_text]
+  text: _💌_Sawa,_ _{{name}}! _tafadhali andika ujumbe wako hapo chini, na tutakujibu mara baada ya kuingia muda wa kazi_
+  inputSize: long
+  errorText: I'm afraid I didn't understand, could you try again, please?
+  destination: user_message
+  => $success -> NiLtc1uB7
+
+### NiLtc1uB7 [email]
+  subject: Ujumbe wa Mteja: Baada ya Kuthibitisha Appointment - Nje ya muda wa kazi
+  text: Habari Huduma kwa Wateja,
+    
+    Ujumbe ufuatao umeachwa na mtumiaji kupitia chat nje ya saa zetu za kawaida za kazi, baada ya kuthibitisha apointment. Tafadhali fanya ufuatiliaji kwa kutumia maelezo hapa chini, kwa kumpigia simu au kumwandikia kupitia chat.
+    Ningependa pia unipe maelezo binafsi kuhusu kilichotokea kupitia private notes kwenye mfumo ili tuweze kuchukua hatua zinazofaa.
+    
+    Ujumbe wa Mtumiaji
+    {{user_message}} https://app.landbot.io/gui/chats_v4/{{uuid}} (https://app.landbot.io/gui/chats_v4/%C2%BF%C2%B7~uuid%C2%B7?)
+    
+    Tafadhali mfuatilie na kumsaidia mtumiaji mara tu ofisi zitakapofunguliwa.
+    
+    Asante,
+    CLC Management
+  emails: ["godfreynjale@clc.tz","dicksonmdumula@clc.tz"]
+
+### N224Mmu0_ [business_hours]
+  timezone: Africa/Dar_es_Salaam
+  openHours: {"Monday":[{"from":"09:00","to":"18:00"}],"Tuesday":[{"from":"09:00","to":"23:30"}],"Wednesday":[{"from":"09:00","to":"18:00"}],"Thursday":[{"from":"09:00","to":"18:00"}],"Friday":[{"from":"09:00","to":"18:00"}],"Saturday":[{"from":"09:00","to":"13:00"}],"Sunday":null}
+  closedDays: []
+  specialDays: []
+  => success -> NpjCsTzza ; failed -> Nw_H_ypct
+
+### NpjCsTzza [set_a_variable]
+  action: SET
+  field: user_message
+  type: STRING
+  value: {{user_message}}
+  => success -> NK8Jk7jjp
+
+### NK8Jk7jjp [email]
+  subject: Ujumbe wa Mteja: Baada ya Kuthibitisha Appointment - Ndani ya Saa za Kazi
+  text: Habari Huduma kwa Wateja,
+    
+    Mtumiaji aliacha ujumbe kupitia chat wakati wa saa zetu za kawaida za kazi baada ya kuthibitisha appointment. Tafadhali fuatilia ujumbe huu siku inayofuata kwa kumpigia simu au kumwandikia kupitia chat.
+    Ningependa pia unipe maelezo binafsi kuhusu kilichojiri kupitia private notes kwenye mfumo ili tuweze kuchukua hatua zinazofaa.
+    
+    Ujumbe wa Mtumiaji
+    {{user_message}}
+    https://app.landbot.io/gui/chats_v4/{{uuid}} (https://app.landbot.io/gui/chats_v4/%C2%BF%C2%B7~uuid%C2%B7?)
+    
+    Tafadhali mfuatilie na kumsaidia mtumiaji mara tu ofisi zitakapofunguliwa.
+    
+    Asante,
+    CLC Management
+  emails: ["dicksonmdumula@clc.tz","godfreynjale@clc.tz"]
+  => success -> NYB0EUQPr
+
+### NYB0EUQPr [human_takeover]
+  agents: 775944,814969,814972
+
+### NuFQdNMho [business_hours]
+  timezone: Africa/Dar_es_Salaam
+  openHours: {"Monday":[{"from":"09:00","to":"18:00"}],"Tuesday":[{"from":"09:00","to":"23:30"}],"Wednesday":[{"from":"09:00","to":"18:00"}],"Thursday":[{"from":"09:00","to":"18:00"}],"Friday":[{"from":"09:00","to":"18:00"}],"Saturday":[{"from":"09:00","to":"13:00"}],"Sunday":null}
+  closedDays: []
+  specialDays: []
+  => success -> NV1_lRy_y ; failed -> NtfZsYccw
+
+### NqAwCgthM [email]
+  subject: Ujumbe wa Mteja Baada ya Kuomba Kukutana na Wakili Ofisini– Ndani ya Saa za Kazi
+  text: Habari Huduma kwa Wateja,
+    
+    Mtumiaji ameacha ujumbe kupitia chat wakati wa saa zetu za kazi baada ya kuchagua kuonana na Wakili ana kwa ana (ofisini). Tafadhali fanya ufuatiliaji siku kwa kumpigia simu au kumwandikia kupitia chat, na unijulishe kwa private notes kwenye mfumo kuhusu kilichotokea kwa ajili ya hatua zaidi.
+    
+    Ujumbe wa Mtumiaji
+    {{user_message}} https://app.landbot.io/gui/chats_v4/{{uuid}} (https://app.landbot.io/gui/chats_v4/%C2%BF%C2%B7~uuid%C2%B7?)
+    
+    Tafadhali msaidie mtumiaji ipasavyo.
+    
+    Asante,
+    CLC Management
+  emails: ["dicksonmdumula@clc.tz","godfreynjale@clc.tz"]
+  => success -> NcIIWMlSA
+
+### NcIIWMlSA [human_takeover]
+  agents: 775944,814969,814972
+
+### NV1_lRy_y [set_a_variable]
+  action: SET
+  field: user_message
+  type: STRING
+  value: {{user_message}}
+  => success -> NqAwCgthM
+
+### NtfZsYccw [reply_buttons]
+  text: {{name}}😔*Timu yetu haipo ofisini kwa sasa.*
+    
+    Tunapatikana siku za kazi zifuatazo:
+     *Jumatatu hadi Ijumaa:* Saa 3:00 asubuhi hadi saa 10:00 jioni (EAT)
+     *Jumamosi:* Saa 3:00 asubuhi hadi saa 7:30 mchana (EAT)
+     *Jumapili:* Hatufungui
+    Tutafurahi kukuhudumia pindi tutakaporejea katika saa zetu za kazi. Asante kwa subira yako!
+  footer: 
+    📌Ungependa kufanya nini?
+  buttons: [Acha Ujumbe] ($df85e3b7-4da7-476f-8fe4-73e4955e0a2c)
+  => default -> N-ipfi8TK
+
+### N-ipfi8TK [var_text]
+  text: _💌_Sawa,_ _{{name}}! _tafadhali andika ujumbe wako hapo chini, na tutakujibu mara baada ya kuingia muda wa kazi_
+  inputSize: long
+  errorText: I'm afraid I didn't understand, could you try again, please?
+  destination: user_message
+  => $success -> NKD0-LA_i
+
+### NKD0-LA_i [email]
+  subject: Ujumbe wa Mteja Baada ya Kuomba Kukutana na Wakili Ofisini– Nje ya Saa za Kazi
+  text: Habari Huduma kwa Wateja,
+    
+    Mtumiaji aliacha ujumbe kupitia chat nje ya saa zetu za kawaida za kazi. Tafadhali endelea kuwasiliana nae kuhusu kupanga appointment ya kuonana na wakili ofisini baada ya kushauriana na Mawakili, au chukua hatua nyingine inayofaa kama vile kumsaidia kupata appointment kwa njia ya simu.
+    Tafadhali fanya ufuatiliaji wa maelezo haya kwa kumpigia simu au kumwandikia kupitia chat, na unijulishe kuhusu kilichotokea kupitia private notes kwenye mfumo
+    
+    Ujumbe wa Mtumiaji
+    {{user_message}} https://app.landbot.io/gui/chats_v4/{{uuid}} (https://app.landbot.io/gui/chats_v4/%C2%BF%C2%B7~uuid%C2%B7?)
+    
+    Tafadhali mfuatilie na kumsaidia mtumiaji mara tu ofisi zitakapofunguliwa.
+    
+    Asante,
+    CLC Management
+  emails: ["godfreynjale@clc.tz","dicksonmdumula@clc.tz"]
+
+### BHrfmmmZj [brick]
+
+
+# BRICK BHrfmmmZj "Brick #4"
+
+### outputs [brick_outputs]
+  outputs: [{"id":"$0","alias":"Output #1"}]
+
+### N8cqFg7mA [email]
+  subject: Ujumbe wa Mteja Baada ya Kuomba Kukutana na Wakili Ofisini– Ndani ya Saa za Kazi
+  text: Habari Huduma kwa Wateja,
+    
+    Mtumiaji ameacha ujumbe kupitia chat wakati wa saa zetu za kazi baada ya kuchagua kuonana na Wakili ana kwa ana (ofisini). Tafadhali fanya ufuatiliaji siku kwa kumpigia simu au kumwandikia kupitia chat, na unijulishe kwa private notes kwenye mfumo kuhusu kilichotokea kwa ajili ya hatua zaidi.
+    
+    Ujumbe wa Mtumiaji
+    {{user_message}} https://app.landbot.io/gui/chats_v4/{{uuid}} (https://app.landbot.io/gui/chats_v4/%C2%BF%C2%B7~uuid%C2%B7?)
+    
+    Tafadhali msaidie mtumiaji ipasavyo.
+    
+    Asante,
+    CLC Management
+  emails: ["godfreynjale@clc.tz","dicksonmdumula@clc.tz"]
+  => success -> NBaPwn2JH
+
+### NBaPwn2JH [human_takeover]
+  agents: 775944,814969,814972
+
+### NLhhazBBm [set_a_variable]
+  action: SET
+  field: user_message
+  type: STRING
+  value: {{user_message}}
+  => success -> N8cqFg7mA
+
+### NvXeyUpUR [reply_buttons]
+  text: {{name}}😔*Timu yetu haipo ofisini kwa sasa.*
+    
+    Tunapatikana siku za kazi zifuatazo:
+     *Jumatatu hadi Ijumaa:* Saa 3:00 asubuhi hadi saa 10:00 jioni (EAT)
+     *Jumamosi:* Saa 3:00 asubuhi hadi saa 7:30 mchana (EAT)
+     *Jumapili:* Hatufungui
+    Tutafurahi kukuhudumia pindi tutakaporejea katika saa zetu za kazi. Asante kwa subira yako!
+  footer: 
+    📌Ungependa kufanya nini?
+  buttons: [Acha Ujumbe] ($df85e3b7-4da7-476f-8fe4-73e4955e0a2c)
+  => default -> NqdMC-XcR
+
+### NqdMC-XcR [var_text]
+  text: _💌_Sawa,_ _{{name}}! _tafadhali andika ujumbe wako hapo chini, na tutakujibu mara baada ya kuingia muda wa kazi_
+  inputSize: long
+  errorText: I'm afraid I didn't understand, could you try again, please?
+  destination: user_message
+  => $success -> NudAEPB-b
+
+### NudAEPB-b [email]
+  subject: Ujumbe wa Mteja Baada ya Kuomba Kukutana na Wakili Ofisini– Nje ya Saa za Kazi
+  text: Habari Huduma kwa Wateja,
+    
+    Mtumiaji aliacha ujumbe kupitia chat nje ya saa zetu za kawaida za kazi. Tafadhali endelea kuwasiliana nae kuhusu kupanga appointment ya kuonana na wakili ofisini baada ya kushauriana na Mawakili, au chukua hatua nyingine inayofaa kama vile kumsaidia kupata appointment kwa njia ya simu.
+    Tafadhali fanya ufuatiliaji wa maelezo haya kwa kumpigia simu au kumwandikia kupitia chat, na unijulishe kuhusu kilichotokea kupitia private notes kwenye mfumo
+    
+    Ujumbe wa Mtumiaji
+    {{user_message}} https://app.landbot.io/gui/chats_v4/{{uuid}} (https://app.landbot.io/gui/chats_v4/%C2%BF%C2%B7~uuid%C2%B7?)
+    
+    Tafadhali mfuatilie na kumsaidia mtumiaji mara tu ofisi zitakapofunguliwa.
+    
+    Asante,
+    CLC Management
+  emails: ["dicksonmdumula@clc.tz","godfreynjale@clc.tz"]
+
+### brick_start [business_hours]
+  timezone: Africa/Dar_es_Salaam
+  openHours: {"Monday":[{"from":"09:00","to":"16:00"}],"Tuesday":[{"from":"09:00","to":"16:00"}],"Wednesday":[{"from":"09:00","to":"16:00"}],"Thursday":[{"from":"09:00","to":"16:00"}],"Friday":[{"from":"09:00","to":"16:00"}],"Saturday":[{"from":"09:00","to":"13:00"}],"Sunday":null}
+  closedDays: []
+  specialDays: []
+  => success -> NLhhazBBm ; failed -> NvXeyUpUR
+
+
+# BRICK BB3P4rCUp "Brick #5"
+
+### outputs [brick_outputs]
+  outputs: [{"id":"$0","alias":"Output #1"}]
+
+### brick_start [reply_buttons]
+  text: 📝 *Marekebisho ya Majina kwa Watahiniwa – Baraza la Mitihani la Tanzania (NECTA)*
+    Kama majina yako yaliandikwa vibaya kwenye *cheti cha darasa la saba, kidato cha nne, cha sita au chuo cha ualimu*, basi ujue hii inakuhusu.
+    Baraza la Mitihani la Tanzania (NECTA) hushughulikia maombi ya marekebisho ya majina yaliyokosewa kuandikwa kwenye mitihani rasmi. Ikiwa unahitaji kurekebisha jina kwenye cheti chako kwa sababu ya makosa ya uandishi, huu ndio utaratibu sahihi wa kufuata.
+  buttons: 
+  => default -> BPONo3tgE
+
+### BPONo3tgE [brick]
+
+### NW8OcwgN8 [email]
+  subject: Customer Appointment Chat: Upon Confirmation Within Business Hours
+  text: Hello Customer Care,
+    
+    The following message was left by a user via chat during our standard business hours post appointment confirmation. Please make follow up on the details below by either chat or calling and kindly give me a private notes on what aspired for further action.
+    
+    Left Message
+    {{user_message}} https://app.landbot.io/gui/chats_v4/{{uuid}} (https://app.landbot.io/gui/chats_v4/%C2%BF%C2%B7~uuid%C2%B7?)
+    
+    Please assist the user accordingly once.
+    
+    Thank you,  
+    CLC Manageme*nt*
+  emails: ["godfrey.aloyce@clctz.org","dickson.mdumula@clctz.org"]
+  => success -> NACT3CbSx
+
+### N-kji-byc [set_a_variable]
+  action: SET
+  field: user_message
+  type: STRING
+  value: {{user_message}}
+  => success -> NW8OcwgN8
+
+### NACT3CbSx [human_takeover]
+  agents: 741085,749184,775944
+
+### NmOxXk2Q9 [reply_buttons]
+  text: {{name}}😔 📴 *Timu Yetu Haipo Mtandaoni kwa Sasa*
+    Tunapatikana *Jumatatu hadi Ijumaa kuanzia saa 3:00 asubuhi hadi saa 12:00 jioni*,
+    na *Jumamosi kuanzia saa 3:00 asubuhi hadi saa 7:30 mchana*.
+     *Hatufanyi kazi Jumapili.*
+    Tutafurahi kukuhudumia wakati wa saa zetu za kazi!
+  footer: 
+    📌 Ungependa kufanya nini?
+  buttons: [Acha Ujumbe] ($df85e3b7-4da7-476f-8fe4-73e4955e0a2c)
+  destination: leave_chatormessage
+  => default -> NAceb7F4H
+
+### NAceb7F4H [var_text]
+  text: 💌Got it_, _{{name}}!_ Please type your message below, and we’ll reply as soon as we’re back._
+  inputSize: long
+  errorText: I'm afraid I didn't understand, could you try again, please?
+  destination: user_message
+  => $success -> Nfxdsa1pb
+
+### Nfxdsa1pb [email]
+  subject: Customer Appointment  Booking Chat - Outside Business Hours
+  text: Hello Customer Care,
+    
+    The following message was left by a user via chat during outside standard business hours, Please make follow up on the details below by either chat or calling and kindly give me a private notes on what aspired for further action.
+    
+    Left Message
+    {{user_message}} https://app.landbot.io/gui/chats_v4/{{uuid}} (https://app.landbot.io/gui/chats_v4/%C2%BF%C2%B7~uuid%C2%B7?)
+    
+    Please assist the user accordingly once operations resume.
+    
+    Thank you,  
+    CLC Management
+  emails: ["godfrey.aloyce@clctz.org","dickson.mdumula@clctz.org"]
+
+### Nq0TOmIYE [business_hours]
+  timezone: Africa/Dar_es_Salaam
+  openHours: {"Monday":[{"from":"09:00","to":"16:00"}],"Tuesday":[{"from":"09:00","to":"16:00"}],"Wednesday":[{"from":"09:00","to":"16:00"}],"Thursday":[{"from":"09:00","to":"16:00"}],"Friday":[{"from":"09:00","to":"16:00"}],"Saturday":[{"from":"09:00","to":"13:00"}],"Sunday":null}
+  closedDays: []
+  specialDays: []
+  => failed -> NmOxXk2Q9 ; success -> N8qrjC8DT
+
+### NIm66TxRu [reply_buttons]
+  text: <h3>*Tunatumaini umejifunza na umeweza kuelewa Mwongozo kama ulivyoandikwa na Mamlaka husika? *</h3>
+  buttons: [Ndiyo] ($e41374a1-5f28-4c1c-a860-ba308f789c3f) | [Hapana] ($536eb32a-ecf9-4f47-b840-26a73dc159f6)
+  => $e41374a1-5f28-4c1c-a860-ba308f789c3f -> NYm0VZ6ze ; $536eb32a-ecf9-4f47-b840-26a73dc159f6 -> NhOv9Usgf
+
+### NYm0VZ6ze [goodbye]
+  messageText: Tunashukuru kwa Taarifa! {{name}} Ikiwa utahitaji huduma zetu siku za usoni, jisikie huru kuwasiliana nasi. Kuwa na siku njema!
+    
+    📢 _Pia, usikose habari tofauti ya huduma zetu zingine!_
+    Jiunge na _WhatsApp Channel ya CLC_ kwa taarifa za kisheria, huduma mpya, na elimu ya sheria moja kwa moja kwenye simu yako.
+    👉 Bonyeza hapa kujiunga (https://whatsapp.com/channel/0029Va8djEOE50Uc7HAtew1X) 😊
+  startButtonEnable: true
+  startButtonText: Start again
+
+### NhOv9Usgf [reply_buttons]
+  text: Ohhh pole {{name}} hebu endelea kupitia zaidi tovuti yao https://www.necta.go.tz/ kwa maswali mengine au hata wapigie au watembelee,
+  footer: Je, Una jambo lingine unahitaji tukusaidie?
+    
+  buttons: [Ndiyo] ($7679fd1a-e575-4b86-ae76-5e568e31c40d) | [Hapana] ($d2364709-f1cb-45e6-a21c-a9cededd3321)
+  => default -> Nq0TOmIYE ; $d2364709-f1cb-45e6-a21c-a9cededd3321 -> NYm0VZ6ze ; $7679fd1a-e575-4b86-ae76-5e568e31c40d -> Nq0TOmIYE
+
+### N8qrjC8DT [chat]
+  msg(text): Tafadhali eleza kwa kifupi unachohitaji ili tuweze kukusaidia haraka na kwa usahihi.
+  buttons: 
+  destination: options
+  => $success -> N-kji-byc
+
+### NTcQj8MWC [chat]
+  msg(text): <h5>*Je, unahitaji msaada wa marekebisho katika cheti cha kuzaliwa? kama ndio*</h5><h5>
+</h5><h5>hebu pitia tovuti ya o https://www.necta.go.tz/ kwa maswali mengine au hata wapigie au watembelee,</h5>
+  msg(media/file): https://storage.googleapis.com/media.landbot.io/421418/channels/1F8P02LLPQ4NCGROWCH6D4J2VAVHFLS3.pdf
+  buttons: 
+  destination: options
+  => $success -> NIm66TxRu
+
+
+# BRICK BPONo3tgE "VYETI BRICK"
+
+### outputs [brick_outputs]
+  outputs: [{"id":"$0","alias":"Output #1"}]
+
+### NEgjqEM60 [email]
+  subject: Customer Appointment Chat: Upon Confirmation Within Business Hours
+  text: Hello Customer Care,
+    
+    The following message was left by a user via chat during our standard business hours post appointment confirmation. Please make follow up on the details below by either chat or calling and kindly give me a private notes on what aspired for further action.
+    
+    Left Message
+    {{user_message}} https://app.landbot.io/gui/chats_v4/{{uuid}} (https://app.landbot.io/gui/chats_v4/%C2%BF%C2%B7~uuid%C2%B7?)
+    
+    Please assist the user accordingly once.
+    
+    Thank you,  
+    CLC Manageme*nt*
+  emails: ["dicksonmdumula@clc.tz","godfreynjale@clc.tz"]
+  => success -> NRCxOXE17
+
+### N6I_Tz3UI [set_a_variable]
+  action: SET
+  field: user_message
+  type: STRING
+  value: {{user_message}}
+  => success -> NEgjqEM60
+
+### NRCxOXE17 [human_takeover]
+  agents: 775944,814969,814972
+
+### Nkxf7jcyn [reply_buttons]
+  text: {{name}}😔 📴 *Timu Yetu Haipo Mtandaoni kwa Sasa*
+    Tunapatikana *Jumatatu hadi Ijumaa kuanzia saa 3:00 asubuhi hadi saa 12:00 jioni*,
+    na *Jumamosi kuanzia saa 3:00 asubuhi hadi saa 7:30 mchana*.
+     *Hatufanyi kazi Jumapili.*
+    Tutafurahi kukuhudumia wakati wa saa zetu za kazi!
+  footer: 
+    📌 Ungependa kufanya nini?
+  buttons: [Acha Ujumbe] ($df85e3b7-4da7-476f-8fe4-73e4955e0a2c)
+  destination: leave_chatormessage
+  => default -> NnnOIkkXx
+
+### NnnOIkkXx [var_text]
+  text: 💌Got it_, _{{name}}!_ Please type your message below, and we’ll reply as soon as we’re back._
+  inputSize: long
+  errorText: I'm afraid I didn't understand, could you try again, please?
+  destination: user_message
+  => $success -> NCnH8Hr-Q
+
+### NCnH8Hr-Q [email]
+  subject: Customer Appointment  Booking Chat - Outside Business Hours
+  text: Hello Customer Care,
+    
+    The following message was left by a user via chat during outside standard business hours, Please make follow up on the details below by either chat or calling and kindly give me a private notes on what aspired for further action.
+    
+    Left Message
+    {{user_message}} https://app.landbot.io/gui/chats_v4/{{uuid}} (https://app.landbot.io/gui/chats_v4/%C2%BF%C2%B7~uuid%C2%B7?)
+    
+    Please assist the user accordingly once operations resume.
+    
+    Thank you,  
+    CLC Management
+  emails: ["godfreynjale@clc.tz","dicksonmdumula@clc.tz"]
+
+### NHL0qkIgl [business_hours]
+  timezone: Africa/Dar_es_Salaam
+  openHours: {"Monday":[{"from":"09:00","to":"16:00"}],"Tuesday":[{"from":"09:00","to":"16:00"}],"Wednesday":[{"from":"09:00","to":"16:00"}],"Thursday":[{"from":"09:00","to":"16:00"}],"Friday":[{"from":"09:00","to":"16:00"}],"Saturday":[{"from":"09:00","to":"13:00"}],"Sunday":null}
+  closedDays: []
+  specialDays: []
+  => failed -> Nkxf7jcyn ; success -> NOnubXV8K
+
+### N7q7cGixt [reply_buttons]
+  text: <h3>*Tunatumaini umejifunza na umeweza kuelewa Mwongozo kama ulivyoandikwa na Mamlaka husika? *</h3>
+  buttons: [Ndiyo] ($e41374a1-5f28-4c1c-a860-ba308f789c3f) | [Hapana] ($536eb32a-ecf9-4f47-b840-26a73dc159f6)
+  => $e41374a1-5f28-4c1c-a860-ba308f789c3f -> Nk-4y5-Ap ; $536eb32a-ecf9-4f47-b840-26a73dc159f6 -> NYmbib_OX
+
+### Nk-4y5-Ap [goodbye]
+  messageText: Tunashukuru kwa Taarifa! {{name}} Ikiwa utahitaji huduma zetu siku za usoni, jisikie huru kuwasiliana nasi. Kuwa na siku njema!
+    
+    📢 _Pia, usikose habari tofauti ya huduma zetu zingine!_
+    Jiunge na _WhatsApp Channel ya CLC_ kwa taarifa za kisheria, huduma mpya, na elimu ya sheria moja kwa moja kwenye simu yako.
+    👉 Bonyeza hapa kujiunga (https://whatsapp.com/channel/0029Va8djEOE50Uc7HAtew1X) 😊
+  startButtonEnable: true
+  startButtonText: Start again
+
+### NYmbib_OX [reply_buttons]
+  text: Ohhh pole {{name}} hebu endelea kupitia zaidi tovuti yao https://www.necta.go.tz/ kwa maswali mengine au hata wapigie au watembelee,
+  footer: Je, Una jambo lingine unahitaji tukusaidie?
+    
+  buttons: [Ndiyo] ($7679fd1a-e575-4b86-ae76-5e568e31c40d) | [Hapana] ($d2364709-f1cb-45e6-a21c-a9cededd3321)
+  => default -> NHL0qkIgl ; $d2364709-f1cb-45e6-a21c-a9cededd3321 -> Nk-4y5-Ap ; $7679fd1a-e575-4b86-ae76-5e568e31c40d -> NHL0qkIgl
+
+### NOnubXV8K [chat]
+  msg(text): Tafadhali eleza kwa kifupi unachohitaji ili tuweze kukusaidia haraka na kwa usahihi.
+  buttons: 
+  destination: options
+  => $success -> N6I_Tz3UI
+
+### brick_start [chat]
+  msg(text): <h5>*Tafadhali soma mwongozo wa NECTA kwenye PDF hapa chini (👇)*</h5>
+  msg(media/file): https://storage.googleapis.com/media.landbot.io/421418/channels/1F8P02LLPQ4NCGROWCH6D4J2VAVHFLS3.pdf
+  buttons: 
+  destination: options
+  => $success -> N7q7cGixt
