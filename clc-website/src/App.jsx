@@ -1,14 +1,18 @@
 import { useEffect, useState } from 'react'
-import { liveStream } from './media.js'
 import Navbar from './components/Navbar.jsx'
 import HeroSlider from './components/HeroSlider.jsx'
 import { ServiceBands, ServicesOverview } from './components/Services.jsx'
 import { LiveMini, MediaArchive, MediaPage, MediaSection } from './components/Media.jsx'
 import Login from './components/Login.jsx'
+import LivePage from './components/LivePage.jsx'
+import AppointmentModal from './appointments/AppointmentModal.jsx'
 import Dashboard from './dashboard/Dashboard.jsx'
+import Join from './join/Join.jsx'
+import Track from './join/Track.jsx'
 import { FinalCTA, FloatingWA, Footer, HowItWorks, PartnerSection, WhyChoose } from './components/Sections.jsx'
 
 const MEDIA_ROUTE = /^#\/media\/(.+)$/
+const JOIN_ROUTE = /^#\/join\/(track|edit)\/([0-9a-f-]{36})\/([\w-]+)$/
 
 function useHash() {
   const [hash, setHash] = useState(window.location.hash)
@@ -34,6 +38,12 @@ export default function App() {
   }, [hash, mediaId])
 
   if (hash === '#/login') return <Login />
+  if (hash === '#/join') return <Join />
+  const joinRoute = hash.match(JOIN_ROUTE)
+  if (joinRoute) {
+    const [, mode, id, token] = joinRoute
+    return mode === 'track' ? <Track id={id} token={token} /> : <Join resume={{ id, token }} />
+  }
   if (hash.startsWith('#/app')) return <Dashboard hash={hash} />
 
   return (
@@ -41,6 +51,8 @@ export default function App() {
       <Navbar />
       {hash === '#/media' ? (
         <MediaArchive />
+      ) : hash === '#/live' ? (
+        <LivePage />
       ) : mediaId ? (
         <MediaPage id={mediaId} />
       ) : (
@@ -56,7 +68,8 @@ export default function App() {
         </main>
       )}
       <Footer />
-      <LiveMini hidden={mediaId === liveStream.id} />
+      <LiveMini hidden={hash === '#/live'} />
+      <AppointmentModal />
       <FloatingWA />
     </>
   )

@@ -1,10 +1,16 @@
 import { useEffect, useRef, useState } from 'react'
-import { Bell, Briefcase, Building2, ChevronDown, Inbox, LayoutDashboard, LogOut, Menu, Scale, UserCircle, Users, Workflow } from 'lucide-react'
+import { Bell, Briefcase, Building2, CalendarCheck, CreditCard, ChevronDown, Inbox, LayoutDashboard, LogOut, Menu, Mic, Package, Radio, Scale, UserCircle, Users, Workflow } from 'lucide-react'
+import { signOut } from './api.js'
 import { ROLES } from './data.js'
 import { Avatar } from './shared.jsx'
-import { AdminFirms, AdminFlows, AdminOverview, AdminUsers } from './Admin.jsx'
+import { AdminFlows, AdminOverview, AdminUsers } from './Admin.jsx'
+import AdminFirmsLive from './Applications.jsx'
+import AdminPackages from './Packages.jsx'
+import AdminMediaPosts from './MediaPosts.jsx'
+import LivePodcast from './LivePodcast.jsx'
+import Appointments from './Appointments.jsx'
 import { FirmCases, FirmOverview, FirmProfile, FirmReferrals, FirmTeam } from './Firm.jsx'
-import { AdvocateCases, AdvocateOverview } from './Advocate.jsx'
+import { AdvocateMatters, AdvocateOverview, AdvocateSubscription, MyDetailsDialog } from './Advocate.jsx'
 
 // One entry per sidebar link: [path, label, icon, page]
 const NAV = {
@@ -12,7 +18,11 @@ const NAV = {
     ['overview', 'Overview', LayoutDashboard, AdminOverview],
     ['users', 'Users', Users, AdminUsers],
     ['flows', 'Chatbot flows', Workflow, AdminFlows],
-    ['firms', 'Law firms', Building2, AdminFirms],
+    ['firms', 'Law firms', Building2, AdminFirmsLive],
+    ['appointments', 'Appointments', CalendarCheck, Appointments],
+    ['packages', 'Packages & services', Package, AdminPackages],
+    ['media', 'Podcast & posts', Mic, AdminMediaPosts],
+    ['live', 'Live podcast', Radio, LivePodcast],
   ],
   firm: [
     ['overview', 'Overview', LayoutDashboard, FirmOverview],
@@ -22,8 +32,9 @@ const NAV = {
     ['profile', 'Firm profile', UserCircle, FirmProfile],
   ],
   advocate: [
-    ['overview', 'Overview', LayoutDashboard, AdvocateOverview],
-    ['cases', 'My cases', Briefcase, AdvocateCases],
+    ['overview', 'Dashboard', LayoutDashboard, AdvocateOverview],
+    ['matters', 'Matters', Briefcase, AdvocateMatters],
+    ['subscription', 'Subscription plans', CreditCard, AdvocateSubscription],
   ],
 }
 
@@ -45,6 +56,7 @@ function readAuth(hash) {
 
 function UserMenu({ auth, onSignOut }) {
   const [open, setOpen] = useState(false)
+  const [details, setDetails] = useState(false)
   const ref = useRef(null)
   useEffect(() => {
     const close = (e) => { if (e.type === 'keydown' ? e.key === 'Escape' : ref.current && !ref.current.contains(e.target)) setOpen(false) }
@@ -64,9 +76,13 @@ function UserMenu({ auth, onSignOut }) {
             <Avatar name={auth.user.full_name} />
             <div><strong>{auth.user.full_name}</strong><small>{auth.membership.organization}</small></div>
           </div>
+          {auth.membership.role === 'advocate' && (
+            <button role="menuitem" className="d-menu-item" onClick={() => { setOpen(false); setDetails(true) }}><UserCircle size={17} /> My details</button>
+          )}
           <button role="menuitem" className="d-menu-out" onClick={onSignOut}><LogOut size={17} /> Sign out</button>
         </div>
       )}
+      {details && <MyDetailsDialog onClose={() => setDetails(false)} />}
     </div>
   )
 }
@@ -88,14 +104,6 @@ export default function Dashboard({ hash }) {
   const items = NAV[role]
   const active = items.find(([p]) => p === page) || items[0]
   const Page = active[3]
-
-  const signOut = async () => {
-    try {
-      if (auth.access) await fetch('/api/auth/logout/', { method: 'POST', headers: { Authorization: `Bearer ${auth.access}` } })
-    } catch { /* offline: still sign out locally */ }
-    sessionStorage.removeItem('clc_auth')
-    window.location.hash = '#/login'
-  }
 
   return (
     <div className="dash">

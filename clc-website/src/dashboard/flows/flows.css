@@ -243,3 +243,4 @@
 .fb-file-list strong { white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 1.3; }
 .fb-file-list li.placeholder { border-color: #e7b9a2; background: #fdf6f2; }
 .fb-tag { display: inline-block; margin-left: 6px; padding: 1px 7px; border-radius: 99px; background: #c2643a; color: #fff; font-size: .66rem; font-weight: 700; vertical-align: middle; letter-spacing: .02em; }
+.btn-danger { background: #b4472a; color: #fff; }

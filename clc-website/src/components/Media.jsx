@@ -2,20 +2,29 @@ import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowLeft, ArrowRight, CalendarDays, Clock, Maximize2, Minus, Play, Search, X } from 'lucide-react'
 import { UI, useLang } from '../i18n.jsx'
-import { MEDIA_TYPES, formatDate, liveStream, mediaItems } from '../media.js'
+import { MEDIA_TYPES, formatDate } from '../media.js'
+import { useLive } from '../live.js'
+import { useMediaPosts } from '../mediaPosts.js'
 import { waLink } from '../data.js'
 import { Reveal, SectionHead } from './ui.jsx'
 import { WhatsAppIcon } from './Icons.jsx'
 
 const pick = (o, lang) => o[lang] ?? o.en
 const typeLabel = (key, lang) => pick(MEDIA_TYPES.find((m) => m.key === key).label, lang)
-const isVideo = (m) => m.type !== 'machapisho'
+// The picture of an item: its cover, or YouTube's thumbnail, or a frame taken from the uploaded video.
+function Thumb({ m, className }) {
+  if (m.image) return <img className={className} src={m.image} alt="" loading="lazy" />
+  if (m.frame) return <video className={className} src={m.frame} preload="metadata" muted playsInline tabIndex={-1} aria-hidden="true" />
+  return null
+}
+
+const isVideo = (m) => m.type !== 'machapisho' || !!m.youtube || !!m.video
 
 function MediaCard({ m, lang, featured = false }) {
   return (
     <motion.article layout className={`mcard ${featured ? 'mcard--feat' : ''}`} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
       <a href={`#/media/${m.id}`} className="mcard-img">
-        <img src={m.image} alt="" loading="lazy" />
+        <Thumb m={m} />
         <span className={`mtag mtag--${m.type}`}>{typeLabel(m.type, lang)}</span>
         {isVideo(m) && <span className="mplay"><Play size={featured ? 30 : 22} fill="currentColor" /></span>}
         {m.duration && <span className="mdur"><Clock size={12} /> {m.duration}</span>}
@@ -34,6 +43,7 @@ const byDate = (a, b) => b.date.localeCompare(a.date)
 
 export function MediaSection() {
   const { lang, t } = useLang()
+  const { items: mediaItems } = useMediaPosts()
   const recent = [...mediaItems].sort(byDate).slice(0, 4)
 
   return (
@@ -53,6 +63,7 @@ export function MediaSection() {
 
 export function MediaArchive() {
   const { lang, t } = useLang()
+  const { items: mediaItems } = useMediaPosts()
   const [filter, setFilter] = useState('all')
   const [q, setQ] = useState('')
   const needle = q.trim().toLowerCase()
@@ -101,8 +112,10 @@ export function MediaArchive() {
 
 export function MediaPage({ id }) {
   const { lang } = useLang()
+  const { items: mediaItems, loading } = useMediaPosts()
   const m = mediaItems.find((x) => x.id === id)
 
+  if (loading) return <main className="mpage" />
   if (!m) {
     return (
       <main className="mpage">
@@ -137,6 +150,8 @@ export function MediaPage({ id }) {
           <Reveal className="mplayer">
             {m.youtube ? (
               <iframe src={`https://www.youtube.com/embed/${m.youtube}`} title={pick(m.title, lang)} allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture" allowFullScreen />
+            ) : m.video ? (
+              <video src={m.video} poster={m.cover || undefined} controls playsInline preload="metadata" />
             ) : (
               <>
                 <img src={m.image} alt="" />
@@ -160,7 +175,7 @@ export function MediaPage({ id }) {
           <h4 className="mside-title">{UI.media.related[lang]}</h4>
           {related.map((r) => (
             <a key={r.id} href={`#/media/${r.id}`} className="mrel">
-              <img src={r.image} alt="" />
+              <Thumb m={r} />
               <span><small>{typeLabel(r.type, lang)}</small>{pick(r.title, lang)}</span>
             </a>
           ))}
@@ -170,11 +185,16 @@ export function MediaPage({ id }) {
   )
 }
 
+// The floating live window: it appears while CLC is live on YouTube and autoplays (muted).
+// Clicking the video or the title opens the live page (#/live) with the full player and the WhatsApp chat.
 export function LiveMini({ hidden = false }) {
-  const { lang, t } = useLang()
-  const [state, setState] = useState('open') // open | min | closed
-  if (!liveStream.active || hidden || state === 'closed') return null
+  const { t } = useLang()
+  const { live } = useLive()
+  const [state, setState] = useState('open') // open | min
+  const [closedFor, setClosedFor] = useState(null) // the video the visitor closed; a new live show opens it again
+  if (!live?.live || hidden || closedFor === live.video_id) return null
 
+  const title = live.title || t({ sw: 'Podcast LIVE sasa', en: 'Podcast LIVE now', zh: '播客直播中' })
   return (
     <div className={`live-mini ${state === 'min' ? 'is-min' : ''}`} role="complementary" aria-label="Live podcast">
       {state === 'min' ? (
@@ -184,24 +204,19 @@ export function LiveMini({ hidden = false }) {
       ) : (
         <motion.div className="live-win" initial={{ opacity: 0, y: 30, scale: .9 }} animate={{ opacity: 1, y: 0, scale: 1 }}>
           <div className="live-screen">
-            {liveStream.youtube ? (
-              <iframe src={`https://www.youtube.com/embed/${liveStream.youtube}?autoplay=1&mute=1&playsinline=1`} title="Live" allow="autoplay; encrypted-media; picture-in-picture" allowFullScreen />
-            ) : (
-              <a href={`#/media/${liveStream.id}`} className="live-cover">
-                <img src={liveStream.image} alt="" />
-                <span className="mplay"><Play size={22} fill="currentColor" /></span>
-              </a>
-            )}
+            <iframe src={`https://www.youtube.com/embed/${live.video_id}?autoplay=1&mute=1&playsinline=1&controls=0&rel=0`} title="Live"
+              allow="autoplay; encrypted-media; picture-in-picture" tabIndex={-1} />
+            <a href="#/live" className="live-click" aria-label={title} />
             <div className="live-bar">
               <span className="live-badge"><span className="live-dot" /> LIVE</span>
               <span className="live-actions">
-                <a href={`#/media/${liveStream.id}`} aria-label="Open" title="Open"><Maximize2 size={15} /></a>
+                <a href="#/live" aria-label="Open" title="Open"><Maximize2 size={15} /></a>
                 <button onClick={() => setState('min')} aria-label="Minimize" title="Minimize"><Minus size={16} /></button>
-                <button onClick={() => setState('closed')} aria-label="Close" title="Close"><X size={16} /></button>
+                <button onClick={() => setClosedFor(live.video_id)} aria-label="Close" title="Close"><X size={16} /></button>
               </span>
             </div>
           </div>
-          <a href={`#/media/${liveStream.id}`} className="live-title">{t(liveStream.title)}</a>
+          <a href="#/live" className="live-title">{title}</a>
         </motion.div>
       )}
     </div>

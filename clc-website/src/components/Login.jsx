@@ -19,6 +19,12 @@ const T = {
   otherAccount: { sw: 'Tumia akaunti nyingine', en: 'Use a different account', zh: '使用其他账号' },
   done: { sw: 'Umeingia', en: 'You are signed in', zh: '登录成功' },
   doneSub: { sw: 'Unafanya kazi kama', en: 'You are working as', zh: '当前身份' },
+  newPwTitle: { sw: 'Weka nenosiri jipya', en: 'Choose a new password', zh: '设置新密码' },
+  newPwSub: { sw: 'Ulitumia nenosiri la muda. Weka nenosiri lako mwenyewe ili kuendelea.', en: 'You signed in with a temporary password. Choose your own to continue.', zh: '您使用的是临时密码，请设置自己的密码后继续。' },
+  newPw: { sw: 'Nenosiri jipya', en: 'New password', zh: '新密码' },
+  confirmPw: { sw: 'Thibitisha nenosiri', en: 'Confirm password', zh: '确认密码' },
+  savePw: { sw: 'Hifadhi na uendelee', en: 'Save and continue', zh: '保存并继续' },
+  mismatch: { sw: 'Manenosiri hayafanani.', en: 'The passwords do not match.', zh: '两次输入的密码不一致。' },
   errors: {
     invalid_credentials: { sw: 'Barua pepe au nenosiri si sahihi.', en: 'Incorrect email or password.', zh: '邮箱或密码不正确。' },
     no_active_role: {
@@ -40,7 +46,7 @@ async function post(url, body, token) {
     body: JSON.stringify(body),
   })
   const data = await res.json().catch(() => ({}))
-  if (!res.ok) throw new Error(data.detail || 'network')
+  if (!res.ok) throw Object.assign(new Error(data.detail || 'network'), { data })
   return data
 }
 
@@ -54,6 +60,8 @@ export default function Login() {
   const [error, setError] = useState('')
   const [pending, setPending] = useState(null) // { pick_role_token, user, memberships }
   const [signedAs, setSignedAs] = useState(null)
+  const [newPw, setNewPw] = useState('')
+  const [confirmPw, setConfirmPw] = useState('')
 
   const fail = (e) => setError(t(T.errors[e.message] || T.errors.network))
 
@@ -80,10 +88,31 @@ export default function Login() {
     try {
       const data = await post('/api/auth/login/', { email, password })
       setPending(data)
-      if (data.memberships.length === 1) await chooseRole(data.memberships[0], data.pick_role_token)
-      else setStep('role')
+      if (data.must_change_password) setStep('newpw')
+      else await proceed(data)
     } catch (err) {
       fail(err)
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  const proceed = async (data) => {
+    if (data.memberships.length === 1) await chooseRole(data.memberships[0], data.pick_role_token)
+    else setStep('role')
+  }
+
+  const changePassword = async (e) => {
+    e.preventDefault()
+    if (newPw !== confirmPw) { setError(t(T.mismatch)); return }
+    setBusy(true)
+    setError('')
+    try {
+      await post('/api/auth/change-password/', { current_password: password, new_password: newPw }, pending.pick_role_token)
+      setPassword(newPw)
+      await proceed(pending)
+    } catch (err) {
+      setError(err.data?.errors?.join(' ') || t(T.errors[err.message] || T.errors.network))
     } finally {
       setBusy(false)
     }
@@ -140,6 +169,25 @@ export default function Login() {
 
                 <button className="btn btn-gold btn-lg login-submit" disabled={busy}>
                   {busy ? <Loader2 size={18} className="spin" /> : t(T.signIn)}
+                </button>
+              </motion.form>
+            )}
+
+            {step === 'newpw' && pending && (
+              <motion.form key="n" onSubmit={changePassword} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.3 }}>
+                <h2>{t(T.newPwTitle)}</h2>
+                <p className="login-sub">{t(T.newPwSub)}</p>
+                <label className="field">
+                  <span>{t(T.newPw)}</span>
+                  <div className="field-box"><Lock size={18} /><input type="password" autoComplete="new-password" required minLength={8} autoFocus value={newPw} onChange={(e) => setNewPw(e.target.value)} /></div>
+                </label>
+                <label className="field">
+                  <span>{t(T.confirmPw)}</span>
+                  <div className="field-box"><Lock size={18} /><input type="password" autoComplete="new-password" required value={confirmPw} onChange={(e) => setConfirmPw(e.target.value)} /></div>
+                </label>
+                {error && <p className="login-error" role="alert">{error}</p>}
+                <button className="btn btn-gold btn-lg login-submit" disabled={busy}>
+                  {busy ? <Loader2 size={18} className="spin" /> : t(T.savePw)}
                 </button>
               </motion.form>
             )}

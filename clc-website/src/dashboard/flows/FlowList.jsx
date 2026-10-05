@@ -1,5 +1,5 @@
 import { Suspense, lazy, useCallback, useEffect, useState } from 'react'
-import { Bot, CircleAlert, Clock, FolderOpen, KeyRound, Loader2, MessageCircle, Plus, Power } from 'lucide-react'
+import { Bot, CircleAlert, Clock, FolderOpen, KeyRound, Loader2, MessageCircle, Pencil, Plus, Power, Trash2 } from 'lucide-react'
 import { api } from '../api.js'
 import { Card, Drawer, Field, PageHead } from '../shared.jsx'
 import { BotFiles, BotSettingsForm } from './BotSetup.jsx'
@@ -44,12 +44,24 @@ export default function FlowList() {
   const [saved, setSaved] = useState(false)
   const loadFiles = useCallback(() => api('chatbot/media/').then(setFiles).catch(() => setFiles([])), [])
   useEffect(() => { if (drawer === 'files') loadFiles() }, [drawer, loadFiles])
+  const [removing, setRemoving] = useState(null)
+  const [removeError, setRemoveError] = useState('')
 
   const load = useCallback(() => {
     api('chatbot/flows/').then(setFlows).catch(setError)
   }, [])
   useEffect(() => { if (!builderId) load() }, [builderId, load])
 
+  const remove = async () => {
+    setRemoveError('')
+    try {
+      await api(`chatbot/flows/${removing.id}/`, { method: 'DELETE' })
+      setFlows((cur) => cur.filter((f) => f.id !== removing.id))
+      setRemoving(null)
+    } catch (err) {
+      setRemoveError(err.message)
+    }
+  }
   const open = (id) => { window.location.hash = `#/app/admin/flows/${id}` }
   const create = async (e) => {
     e.preventDefault()
@@ -93,27 +105,51 @@ export default function FlowList() {
       )}
 
       {flows && flows.length > 0 && (
-        <div className="d-flow-grid">
-          {flows.map((f) => (
-            <button key={f.id} className="d-flow" onClick={() => open(f.id)}>
-              <div className="d-flow-top">
-                <span className="d-flow-icon"><Bot size={20} /></span>
-                <span className="fb-status">
-                  {!f.is_active ? <em className="off"><Power size={11} /> Off</em>
-                    : f.published ? <em className="live">Live v{f.published.version}</em> : <em>Not published</em>}
-                  {f.draft && <em className="draft">Changes</em>}
-                </span>
-              </div>
-              <h3>{f.name}</h3>
-              {f.description && <p>{f.description}</p>}
-              <TriggerChips triggers={f.triggers} />
-              <div className="d-flow-foot">
-                <span>{(f.draft || f.published)?.nodes ?? 0} blocks</span>
-                <span>Updated {new Date(f.updated_at).toLocaleDateString()}</span>
-              </div>
-            </button>
-          ))}
-        </div>
+        <Card>
+          <div className="d-table-wrap">
+            <table className="d-table clickable">
+              <thead>
+                <tr><th>S/N</th><th>Name</th><th>Triggers</th><th>Blocks</th><th>Status</th><th>Updated</th><th>Action</th></tr>
+              </thead>
+              <tbody>
+                {flows.map((f, i) => (
+                  <tr key={f.id} onClick={() => open(f.id)}>
+                    <td>{i + 1}</td>
+                    <td>
+                      <strong>{f.name}</strong>
+                      {f.description && <small>{f.description}</small>}
+                    </td>
+                    <td><TriggerChips triggers={f.triggers} /></td>
+                    <td>{(f.draft || f.published)?.nodes ?? 0}</td>
+                    <td>
+                      <span className="fb-status">
+                        {!f.is_active ? <em className="off"><Power size={11} /> Off</em>
+                          : f.published ? <em className="live">Live v{f.published.version}</em> : <em>Not published</em>}
+                        {f.draft && <em className="draft">Changes</em>}
+                      </span>
+                    </td>
+                    <td>{new Date(f.updated_at).toLocaleDateString()}</td>
+                    <td onClick={(e) => e.stopPropagation()}>
+                      <div className="d-actions">
+                        <button className="d-act" data-tip={`Open the builder for ${f.name}.`} onClick={() => open(f.id)} aria-label={`Open builder for ${f.name}`}><Pencil size={16} /></button>
+                        <button className="d-act is-danger" data-tip={`Delete ${f.name} and every version of it. This cannot be undone.`} onClick={() => { setRemoveError(''); setRemoving(f) }} aria-label={`Delete ${f.name}`}><Trash2 size={16} /></button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </Card>
+      )}
+
+      {removing && (
+        <Drawer title="Delete this flow?" onClose={() => setRemoving(null)}
+          footer={<><button className="btn btn-ghost" onClick={() => setRemoving(null)}>Keep it</button>
+            <button className="btn btn-danger" onClick={remove}>Delete flow</button></>}>
+          <p className="d-text"><strong>{removing.name}</strong> and all its versions will be permanently deleted. Clients will no longer be able to start it.</p>
+          {removeError && <p className="fb-error"><CircleAlert size={16} /> {removeError}</p>}
+        </Drawer>
       )}
 
       {drawer === 'files' && (

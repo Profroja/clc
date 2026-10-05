@@ -5,7 +5,8 @@ import {
   LogIn, Mail, MapPin, Mic, Phone, Video, Handshake, Users,
 } from 'lucide-react'
 import { UI, useLang } from '../i18n.jsx'
-import { services, waLink, WHATSAPP } from '../data.js'
+import { waLink, WHATSAPP } from '../data.js'
+import { usePackages } from '../packages.js'
 import { Reveal, SectionHead } from './ui.jsx'
 import { Logo } from './Navbar.jsx'
 import { SOCIALS, Social, WhatsAppIcon } from './Icons.jsx'
@@ -91,7 +92,7 @@ export function PartnerSection() {
           <span className="eyebrow">{t(P.eyebrow)}</span>
           <h2>{t(P.title)}</h2>
           <p>{t(P.sub)}</p>
-          <a className="btn btn-gold btn-lg btn-shine" href={waLink(P.msg[lang] || P.msg.en)} target="_blank" rel="noopener noreferrer">
+          <a className="btn btn-gold btn-lg btn-shine" href="#/join">
             <Handshake size={20} /> {t(P.cta)} <ArrowRight size={18} />
           </a>
           <small className="partner-note">{t(P.note)}</small>
@@ -154,6 +155,7 @@ const TIMES = ['09:00', '10:00', '11:00', '12:00', '14:00', '15:00', '16:00', '1
 
 export function Booking() {
   const { t, lang } = useLang()
+  const { packages } = usePackages()
   const B = UI.booking
   const [step, setStep] = useState(0)
   const [f, setF] = useState({ service: '', meeting: 'WhatsApp', date: '', time: '10:00', name: '', phone: '', note: '' })
@@ -162,10 +164,10 @@ export function Booking() {
   const today = new Date().toISOString().slice(0, 10)
 
   const send = () => {
-    const svc = services.find((s) => s.id === f.service)
+    const svc = packages.find((s) => s.id === f.service)
     const msg = [
       'Booking — Community Legal Clinic',
-      `Service: ${svc ? svc.short.en : ''}`,
+      `Service: ${svc ? svc.title : ''}`,
       `Meeting: ${f.meeting}`,
       `Date: ${f.date} ${f.time}`,
       `Name: ${f.name}`,
@@ -203,10 +205,10 @@ export function Booking() {
             <motion.div key={step} initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -24 }} transition={{ duration: 0.3 }}>
               {step === 0 && (
                 <div className="pick-grid">
-                  {services.map((s) => (
+                  {packages.map((s) => (
                     <button key={s.id} className={`pick ${f.service === s.id ? 'on' : ''}`} onClick={() => set('service', s.id)}>
-                      <img src={s.image} alt="" />
-                      <span>{t(s.short)}</span>
+                      {s.image && <img src={s.image} alt="" />}
+                      <span>{s.title}</span>
                     </button>
                   ))}
                 </div>
@@ -300,6 +302,7 @@ export function FinalCTA() {
 
 export function Footer() {
   const { t } = useLang()
+  const { packages } = usePackages()
   const F = UI.footer
   return (
     <footer className="footer" id="footer">
@@ -320,7 +323,7 @@ export function Footer() {
         </div>
         <div>
           <h4>{t(F.services)}</h4>
-          {services.map((s) => <a key={s.id} href={`#${s.id}`}>{t(s.short)}</a>)}
+          {packages.map((s) => <a key={s.id} href={`#${s.id}`}>{s.title}</a>)}
         </div>
         <div>
           <h4>{t(F.contact)}</h4>

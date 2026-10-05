@@ -4,7 +4,7 @@
 export const ROLES = {
   clc_admin: { key: 'admin', label: 'Administrator', home: '#/app/admin/overview' },
   firm_admin: { key: 'firm', label: 'Law firm representative', home: '#/app/firm/overview' },
-  advocate: { key: 'advocate', label: 'Manager', home: '#/app/advocate/overview' },
+  advocate: { key: 'advocate', label: 'Advocate', home: '#/app/advocate/overview' },
 }
 
 export const SERVICES = [
@@ -112,4 +112,6 @@ export const statusTone = {
   approved: 'green', active: 'green', published: 'green', accepted: 'green',
   pending: 'amber', invited: 'amber', draft: 'amber', sent: 'amber', advocate_assigned: 'blue',
   suspended: 'red', rejected: 'red', declined: 'red',
+  submitted: 'amber', under_review: 'blue', correction_required: 'red', meeting_pending: 'blue',
+  agreements_pending: 'blue', approved_for_trial: 'green', replacement_requested: 'red', signed: 'green',
 }

@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { X } from 'lucide-react'
+import { User, X } from 'lucide-react'
 import { statusTone } from './data.js'
 
 export function PageHead({ title, sub, children }) {
@@ -47,13 +47,12 @@ export function Card({ title, action, children, className = '' }) {
   )
 }
 
-export function Avatar({ name }) {
-  const initials = name.split(' ').map((p) => p[0]).slice(0, 2).join('').toUpperCase()
-  return <span className="d-avatar">{initials}</span>
+// A plain person icon (no initials)
+export function Avatar() {
+  return <span className="d-avatar"><User size={18} /></span>
 }
-
 export function BarChart({ data }) {
-  const max = Math.max(...data.map((d) => d.v))
+  const max = Math.max(1, ...data.map((d) => d.v))
   return (
     <div className="d-bars">
       {data.map((d, i) => (
@@ -68,7 +67,7 @@ export function BarChart({ data }) {
 }
 
 // Right-hand slide-over used for forms and detail views
-export function Drawer({ title, onClose, children, footer }) {
+export function Drawer({ title, onClose, children, footer, wide = false }) {
   useEffect(() => {
     const esc = (e) => e.key === 'Escape' && onClose()
     document.addEventListener('keydown', esc)
@@ -76,7 +75,7 @@ export function Drawer({ title, onClose, children, footer }) {
   }, [onClose])
   return (
     <div className="d-overlay" onClick={onClose}>
-      <motion.aside className="d-drawer" role="dialog" aria-label={title} onClick={(e) => e.stopPropagation()}
+      <motion.aside className={`d-drawer ${wide ? 'wide' : ''}`} role="dialog" aria-label={title} onClick={(e) => e.stopPropagation()}
         initial={{ x: 480 }} animate={{ x: 0 }} transition={{ type: 'spring', damping: 30, stiffness: 300 }}>
         <header>
           <h2>{title}</h2>
@@ -105,5 +104,27 @@ export function DetailList({ rows }) {
         <div key={k}><dt>{k}</dt><dd>{v || '—'}</dd></div>
       ))}
     </dl>
+  )
+}
+
+// Centred pop-up dialog
+export function Modal({ title, onClose, children, footer, wide = false }) {
+  useEffect(() => {
+    const esc = (e) => e.key === 'Escape' && onClose()
+    document.addEventListener('keydown', esc)
+    return () => document.removeEventListener('keydown', esc)
+  }, [onClose])
+  return (
+    <div className="d-overlay d-modal-wrap" onClick={onClose}>
+      <motion.div className={`d-modal ${wide ? 'wide' : ''}`} role="dialog" aria-modal="true" aria-label={title} onClick={(e) => e.stopPropagation()}
+        initial={{ opacity: 0, scale: 0.95, y: 12 }} animate={{ opacity: 1, scale: 1, y: 0 }} transition={{ duration: 0.2 }}>
+        <header>
+          <h2>{title}</h2>
+          <button className="d-icon-btn" onClick={onClose} aria-label="Close"><X size={18} /></button>
+        </header>
+        <div className="d-modal-body">{children}</div>
+        {footer && <footer>{footer}</footer>}
+      </motion.div>
+    </div>
   )
 }

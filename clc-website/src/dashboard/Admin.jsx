@@ -1,110 +1,254 @@
-import { useState } from 'react'
-import { Building2, Check, FileText, MapPin, Search, UserPlus, Users, Workflow } from 'lucide-react'
-import { activity, firms as firmData, flows as flowData, ROLES, SERVICES, users as userData, weekly } from './data.js'
-import { Avatar, Badge, BarChart, Card, DetailList, Drawer, Field, PageHead, StatCard } from './shared.jsx'
+import { useEffect, useState } from 'react'
+import { Building2, Check, CircleAlert, FileText, KeyRound, Loader2, MapPin, Pencil, Power, Search, UserPlus, Users, Workflow } from 'lucide-react'
+import { api } from './api.js'
+import { firms as firmData, flows as flowData, ROLES, SERVICES, users as userData } from './data.js'
+import { Avatar, Badge, BarChart, Card, DetailList, Drawer, Field, Modal, PageHead, StatCard } from './shared.jsx'
 
 const serviceName = (code) => SERVICES.find((s) => s.code === code)?.name || code
 
 /* ---------------- Overview ---------------- */
 export function AdminOverview() {
-  const pending = firmData.filter((f) => f.status === 'pending')
+  const [data, setData] = useState(null)
+  const [error, setError] = useState('')
+  useEffect(() => { api('admin/overview/').then(setData).catch((e) => setError(e.message)) }, [])
+
   return (
     <>
-      <PageHead title="Good day, Administrator" sub="Here is what is happening across CLC today." />
-      <div className="d-stats">
-        <StatCard icon={Building2} label="Law firms" value={firmData.length} hint={`${pending.length} awaiting approval`} tone="gold" />
-        <StatCard icon={Users} label="Platform users" value={userData.length} hint="2 invitations pending" tone="blue" delay={0.05} />
-        <StatCard icon={Workflow} label="Chatbot flows" value={flowData.length} hint="1 draft" tone="green" delay={0.1} />
-        <StatCard icon={FileText} label="Open cases" value="29" hint="+6 this week" tone="navy" delay={0.15} />
-      </div>
-      <div className="d-grid-2">
-        <Card title="WhatsApp conversations this week"><BarChart data={weekly} /></Card>
-        <Card title="Recent activity">
-          <ul className="d-timeline">
-            {activity.map((a) => <li key={a.text}><span>{a.t}</span>{a.text}</li>)}
-          </ul>
-        </Card>
-      </div>
-      {pending.length > 0 && (
-        <Card title="Firms waiting for approval">
-          {pending.map((f) => (
-            <div key={f.id} className="d-row">
-              <Avatar name={f.name} />
-              <div className="d-row-main"><strong>{f.name}</strong><small>{f.region} · {f.registration}</small></div>
-              <a href="#/app/admin/firms" className="btn btn-navy d-sm">Review</a>
-            </div>
-          ))}
-        </Card>
+      <PageHead title="Overview" sub="What is happening across CLC." />
+      {error && <Card><p className="fb-error"><CircleAlert size={18} /> {error}</p></Card>}
+      {!data && !error && <div className="fb-center-inline"><Loader2 className="spin" /></div>}
+      {data && (
+        <>
+          <div className="d-stats">
+            <StatCard icon={Building2} label="Law firms" value={data.law_firms.total}
+              hint={`${data.law_firms.awaiting_approval} awaiting approval · ${data.law_firms.approved} approved`} tone="gold" />
+            <StatCard icon={Users} label="Platform users" value={data.users.total}
+              hint={`${data.users.not_signed_in_yet} yet to sign in`} tone="blue" delay={0.05} />
+            <StatCard icon={Workflow} label="Chatbot flows" value={data.flows.total}
+              hint={`${data.flows.live} live · ${data.flows.with_changes} with unpublished changes`} tone="green" delay={0.1} />
+            <StatCard icon={FileText} label="Open cases" value={data.cases.open}
+              hint={`${data.cases.new_this_week} new this week`} tone="navy" delay={0.15} />
+          </div>
+          <Card title="WhatsApp conversations, last 7 days"><BarChart data={data.conversations_per_day} /></Card>
+          {data.awaiting_firms.length > 0 && (
+            <Card title="Firms waiting for approval">
+              <div className="d-table-wrap">
+                <table className="d-table">
+                  <thead>
+                    <tr><th>S/N</th><th>Application no.</th><th>Law firm</th><th>Region</th><th>Status</th><th>Action</th></tr>
+                  </thead>
+                  <tbody>
+                    {data.awaiting_firms.map((f, i) => (
+                      <tr key={f.id}>
+                        <td>{i + 1}</td>
+                        <td>{f.application_number}</td>
+                        <td><strong>{f.firm_name}</strong></td>
+                        <td>{f.region}</td>
+                        <td><Badge>{f.status}</Badge></td>
+                        <td><a href="#/app/admin/firms" className="btn btn-navy d-sm">Review</a></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </Card>
+          )}
+        </>
       )}
     </>
   )
 }
-
 /* ---------------- Users ---------------- */
+const ROLE_OPTIONS = [['clc_admin', 'Administrator'], ['firm_admin', 'Law firm admin'], ['advocate', 'Advocate']]
+const BLANK = { full_name: '', email: '', phone: '', role: 'firm_admin', organization_id: '', roll_number: '', practising_certificate: '', certificate_expires_on: '' }
+
 export function AdminUsers() {
-  const [list, setList] = useState(userData)
+  const [rows, setRows] = useState(null)
+  const [firms, setFirms] = useState([])
+  const [error, setError] = useState('')
   const [open, setOpen] = useState(false)
   const [q, setQ] = useState('')
-  const [form, setForm] = useState({ name: '', email: '', phone: '', role: 'firm_admin', org: firmData[0].name })
+  const [form, setForm] = useState(BLANK)
+  const [formError, setFormError] = useState('')
+  const [busy, setBusy] = useState(false)
+  const [action, setAction] = useState(null) // { type: 'edit' | 'password' | 'toggle', user }
   const set = (k) => (e) => setForm({ ...form, [k]: e.target.value })
 
-  const submit = (e) => {
-    e.preventDefault()
-    const org = form.role === 'clc_admin' ? 'Community Legal Clinic' : form.org
-    setList([{ id: `u${Date.now()}`, name: form.name, email: form.email, role: form.role, org, status: 'invited' }, ...list])
-    setForm({ name: '', email: '', phone: '', role: 'firm_admin', org: firmData[0].name })
-    setOpen(false)
+  const load = () => {
+    api('admin/users/').then(setRows).catch((e) => setError(e.message))
+    api('admin/firms/').then(setFirms).catch(() => {})
   }
-  const shown = list.filter((u) => `${u.name} ${u.email} ${u.org}`.toLowerCase().includes(q.toLowerCase()))
+  useEffect(load, [])
+
+  const needsFirm = form.role !== 'clc_admin'
+  const submit = async (e) => {
+    e.preventDefault()
+    setBusy(true)
+    setFormError('')
+    try {
+      await api('admin/users/', { method: 'POST', body: form })
+      setOpen(false)
+      setForm(BLANK)
+      load()
+    } catch (err) {
+      setFormError(err.message)
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  const shown = (rows || []).filter((r) => `${r.full_name} ${r.email} ${r.organization} ${r.role_label}`.toLowerCase().includes(q.toLowerCase()))
 
   return (
     <>
       <PageHead title="Users" sub="Create accounts and invite people to the platform.">
-        <button className="btn btn-gold" onClick={() => setOpen(true)}><UserPlus size={17} /> Create user</button>
+        <button className="btn btn-gold" onClick={() => { setFormError(''); setOpen(true) }}><UserPlus size={17} /> Create user</button>
       </PageHead>
-      <Card>
-        <div className="d-search"><Search size={16} /><input placeholder="Search by name, email or organization" value={q} onChange={(e) => setQ(e.target.value)} /></div>
-        <div className="d-table-wrap">
-          <table className="d-table">
-            <thead><tr><th>User</th><th>Role</th><th>Organization</th><th>Status</th></tr></thead>
-            <tbody>
-              {shown.map((u) => (
-                <tr key={u.id}>
-                  <td><div className="d-cell-user"><Avatar name={u.name} /><div><strong>{u.name}</strong><small>{u.email}</small></div></div></td>
-                  <td>{ROLES[u.role].label}</td>
-                  <td>{u.org}</td>
-                  <td><Badge>{u.status}</Badge></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </Card>
+      {error && <Card><p className="fb-error"><CircleAlert size={18} /> {error}</p></Card>}
+      {!rows && !error && <div className="fb-center-inline"><Loader2 className="spin" /></div>}
+      {rows && (
+        <Card>
+          <div className="d-search"><Search size={16} /><input placeholder="Search by name, email, role or law firm" value={q} onChange={(e) => setQ(e.target.value)} /></div>
+          <div className="d-table-wrap">
+            <table className="d-table">
+              <thead><tr><th>S/N</th><th>Name</th><th>Email</th><th>Phone</th><th>Role</th><th>Law firm</th><th>Status</th><th>Action</th></tr></thead>
+              <tbody>
+                {shown.map((u, i) => (
+                  <tr key={u.id}>
+                    <td>{i + 1}</td>
+                    <td><strong>{u.full_name}</strong></td>
+                    <td>{u.email}</td>
+                    <td>{u.phone || '—'}</td>
+                    <td>{u.role_label}</td>
+                    <td>{u.role === 'clc_admin' ? '—' : u.organization}</td>
+                    <td><Badge>{u.status}</Badge></td>
+                    <td>
+                      <div className="d-actions">
+                        <button className="d-act" data-tip="Edit this user's name, email and phone number." onClick={() => setAction({ type: 'edit', user: u })} aria-label={`Edit ${u.full_name}`}><Pencil size={16} /></button>
+                        <button className="d-act" data-tip="Set a new temporary password. Their current password stops working straight away." onClick={() => setAction({ type: 'password', user: u })} aria-label={`Change password for ${u.full_name}`}><KeyRound size={16} /></button>
+                        <button className={`d-act ${u.is_active ? 'is-off' : 'is-on'}`} data-tip={u.is_active ? 'Deactivate this account. They will no longer be able to sign in.' : 'Activate this account so they can sign in again.'} onClick={() => setAction({ type: 'toggle', user: u })} aria-label={`${u.is_active ? 'Deactivate' : 'Activate'} ${u.full_name}`}><Power size={16} /></button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+                {shown.length === 0 && <tr><td colSpan={8} className="fb-muted">No users found.</td></tr>}
+              </tbody>
+            </table>
+          </div>
+        </Card>
+      )}
+
+      {action && <UserAction action={action} onClose={() => setAction(null)} onDone={() => { setAction(null); load() }} />}
 
       {open && (
-        <Drawer title="Create user" onClose={() => setOpen(false)}
-          footer={<><button className="btn btn-ghost" onClick={() => setOpen(false)}>Cancel</button><button form="new-user" className="btn btn-gold">Send invitation</button></>}>
+        <Modal title="Create user" onClose={() => setOpen(false)}
+          footer={<><button type="button" className="btn btn-ghost" onClick={() => setOpen(false)}>Cancel</button>
+            <button form="new-user" className="btn btn-gold" disabled={busy}>{busy ? <Loader2 size={16} className="spin" /> : 'Create user'}</button></>}>
           <form id="new-user" onSubmit={submit} className="d-form">
-            <Field label="Full name"><input required value={form.name} onChange={set('name')} /></Field>
+            <Field label="Full name"><input required autoFocus value={form.full_name} onChange={set('full_name')} /></Field>
             <Field label="Email"><input type="email" required value={form.email} onChange={set('email')} /></Field>
             <Field label="Phone"><input value={form.phone} onChange={set('phone')} placeholder="+255…" /></Field>
             <Field label="Role">
               <select value={form.role} onChange={set('role')}>
-                {Object.entries(ROLES).map(([k, r]) => <option key={k} value={k}>{r.label}</option>)}
+                {ROLE_OPTIONS.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
               </select>
             </Field>
-            {form.role !== 'clc_admin' && (
+            {needsFirm && (
               <Field label="Law firm">
-                <select value={form.org} onChange={set('org')}>
-                  {firmData.filter((f) => f.status === 'approved').map((f) => <option key={f.id}>{f.name}</option>)}
+                <select required value={form.organization_id} onChange={set('organization_id')}>
+                  <option value="">Select a registered law firm</option>
+                  {firms.map((f) => <option key={f.id} value={f.id}>{f.name}</option>)}
                 </select>
               </Field>
             )}
-            <p className="d-hint">The person receives an email invitation and sets their own password.</p>
+            {needsFirm && firms.length === 0 && <p className="d-hint">No law firm has been approved yet. A firm must be registered and approved before people can be attached to it.</p>}
+            {form.role === 'advocate' && (
+              <>
+                <Field label="Roll number"><input required value={form.roll_number} onChange={set('roll_number')} /></Field>
+                <Field label="Practising certificate number"><input required value={form.practising_certificate} onChange={set('practising_certificate')} /></Field>
+                <Field label="Certificate expiry date"><input type="date" required value={form.certificate_expires_on} onChange={set('certificate_expires_on')} /></Field>
+              </>
+            )}
+            {formError && <p className="fb-error"><CircleAlert size={16} /> {formError}</p>}
+            <p className="d-hint">The person receives an email with a temporary password and must choose a new one at first sign-in.</p>
           </form>
-        </Drawer>
+        </Modal>
       )}
     </>
+  )
+}
+// Edit / change password / deactivate pop-ups for one user row
+function UserAction({ action, onClose, onDone }) {
+  const { type, user } = action
+  const [form, setForm] = useState({ full_name: user.full_name, email: user.email, phone: user.phone })
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState('')
+  const [result, setResult] = useState(null) // new temporary password
+  const base = `admin/users/${user.id}/`
+
+  const run = async (path, method, body) => {
+    setBusy(true)
+    setError('')
+    try {
+      const data = await api(path, { method, body })
+      if (type === 'password') setResult(data)
+      else onDone()
+    } catch (e) {
+      setError(e.message)
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  if (type === 'edit') {
+    return (
+      <Modal title="Edit user" onClose={onClose}
+        footer={<><button className="btn btn-ghost" onClick={onClose}>Cancel</button>
+          <button form="edit-user" className="btn btn-gold" disabled={busy}>{busy ? <Loader2 size={16} className="spin" /> : 'Save changes'}</button></>}>
+        <form id="edit-user" className="d-form" onSubmit={(e) => { e.preventDefault(); run(base, 'PATCH', form) }}>
+          <Field label="Full name"><input required autoFocus value={form.full_name} onChange={(e) => setForm({ ...form, full_name: e.target.value })} /></Field>
+          <Field label="Email"><input type="email" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} /></Field>
+          <Field label="Phone"><input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} /></Field>
+          <p className="d-hint">Changes apply to all of this person's roles.</p>
+          {error && <p className="fb-error"><CircleAlert size={16} /> {error}</p>}
+        </form>
+      </Modal>
+    )
+  }
+
+  if (type === 'password') {
+    return (
+      <Modal title="Change password" onClose={result ? onDone : onClose}
+        footer={result ? <button className="btn btn-gold" onClick={onDone}>Done</button>
+          : <><button className="btn btn-ghost" onClick={onClose}>Cancel</button>
+            <button className="btn btn-gold" disabled={busy} onClick={() => run(`${base}reset-password/`, 'POST')}>{busy ? <Loader2 size={16} className="spin" /> : 'Set new password'}</button></>}>
+        {result ? (
+          <>
+            <p className="d-text">A new temporary password was set for <strong>{user.full_name}</strong> and emailed to {result.email}.</p>
+            <p className="temp-pw">{result.temporary_password}</p>
+            <p className="d-hint">This is shown only now. They must choose their own password when they sign in.</p>
+          </>
+        ) : (
+          <>
+            <p className="d-text">Set a new temporary password for <strong>{user.full_name}</strong>? Their current password stops working, and they will be asked to choose a new one when they sign in.</p>
+            {error && <p className="fb-error"><CircleAlert size={16} /> {error}</p>}
+          </>
+        )}
+      </Modal>
+    )
+  }
+
+  const off = user.is_active
+  return (
+    <Modal title={off ? 'Deactivate account' : 'Activate account'} onClose={onClose}
+      footer={<><button className="btn btn-ghost" onClick={onClose}>Cancel</button>
+        <button className={`btn ${off ? 'btn-danger' : 'btn-gold'}`} disabled={busy}
+          onClick={() => run(`${base}${off ? 'deactivate' : 'activate'}/`, 'POST')}>{busy ? <Loader2 size={16} className="spin" /> : off ? 'Deactivate' : 'Activate'}</button></>}>
+      <p className="d-text">{off
+        ? <><strong>{user.full_name}</strong> will no longer be able to sign in, in any role. You can activate the account again later.</>
+        : <><strong>{user.full_name}</strong> will be able to sign in again.</>}</p>
+      {error && <p className="fb-error"><CircleAlert size={16} /> {error}</p>}
+    </Modal>
   )
 }
 
